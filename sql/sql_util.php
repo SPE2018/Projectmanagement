@@ -55,7 +55,7 @@ function sql_getUser($username) {
 }
 
 function sql_addUser($username, $mail, $password) {
-    $sql = "INSERT INTO users ('name', 'mail', 'password') values('$username', '$mail', '$password')";
+    $sql = "INSERT INTO users ('name', 'mail', 'password') VALUES('$username', '$mail', '$password');";
     sql_query($sql);
 }
 
@@ -81,7 +81,9 @@ function sql_getProjectFromId($id, $loadMilestones = false) {
 }
 
 function sql_addProject($name) {
-    $sql = "INSERT INTO users ('name', 'mail', 'password') values('$username', '$mail', '$password')";
+    $created = time(); // Current time in seconds
+    $endby = time() + 60*60*24*7; // 7 days ahead in seconds
+    $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', from_unixtime($created), from_unixtime($endby));";
     sql_query($sql);
 }
 
