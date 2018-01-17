@@ -9,7 +9,7 @@ class Project {
     public $endDate;
     
     public function __construct($id, $name, $createdDate, $endDate) {
-        $this->id = $id;
+        $this->id = intval($id);
         $this->name = $name;
         $this->createdDate = $createdDate;
         $this->endDate = $endDate;

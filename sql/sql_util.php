@@ -1,6 +1,8 @@
 <?php
 
 include "wrapper/user_class.php";
+include "wrapper/project_class.php";
+include "wrapper/milestone_class.php";
 
 /*
  * Globals
@@ -75,6 +77,13 @@ function sql_getProjectFromId($id, $loadMilestones = false) {
     
     if ($loadMilestones) {
         // TODO: load milestones...
+        $sql = "SELECT * FROM milestones WHERE project_id=$id";
+        $result = sql_query($sql)->fetch_all(MYSQLI_ASSOC);
+        //var_dump($result);
+        foreach ($result as $i) {
+            var_dump($i);
+            //$milestone = new Milestone($result['id']);
+        }
     }
     
     return $project;
@@ -85,6 +94,8 @@ function sql_addProject($name) {
     $endby = time() + 60*60*24*7; // 7 days ahead in seconds
     $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', from_unixtime($created), from_unixtime($endby));";
     sql_query($sql);
+    
+    
 }
 
 /*
