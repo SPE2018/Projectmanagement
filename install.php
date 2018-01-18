@@ -1,5 +1,6 @@
 <?php
     $installed = false;
+    $error = null;
 
     function query($con, $sql) {
         $result = $con->query($sql);
@@ -11,13 +12,39 @@
     
     function installAll() {
         global $installed;
+        global $error;
         
-        $con = new mysqli("localhost", "root", "", "planit");
+        $con = null;
+        
+        $address = filter_input(INPUT_POST, "address");
+        $db = filter_input(INPUT_POST, "db");
+        $name = filter_input(INPUT_POST, "name");
+        $pass = filter_input(INPUT_POST, "password");
+
+        if (strlen($address) == 0 || strlen($db) == 0 || strlen($name) == 0) {
+            $installed = false;
+            $error = "Fehlerhafte Eingabe";
+            return;
+        }
+        
+        echo "Before: '$db'<br>";
+        $db = str_replace(";", "", $db);
+        echo "After: '$db'<br>";
+        
+        $con = new mysqli($address, $name, $pass);
         if ($con->connect_errno) {
             echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
             die();
         }
-        $con->set_charset('utf8');
+        query($con, "CREATE DATABASE IF NOT EXISTS `$db`;");
+
+        $con = new mysqli($address, $name, $pass, $db);
+        if ($con->connect_errno) {
+            echo "Failed to connect to MySQL (2): (" . $con->connect_errno . ") " . $con->connect_error;
+            die();
+        }
+        
+        $con->set_charset('utf8');                
         
         query($con, "CREATE TABLE `projects` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -56,7 +83,7 @@
         $installed = true;
     }
 
-    if (filter_input(INPUT_GET, "install") !== null) {
+    if (filter_input(INPUT_POST, "install") !== null) {
         installAll();
     }
 ?>
@@ -70,11 +97,21 @@
         <h1>Willkommen bei planIT</h1>
         <?php
             global $installed;
-            if ($installed) {
+            if ($installed == true) {
                 echo "<p>Erfolgreich installiert.</p>";
             } else {
-                echo "<form>
-                <button type='submit' name='install' value='all'>Installieren</button>          
+                if ($error != null) {
+                    echo "<p><b>Anmerkung: $error</b></p><br><br>";
+                }
+                echo "<form method='post'>";                
+                
+                echo "Host Adress:<input type='text' name='address'><br><br>";                                
+                echo "Database:<input type='text' name='db'><br>";
+                                
+                echo "Host Username:<input type='text' name='name'><br>";
+                echo "Host Password:<input type='password' name='password'><br><br>";
+                
+                echo "<button type='submit' name='install' value='all'>Installieren</button>          
                 </form>";
             }
         ?>
