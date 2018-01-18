@@ -2,9 +2,8 @@
 include_once ("functions.php");
 echo get_head();
 ?>
-<body>
+<!--<body>
 
-<<<<<<< HEAD
 include "util/sql_util.php";
 
 SQL::connect();
@@ -17,10 +16,9 @@ sql_addProject("project1");
 var_dump(sql_getProjectFromId(5, true));*/
 
 var_dump(SQL::loadMilestones(5));
-=======
+-->
 <div class="container">
     <?php
->>>>>>> d4638bc0bc0706cdeeac51295ea50ae6eedd7d67
 
     echo get_nav();
     ?>
