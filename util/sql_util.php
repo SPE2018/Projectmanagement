@@ -49,7 +49,7 @@ class SQL {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
         return $user;
     }
 
@@ -58,7 +58,7 @@ class SQL {
      * This user needs to be activated/enabled by an admin
      */
     public static function addUser($username, $mail, $password) {
-        $sql = "INSERT INTO users ('name', 'mail', 'password', 'enabled') VALUES('$username', '$mail', '$password', 0);";
+        $sql = "INSERT INTO users (name, mail, password, enabled) VALUES('$username', '$mail', '$password', 0);";
         SQL::query($sql); // TODO: Error handling
     }
 
