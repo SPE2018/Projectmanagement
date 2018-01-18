@@ -15,11 +15,24 @@ function login_checkValidation () {
 }
 
 function login_createLoginForm() {
-    echo '<form action="login.php"><input type="text" name="username"'
-    . 'value="username/e-mail" method="post" name="login_username"> Username or e-mail-address:<br>';
+    echo '<form action="login.php">username or e-mail-address:<br><input type="text"'
+    . 'name="öogin_username" value="username/e-mail" method="post" name="login_username"><br><br>';
     
-    echo '<input type="password" name="password"'
-    . 'value="username/e-mail" method="post" name="login_password"> password:<br>';
+    echo 'password:<br><input type="password" name="password"'
+    . 'method="post" name="login_password"><br><br>';
     
-    echo '<button type="submit" name="btn_login">anmelden</button></form>';
+    echo '<button type="submit" name="btn_login">sign in</button></form>';
+}
+
+function login_createRegisterForm() {
+    echo '<form action="login.php">username or e-mail-address:<br><input type="text"'
+    . 'name="register_username" value="username/e-mail" method="post" name="register_username"><br><br>';
+    
+    echo 'e-mail:<br><input type="email" name="email" value="john.doe@example.com"'
+    . 'method="post" name="register_email"><br><br>';
+    
+    echo 'password:<br><input type="password" name="password"'
+    . 'method="post" name="register_password"><br><br>';
+    
+    echo '<button type="submit" name="btn_register">sign up</button></form>';
 }

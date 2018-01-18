@@ -5,11 +5,11 @@
     //get_Head();
 ?>
 <body>
-    <h1>Sign in</h1>
-    <div name="loginform">
+    <h1>Sign up</h1>
+    <div name="registerform">
         <?php
-            login_createLoginForm();
+            login_createRegisterForm();
         ?>
     </div>
-    <!--<a href="register.php">register</a>-->
 </body>
+
