@@ -10,6 +10,7 @@
         <?php
             login_createLoginForm();
         ?>
+        <a href="register.php">register</a>
     </div>
-    <!--<a href="register.php">register</a>-->
+
 </body>
