@@ -49,7 +49,7 @@ class SQL {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
         return $user;
     }
 
@@ -130,19 +130,24 @@ class SQL {
         foreach ($result as $i) {
             $milestone = new Milestone($i['id'], $i['name'], $i['desc']);
             echo $milestone->name . "<br>";
-            //var_dump($milestone);
+           
             array_push($toReturn, $milestone);
             
             $milestone->tasks = SQL::loadTasks($milestone->id);
         }
         return $toReturn;
     }
+    
+    public static function addMilestone($project_id, $name, $desc) {
+        $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`) VALUES('$project_id', '$name', '$desc');";
+        $result = SQL::query($sql); // TODO: Error handling        
+    }
 
     public static function loadTasks($milestone_id) {
         $toReturn = array();
         $sql = "SELECT * FROM tasks WHERE milestone_id=$milestone_id;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
-        //var_dump($result);
+        
         foreach ($result as $i) {
             $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['previous_task'], $i['finished']);
             array_push($toReturn, $task);
