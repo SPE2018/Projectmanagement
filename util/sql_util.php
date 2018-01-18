@@ -4,6 +4,9 @@ include_once "wrapper/user_class.php";
 include_once "wrapper/project_class.php";
 include_once "wrapper/milestone_class.php";
 include_once "wrapper/task_class.php";
+include_once "task_manager.php";
+include_once "user_manager.php";
+include_once "project_manager.php";
 
 class SQL {
 
@@ -74,22 +77,7 @@ class SQL {
         $result = SQL::query($sql); // TODO: Error handling        
     }
 
-    public static function loadTasks($milestone_id) {
-        $toReturn = array();
-        $sql = "SELECT * FROM tasks WHERE milestone_id=$milestone_id;";
-        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
-        
-        foreach ($result as $i) {
-            $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['previous_task'], $i['finished']);
-            array_push($toReturn, $task);
-        }
-        return $toReturn;
-    }
-
-    public static function addTask($milestone_id, $name, $previous_id) {
-        $sql = "INSERT INTO tasks (milestone_id, name, previous_id) VALUES('$milestone_id', '$name', '$previous_id');";
-        SQL::query($sql);
-    }
+   
 
     /*
      * Projects end
