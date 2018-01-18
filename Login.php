@@ -8,7 +8,7 @@
     <h1>Sign in</h1>
     <div name="loginform">
         <?php
-            login_createLoginForm();
+            Login::createLoginForm();
         ?>
         <a href="register.php">register</a>
     </div>

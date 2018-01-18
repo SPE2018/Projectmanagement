@@ -9,7 +9,7 @@
     
     <div name="registerform">
         <?php
-            login_createRegisterForm();
+            Registration::createRegisterForm();
         ?>
         <a href="login.php">back to login</a>
     </div>
