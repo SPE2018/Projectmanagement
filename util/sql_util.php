@@ -75,6 +75,25 @@ class SQL {
      * Projects
      */
 
+    public static function getAllProjects($loadMilestones = false) {
+        $toReturn = array();
+        $sql = "SELECT * FROM projects WHERE;";
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC); // TODO: Error handling
+        
+        foreach ($result as $r) {            
+            $project = new Project($r['id'], $r['name'], $r['created'], $r['endby']);  
+            if ($loadMilestones) {
+                $sql = "SELECT * FROM milestones WHERE project_id=" . $r['id'] . ";";
+                $result_milestone = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
+                foreach ($result_milestone as $i) {
+                    $milestone = new Milestone($i['id'], $i['name'], $i['desc']);
+                    array_push($project->milestones, $milestone);
+                }
+            }
+            array_push($toReturn, $project);
+        }
+    }
+    
     public static function getProjectFromId($id, $loadMilestones = false) {
         $sql = "SELECT * FROM projects WHERE id='$id';";
         $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
@@ -82,7 +101,6 @@ class SQL {
         $project = new Project($id, $result['name'], $result['created'], $result['endby']);
 
         if ($loadMilestones) {
-            // TODO: load milestones...
             $sql = "SELECT * FROM milestones WHERE project_id=$id;";
             $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
             foreach ($result as $i) {
