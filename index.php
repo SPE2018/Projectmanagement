@@ -1,14 +1,16 @@
 <?php
 
-include "sql/sql_util.php";
+include "util/sql_util.php";
 
-sql_connect();
+SQL::connect();
 
-$loos = sql_getUser("loospete");
+$loos = SQL::getUser("loospete");
 var_dump($loos);
-sleep(1);
+/*sleep(1);
 sql_addProject("project1");
 
-var_dump(sql_getProjectFromId(5, true));
+var_dump(sql_getProjectFromId(5, true));*/
+
+SQL::loadTasks(1);
 
 ?>
