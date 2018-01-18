@@ -1,4 +1,8 @@
 <?php
+include_once 'LoginUtility.php';
+include_once 'util/user_manager.php';
+include_once 'util/sql_util.php';
+
 if(session_status() != PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -7,7 +11,7 @@ class Login {
     public static function checkLogin () {
         $name = filter_input(INPUT_POST, 'login_username');
         $pass = filter_input(INPUT_POST, 'login_password');
-        $user = SQL::getUser($name);
+        $user = UserManager::getUser($name);
         if($user != NULL) {
             if($user->enabled == FALSE) {
                 echo '<p style="Color: orange; Font-Size:24">' . $name . ' does exists but is not enabled yet :S</p>';            
@@ -43,7 +47,7 @@ class Registration {
             if($pass != $rptpw) {
                 echo '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
-                SQL::addUser($name, $mail, $pass);
+                UserManager::addUser($name, $mail, $pass);
                 header("Login.php");
             }
         }
