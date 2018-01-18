@@ -100,16 +100,22 @@ class SQL {
         SQL::query($sql); // TODO: Error handling   
     }
 
-    public static function loadMilestones($project_id, $limit, $offset) {
+    public static function loadMilestones($project_id, $limit = 0, $offset = 0) {
         $toReturn = array();
-        $sql = "SELECT * FROM milestones WHERE project_id=$project_id OFFSET $offset LIMIT $limit;";
-        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
+        $sql = "SELECT * FROM milestones WHERE project_id=$project_id";
+        if ($limit > 0) {
+            $sql = $sql . " OFFSET $offset LIMIT $limit;";
+        } else {
+            $sql = $sql . ";";
+        }
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
         foreach ($result as $i) {
             $milestone = new Milestone($i['id'], $i['name'], $i['desc']);
+            echo $milestone->name . "<br>";
+            //var_dump($milestone);
             array_push($toReturn, $milestone);
-
-
-
+            
+            $milestone->tasks = SQL::loadTasks($milestone->id);
         }
         return $toReturn;
     }
@@ -118,7 +124,7 @@ class SQL {
         $toReturn = array();
         $sql = "SELECT * FROM tasks WHERE milestone_id=$milestone_id;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
-        var_dump($result);
+        //var_dump($result);
         foreach ($result as $i) {
             $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['previous_task'], $i['finished']);
             array_push($toReturn, $task);
