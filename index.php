@@ -1,5 +1,5 @@
 <?php
-include_once ("functions.php");
+include_once("php/functions.php");
 echo get_head();
 ?>
 <!--<body>
