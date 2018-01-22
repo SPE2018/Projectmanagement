@@ -9,20 +9,39 @@ if(session_status() != PHP_SESSION_ACTIVE) {
 
 class Login {
     public static function checkLogin () {
-        $name = filter_input(INPUT_POST, 'login_username');
-        $pass = filter_input(INPUT_POST, 'login_password');
+        if((filter_input(INPUT_POST, 'login_username')) != NULL) {
+            $name = filter_input(INPUT_POST, 'login_username');
+        }
+        if((filter_input(INPUT_POST, 'login_password')) != NULL) {
+            $pass = filter_input(INPUT_POST, 'login_password');
+        }
         $user = UserManager::getUser($name);
         if($user != NULL) {
-            if($user->enabled == FALSE) {
+            if(UserManager::getUser($name) == NULL) {
+                echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
+            } elseif($user->enabled == FALSE) {
                 echo '<p style="Color: orange; Font-Size:24">' . $name . ' does exists but is not enabled yet :S</p>';            
-            }
-            if($user->password == $pass && $user->enabled == TRUE) {
-                $_SESSION['user'] = $user->name;
-                echo '<p style="Color: green; Font-Size:24">Welcome to planIT, ' . (($name == "admin") ? "my master" : $name) . '!</p>';            
+            } else {
+                Login::admincheck($name, $pass);
             }
         }
     }
 
+    public static function admincheck($name, $pass) {
+        if(UserManager::getUser('admin') == NULL) {
+            return;
+        }
+        if($name != 'admin') {
+            echo '<p style="Color: green; Font-Size:24">Welcome to planIT, ' . $name . '!</p>';            
+        } elseif(($pass == (UserManager::getUser('admin')->$pass))) {
+            $_SESSION['user'] = 'admin';
+            echo '<p style="Color: darkgreen; Font-Size:26">Welcome, Master =))</p>';            
+            header('../Admin/admin.php');
+        } else {
+            echo "user = NULL";
+        }
+    }
+    
     public static function createLoginForm() {
         if((filter_input(INPUT_POST, 'btn_login')) != NULL) {
             Login::checkLogin();

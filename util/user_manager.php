@@ -30,8 +30,8 @@ class UserManager {
         return $user;
     }
     
-    public static function getUsers() {
-        $sql = "SELECT * FROM users;";
+    public static function getEnabledUsers() {
+        $sql = "SELECT * FROM users WHERE enabled=1;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
         $toReturn = array();
         

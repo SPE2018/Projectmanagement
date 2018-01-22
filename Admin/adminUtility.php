@@ -10,23 +10,24 @@ include_once '../util/user_manager.php';
 
 class Admin{
     public static function display_usersToEnable() {
+        echo '<table class="table">users with request to sign up:' .
+        '<tr><th>username</th><th>enable?</th>';
+        
         if(UserManager::getUser(filter_input(INPUT_GET, 'toenable')) == NULL) {
             return;
         }
         
         UserManager::enableUser(UserManager::getUser(filter_input(INPUT_GET, 'toenable')));
-        echo '<table class="table">' .
-        '<tr><th>username</th><th>enable?</th>';
         if(UserManager::getDisabledUsers() != NULL) {
             $users = UserManager::getDisabledUsers();
             foreach($users as $u) {
                 echo '<tr><td>' . $u->name . '</td><td><a href="admin.php?toenable=' . $u->name . '">enable</a></td></tr>';
             }
         }
-        echo '</table><br><br>';
+        echo '</table>';
     }
     
-    public static function display_userList() {
+    public static function display_EnabledUserList() {
         /*if(filter_input(INPUT_GET, 'toenable') != NULL) {
             UserManager::enableUser(UserManager::getUser(filter_input(INPUT_GET, 'toenable'))->userid);
         }*/
@@ -36,10 +37,10 @@ class Admin{
         /*if(filter_input(INPUT_GET, 'toenable') != NULL) {
             UserManager::enableUser(UserManager::getUser(filter_input(INPUT_GET, 'toenable'))->userid);
         }*/
-        echo '<table class="table">' .
+        echo '<table class="table">already enabled users:' .
         '<tr><th colspan=5>username</th><th>promote</th><th>delete</th><th>manage</th>';
-        if(UserManager::getUsers() != NULL) {
-            $users = UserManager::getUsers();
+        if(UserManager::getEnabledUsers() != NULL) {
+            $users = UserManager::getEnabledUsers();
             foreach($users as $u) {
                 echo '<tr><td colspan=5>' . $u->name
                         . '</td><td><a href="admin.php?promote=' . $u->name . '">promote to admin</a></td><td>'
