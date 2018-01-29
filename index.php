@@ -4,10 +4,6 @@ echo get_head();
 ?>
 <!--<body>
 
-include "util/sql_util.php";
-
-SQL::connect();
-
 $loos = SQL::getUser("loospete");
 //var_dump($loos);
 /*sleep(1);
