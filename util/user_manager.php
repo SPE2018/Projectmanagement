@@ -42,6 +42,18 @@ class UserManager {
         return $toReturn;
     }
     
+    public static function getAdmins() {
+        $sql = "SELECT * FROM users WHERE admin=1;";
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
+        $toReturn = array();
+        
+        foreach ($result as $r) {
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
+            array_push($toReturn, $user);
+        }
+        return $toReturn;
+    }
+    
     public static function getDisabledUsers() {
         $sql = "SELECT * FROM users WHERE enabled=0;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
@@ -64,6 +76,13 @@ class UserManager {
             SQL::query($sql); // TODO: Error handling
         } else {
             echo '<p style="Color: red; Font-Size:24">user with this name does already exists</p>';            
+        }
+    }
+    
+    public static function promoteUser($username) {
+        if(UserManager::getUser($username) != NULL) {
+            $sql = "UPDATE users SET `admin` = 1 WHERE `name`='$username';";
+            SQL::query($sql); // TODO: Error handling
         }
     }
     
