@@ -15,6 +15,6 @@ class User {
         $this->mail = $mail;
         $this->password = $password;
         $this->admin = $admin != 0;
-        $this->enabled = (($admin) ? 1 : $enabled != 0);
+        $this->enabled = $enabled != 0;
     }
 }

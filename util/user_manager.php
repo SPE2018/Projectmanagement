@@ -36,7 +36,7 @@ class UserManager {
         $toReturn = array();
         
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -82,6 +82,13 @@ class UserManager {
     public static function promoteUser($username) {
         if(UserManager::getUser($username) != NULL) {
             $sql = "UPDATE users SET `admin` = 1 WHERE `name`='$username';";
+            SQL::query($sql); // TODO: Error handling
+        }
+    }
+    
+    public static function demoteUser($username) {
+        if(UserManager::getUser($username) != NULL) {
+            $sql = "UPDATE users SET `admin` = 0 WHERE `name`='$username';";
             SQL::query($sql); // TODO: Error handling
         }
     }

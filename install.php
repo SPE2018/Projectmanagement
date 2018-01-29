@@ -67,9 +67,12 @@
                         `name` varchar(45) NOT NULL,
                         `mail` varchar(45) NOT NULL,
                         `password` varchar(90) NOT NULL,
+                        `admin` tinyint(1) DEFAULT '0',
                         `enabled` tinyint(1) DEFAULT '0',
                         PRIMARY KEY (`id`)
                       ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;");
+        
+        query($con, "INSERT INTO `users` VALUES (0, 'admin', 'john.doe@example.de', 'root', 1, 1);");
         
         query($con, "CREATE TABLE `tasks` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
