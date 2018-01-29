@@ -7,10 +7,11 @@
     <h1>office of da big bozz</h1>
     <div name="adminform">
         <?php
-            Admin::display_usersToEnable();
+            echo '<p style="Color: darkgreen; Font-Size:26">Welcome, Master =))</p><br>';       
+            Admin::display_DisabledUserList();
             Admin::display_EnabledUserList()
         ?>
-        <a href=../index.php">home</a>
+        <a href=../LogIn/Login.php.php">home</a>
     </div>
 
 </body>

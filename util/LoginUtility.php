@@ -10,11 +10,13 @@ class Login {
     public static function checkLogin () {
         if((filter_input(INPUT_POST, 'login_username')) != NULL) {
             $name = filter_input(INPUT_POST, 'login_username');
+            echo $name . "\n\n\n\n";
         }
         if((filter_input(INPUT_POST, 'login_password')) != NULL) {
             $pass = filter_input(INPUT_POST, 'login_password');
         }
         $user = UserManager::getUser($name);
+        echo $user->name . "\n\n\n\n";
         if($user != NULL) {
             if(UserManager::getUser($name) == NULL) {
                 echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
@@ -27,17 +29,20 @@ class Login {
     }
 
     public static function admincheck($name, $pass) {
-        if(UserManager::getUser('admin') == NULL) {
+        $admin = UserManager::getUser('admin');
+        if($admin == NULL) {
+            echo "User is null<br>";
             return;
         }
+        echo $admin->password;
         if($name != 'admin') {
             echo '<p style="Color: green; Font-Size:24">Welcome to planIT, ' . $name . '!</p>';            
-        } elseif(($pass == (UserManager::getUser('admin')->$pass))) {
+        } elseif ($pass == $admin->password) {
             $_SESSION['user'] = 'admin';
             echo '<p style="Color: darkgreen; Font-Size:26">Welcome, Master =))</p>';            
-            header('../Admin/admin.php');
+            header("Location: ../Admin/admin.php");
         } else {
-            echo "user = NULL";
+            echo "Wrong password for " . $name;
         }
     }
     
