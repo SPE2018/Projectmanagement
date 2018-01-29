@@ -73,8 +73,8 @@ echo get_nav();
                         $name = get_parameter("name", false);
                         $startdate = get_parameter("startdate", false);
                         $enddate = get_parameter("enddate", false);
-                        SQL::addProject($name, $startdate, $enddate);
-                        $Project = SQL::getProjectFromId(1, $loadMilestones = false);
+                        ProjectManager::addProject($name, $startdate, $enddate);
+                        $Project = ProjectManager::getProjectFromId(1, $loadMilestones = false);
                         $arr[] = $Project;
                         echo get_projecttable($Project->name, $Project->createdDate, $Project->endDate);
                     ?>
