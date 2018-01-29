@@ -28,19 +28,13 @@
     width: max-content;
 }
 
+
 .progress-bar-vertical {
     transform: rotate(180deg);
     width: 15px;
     display: flex;
     align-items: flex-end;
     margin-left: 50%;
-}
-
-th{
-    text-align: center;
-    background:  #343a40;
-    color: white;
-    width: 100%;
 }
 
 .fa-minus{
@@ -60,3 +54,4 @@ th{
 .fa-plus:hover{
     cursor: pointer;
 }
+

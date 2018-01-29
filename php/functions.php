@@ -9,6 +9,15 @@ function get_nav()
     return file_get_contents("php/html/nav.html");
 }
 
+function get_parameter($name, $default)
+{
+    if(isset($_GET[$name]))
+    {
+        return $_GET[$name];
+    }
+    return $default;
+}
+
 function get_date()
 {
     $now = date("Y-m-d");
@@ -47,12 +56,14 @@ function get_day($date)
     return date_format($date, "%a");
 }
 
+// Convert and format a date string to a date object with the specific format dd-mm-yyyy
 function get_d_m_Y($date)
 {
     $date = date_create($date);
     return date_format($date, 'd-m-Y');
 }
 
+// Create a new project table
 function get_projecttable($projectname, $startdate, $enddate)
 {
     $progress = get_progress($startdate, $enddate);
@@ -64,10 +75,9 @@ function get_projecttable($projectname, $startdate, $enddate)
     $startDate = date_create($startdate);
     $endDate = date_create($enddate);
 
-    $s = '<div class="col-lg-6">';
-    $s = $s . "<table class='table table-responsive'><thead><tr class='align-middle'><th colspan='4' style='width: 714.4px'><span style='margin-right: 10px'>Project: ".$projectname."</span><i id='pm-btn-".$projectname."' class='fa fa-minus'></i></th></tr></thead><tbody>";
-
-    $s = $s . "<tr class='collapse-".$projectname."'><th>Progress</th><th>Date</th><th>Milestones</th><th>Chart</th></tr>";
+    $s = '<div class="col-lg-12">';
+    $s = $s . "<table class='table table-responsive'><thead><tr class='align-middle'><th class='bg-primary' colspan='4' style='width: 792px'><span>Project: ".$projectname."</span><i id='pm-btn-".$projectname."' class='fa fa-minus'></i></th></tr></thead><tbody>";
+    $s = $s . "<tr class='collapse-".$projectname." h-100'><th class='bg-primary'>Progress</th><th class='bg-primary'>Date</th><th class='bg-primary'>Milestones</th><th class='bg-primary'>Chart</th></tr>";
     $s = $s . '<tr class="collapse-'.$projectname.'"><td id="progress-td-'.$projectname.'" class="progress-td align-middle" rowspan="'. $rowspan .'"><div id="progress-'.$projectname.'" class="progress progress-bar-vertical"><div id="'.$projectname.'" style="width: 100%" class="progress-bar bg-success" role="progressbar" aria-valuenow="'. $progress.'" aria-valuemin="0" aria-valuemax="100"></div></div></td>
                         <td class="align-middle custom-td">
                             <div>'.$start.'</div>
@@ -81,13 +91,12 @@ function get_projecttable($projectname, $startdate, $enddate)
     $interval = new DateInterval('P1D');
     $startDate = date_add($startDate, date_interval_create_from_date_string('1 days'));
     $daterange = new DatePeriod($startDate, $interval, $endDate);
-    $milestonedate = date_create("2018-01-20");
+    $milestonedate = date_create("2018-02-01");
     foreach($daterange as $date)
     {
-            $s = $s . '<tr class="collapse-' . $projectname . '">
-                    <td class="align-middle custom-td">';
-            $s = $s . '<div>' . $date->format('d-m-Y') . '</div>';
-            $s = $s . '</td>
+        if($milestonedate == $date) {
+            $s = $s . '<tr class="collapse-' . $projectname . ' mh-50">
+                    <td class="align-middle custom-td"><div>' . $date->format('d-m-Y') . '</div></td>
                     <td class="align-middle custom-td"><div class="btn-group">
                             <button type="button" class="btn btn-primary btn-sm" style="height: 30.4px">Action</button>
                             <button type="button" class="btn dropdown-toggle dropdown-toggle-split btn-sm" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="height: 30.4px">
@@ -102,6 +111,11 @@ function get_projecttable($projectname, $startdate, $enddate)
                             </div>
                         </div></td>
                 </tr>';
+        } else {
+            $s = $s . '<tr class="collapse-' . $projectname . '">
+                    <td class="align-middle"><div></div>
+                    <td class="align-middle" style="opacity: 0"><div>-</div></tr>';
+        }
     }
 
     $s = $s . '<tr class="collapse-'.$projectname.'">
@@ -111,8 +125,7 @@ function get_projecttable($projectname, $startdate, $enddate)
                     <td class="align-middle custom-td">
                         <div>FINISH</div>
                     </td>
-               </tr></div>';
-    $s = $s . '</tbody></table></div>';
+               </tr></div></tbody></table></div>';
 
     return $s;
 }

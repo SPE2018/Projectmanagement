@@ -15,7 +15,7 @@ class SQL {
     public static function connect() {
         static $con = null;
         if ($con == null) {
-            $con = new mysqli("localhost", "root", "", "planit");
+            $con = new mysqli("localhost", "root", "root", "planit-db");
             if ($con->connect_errno) {
                 echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
                 die();
@@ -93,10 +93,8 @@ class SQL {
         return $project;
     }
 
-    public static function addProject($name) {
-        $created = time(); // Current time in seconds
-        $endby = time() + 60*60*24*7; // 7 days ahead in seconds
-        $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', from_unixtime($created), from_unixtime($endby));";
+    public static function addProject($name, $created, $endby) {
+        $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', '$created', '$endby')";
         SQL::query($sql); // TODO: Error handling   
     }
 
