@@ -1,7 +1,6 @@
 <?php
-include_once '../LogIn/LoginUtility.php';
-include_once '../util/user_manager.php';
-include_once '../util/sql_util.php';
+include_once 'user_manager.php';
+include_once 'sql_util.php';
 
 if(session_status() != PHP_SESSION_ACTIVE) {
     session_start();
