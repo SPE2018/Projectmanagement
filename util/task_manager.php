@@ -1,6 +1,5 @@
 <?php
 
-
 class TaskManager {
     
     public static function loadTasks($milestone_id) {
