@@ -72,7 +72,7 @@
                         PRIMARY KEY (`id`)
                       ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;");
         
-        query($con, "INSERT INTO `users` VALUES (0, 'admin', 'john.doe@example.de', 'root', 1, 1);");
+        query($con, "INSERT INTO `users` VALUES (0, 'admin', 'john.doe@example.com', 'root', 1, 1);");
         
         query($con, "CREATE TABLE `tasks` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -82,6 +82,16 @@
                         `finished` tinyint(1) DEFAULT '0',
                         PRIMARY KEY (`id`)
                       ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
+        
+        query($con, "CREATE TABLE `notes` (
+                        `id`		INT(11) NOT NULL AUTO_INCREMENT,
+                        `pid`		INT(11) NOT NULL,
+                        `uid`		INT(11) NOT NULL,
+                        `timestamp`	DATETIME,
+                        `header`	VARCHAR(100),
+                        `comment`	VARCHAR(255),
+                        PRIMARY KEY(`id`)
+                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
         $installed = true;
     }
