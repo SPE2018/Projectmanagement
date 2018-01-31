@@ -35,30 +35,7 @@ class SQL {
             die("Error while querying: $sql: " . $con->error);
         }
         return $result;
-    }
+    }    
 
-    /*
-     * Users
-     */
-
-    
-
-    /*
-     * Users end
-     */
-
-    /*
-     * Projects
-     */
-
-    
-
-    
-
-   
-
-    /*
-     * Projects end
-     */
 
 }

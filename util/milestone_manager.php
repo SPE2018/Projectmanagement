@@ -1,6 +1,9 @@
 <?php
 
 include_once "sql_util.php";
+include_once "edit_task_util.php";
+include_once "elements/bootstrap_util.php";
+include_once "elements/page_builder.php";
 
 class MilestoneManager {
     
@@ -14,7 +17,7 @@ class MilestoneManager {
         }
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
         foreach ($result as $i) {
-            $milestone = new Milestone($i['id'], $i['name'], $i['desc']);
+            $milestone = new Milestone($i['id'], $i['name'], $i['desc'], $i['start'], $i['stop']);
            
             array_push($toReturn, $milestone);
             
@@ -27,13 +30,20 @@ class MilestoneManager {
         $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
         $result = SQL::query($sql)->fetch_assoc();        
 
-        $milestone = new Milestone($result['id'], $result['name'], $result['desc']);
+        $milestone = new Milestone($result['id'], $result['name'], $result['desc'], $result['start'], $result['stop']);
         $milestone->tasks = TaskManager::loadTasks($milestone->id);
         return $milestone;
     }
     
-    public static function addMilestone($project_id, $name, $desc) {
-        $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`) VALUES('$project_id', '$name', '$desc');";
+    public static function addMilestone($project_id, $name, $desc, $start, $stop) {
+        $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`, `start`, `stop`) VALUES('$project_id', '$name', '$desc', '$start', '$stop');";
+        $result = SQL::query($sql); // TODO: Error handling        
+    }
+    
+    public static function updateMilestone($milestone_id, $name, $desc, $start, $stop) {
+        $sql = "UPDATE milestones SET "
+                . "`name`='$name', `desc`='$desc', `start`='$start', `stop`='$stop' "
+                . "WHERE id=$milestone_id;";
         $result = SQL::query($sql); // TODO: Error handling        
     }
     
@@ -51,50 +61,105 @@ class MilestoneManager {
        return $save == "true";
     }
     
-    public static function save() {
+    public static function shouldEditTask() {
+         return filter_input(INPUT_GET, "taskid") != null
+                && filter_input(INPUT_GET, "edit") == "true";
+    }
+    
+    
+    
+    public static function save($milestone_id) {
+        $name = filter_input(INPUT_POST, "name");
+        $desc = filter_input(INPUT_POST, "desc");
+        $start = filter_input(INPUT_POST, "start");
+        $stop = filter_input(INPUT_POST, "stop");
         
+        MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
+        
+        //MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
     }
     
     public static function displayMilestone($project_id, $milestone_id) {
         if (MilestoneManager::pressedSave()) {
-            MilestoneManager::save();
-            echo '<div class="alert alert-success">
-                Die Änderungen wurden <strong>gespeichert.</strong>
-              </div>';
-        } else {
-            echo "Modify<br>";
+            MilestoneManager::save($milestone_id);
+            echo BUtil::success("Die Änderungen am Meilenstein wurden <strong>gespeichert.</strong>");
+        }
+        // If the user pressed the finish button, change the finish state of the task
+        if (TaskEditor::toggledFinished()) {
+            TaskEditor::handleFinished();
+        }
+        // If the user pressed the edit task button, send them
+        // to the edit task page
+        if (MilestoneManager::shouldEditTask()) {
+            $project_id = filter_input(INPUT_GET, "projectid");
+            $milestone_id = filter_input(INPUT_GET, "milestoneid");
+            $task_id = filter_input(INPUT_GET, "taskid");
+            header("Location: edit_task.php?projectid=$project_id&"
+                    . "milestoneid=$milestone_id&"
+                    . "taskid=$task_id");
+            return;
         }
         
         // Load milestone including tasks
         $milestone = MilestoneManager::loadMilestoneFromId($project_id, $milestone_id);
         if ($milestone == null) {
             die("Milestone not found");
-        }
+        }        
         
+        $builder = new PageBuilder();
         
-        $out = "";       
-        
+        //$out = "";       
 
-        $out = $out . "<h1>Milestone " . $milestone->name . "</h1><br>";
+        //$out = $out . "<h1>Milestone " . $milestone->name . "</h1><br>";
+        $h1 = ElementFactory::createHtml(
+                "<h1>Milestone " . $milestone->name . "</h1><br>");
+        $builder->add($h1->open);
         
-        $out = $out . "<form method='post'>"; 
-        $out = $out . '<div class="form-group">';
+        //$out = $out . "<form method='post'>"; 
+        //$out = $out . '<div class="form-group">';
+        $builder->add(ElementFactory::createHtml(
+                "<form method='post'>"));
+        $builder->add(ElementFactory::createHtml(
+                '<div class="form-group">'));
         
-        $out = $out . '<label for="desc">Beschreibung:</label>';
-        $out = $out . "<input class='form-control' id='desc' type='text' name='desc' value='" . $milestone->desc . "'>";     
+        //$out = $out . BUtil::getLabel("name", "Name:");
+        //$out = $out . "<input class='form-control' id='name' type='text' name='name' value='" . $milestone->name . "'>";     
+        //$out = $out . BUtil::getTextInput("name", $milestone->name);
+        //$out = $out . BUtil::getLabel("desc", "Beschreibung:");
+        //$out = $out . BUtil::getTextInput("desc", $milestone->desc);   
+        
+        $builder->add(ElementFactory::createLabel("name", "Name:"));
+        $builder->add(ElementFactory::createTextInput("name", $milestone->name));
+        $builder->add(ElementFactory::createLabel("desc", "Beschreibung:"));
+        $builder->add(ElementFactory::createTextInput("desc", $milestone->desc));
+        
+        $builder->add(ElementFactory::createLabel("start", "Startzeit:"));
+        $builder->add(ElementFactory::createDatepicker("start", "start_picker", $milestone->start));
+        $builder->add(ElementFactory::createLabel("stop", "Endzeit:"));
+        $builder->add(ElementFactory::createDatepicker("stop", "stop_picker", $milestone->stop));
+        
+        /*$out = $out . BUtil::getLabel("start", "Startzeit:");
+        $out = $out . BUtil::getDatepicker("start", "start_picker", $milestone->start);
+        $out = $out . BUtil::getLabel("stop", "Endzeit:");
+        $out = $out . BUtil::getDatepicker("stop", "stop_picker", $milestone->stop);*/
+        
+        $out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";     
+        $out = $out . "</div>"; // Close form group
+        $out = $out . "</form>";   
         
         $out = $out . "<ol>";            
         $tasks_array = $milestone->tasks;
         foreach ($tasks_array as $task) {
+            $finished = $task->finished ? "Fertig" : "Nicht fertig";
+            
             $out = $out . "<li>";
-            $out = $out . "<h4>" . $task->name . "</h4>";
+            $out = $out . "<h4>" . $task->name . " ($finished)</h4>";
+            $out = $out . TaskEditor::displayTask($project_id, $milestone_id, $task->id);
             $out = $out . "</li>";
         }
         $out = $out . "</ol>";
         
-        $out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";     
-        $out = $out . "</div>"; // Close form group
-        $out = $out . "</form>";     
+          
         
         
         echo $out;
