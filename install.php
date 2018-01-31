@@ -88,8 +88,8 @@
                         `pid`		INT(11) NOT NULL,
                         `uid`		INT(11) NOT NULL,
                         `timestamp`	DATETIME,
-                        `header`	VARCHAR(100),
-                        `comment`	VARCHAR(255),
+                        `header`	VARCHAR(40),
+                        `comment`	VARCHAR(250),
                         PRIMARY KEY(`id`)
                       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         

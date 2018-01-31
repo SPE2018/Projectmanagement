@@ -16,27 +16,33 @@ class Login {
         }
         $user = UserManager::getUser($name);
         if($user != NULL) {
-            if(UserManager::getUser($name) == NULL) {
-                echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
-            } elseif($user->enabled == faöse) {
-                echo '<p style="Color: orange; Font-Size:24">' . $name . ' does exists but is not enabled yet :S</p>';            
+            if($pass != $user->password){
+                echo '<p style="Color: red; Font-Size:24">wrong password for ' . $name . '</p>';            
+            } elseif(($user->enabled) == false) {
+                echo '<p style="Color: orange; Font-Size:24">' . $name .  ' does exists but is not enabled yet</p>';            
             } else {
-                Login::admincheck($name, $pass);
+                Login::admincheck($user->name, $pass);
+                $_SESSION['user'] = $user->name;
+                if((UserManager::getUser($name)->enabled) == true) {
+                    header("Location: ../index.php");  
+                }
             }
+        } else {
+            echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
         }
     }
 
     public static function admincheck($name, $pass) {
-        $admin = UserManager::getUser('admin');
-        if($name != 'admin') {
-            echo '<p style="Color: green; Font-Size:24">Welcome to planIT, ' . $name . '!</p>';            
-        } elseif ($pass == $admin->password) {
-            $_SESSION['user'] = 'admin';
-            echo '<p style="Color: darkgreen; Font-Size:26">Welcome, Master =))</p>';            
+        if(UserManager::getUser($name)->admin == true) {
+            $_SESSION['user'] = $name;
             header("Location: ../Admin/admin.php");
+            return true;
+        } elseif ($pass == UserManager::getUser($name)->password) {
+            $_SESSION['user'] = $name;
         } else {
             echo "Wrong password for " . $name;
         }
+        return false;
     }
     
     public static function createLoginForm() {
@@ -50,6 +56,10 @@ class Login {
         . 'name="login_password" placeholder="password" required><br><br>';
 
         echo '<button type="submit" name="btn_login" value="yes">sign in</button></form>';
+    }
+    
+    public static function logout() {
+        unset($_SESSION['user']);
     }
 }
 

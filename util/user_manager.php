@@ -15,7 +15,7 @@ class UserManager {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['admin'], $result['enabled']);
         return $user;
     }
     

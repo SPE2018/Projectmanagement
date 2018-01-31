@@ -33,15 +33,19 @@ class Admin{
         if(UserManager::getAdmins() != NULL) {
             $users = UserManager::getAdmins();
             foreach($users as $u) {
-                echo '<tr><td colspan=5>' . $u->name . '</td>'
-                . (($u->name == 'admin') ? '<td>cannot be demoted!</td>' : ('<td><a href="admin.php?demote=' . $u->name . '">demote</a></td>'));
+                if($_SESSION['user'] == $u->name) {
+                    echo '<tr><td colspan=5>' . $u->name . '</td>'
+                    . (($_SESSION['user'] == 'admin') ? '<td>cannot be demoted!</td>' : ('<td><a href="admin.php?demote=' . $u->name . '">hand back administrator-permissions</a></td>'));
+                } else {
+                    echo '<tr><td colspan=5>' . $u->name . '</td>'
+                    . (($u->name == 'admin') ? '<td>cannot be demoted!</td>' : ('<td>only "admin" can demote admins</td>'));
+                }        
             }
         }
         echo '</table>';
     }
     
     public static function display_EnabledUserList() {
-
         echo '<table class="table">already enabled users:' .
         '<tr><th colspan=5>username</th><th>promote</th><th>delete</th><th>manage</th>';
         if(UserManager::getEnabledUsers() != NULL) {
