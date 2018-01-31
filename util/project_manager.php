@@ -22,7 +22,7 @@ class ProjectManager {
     
     public static function getAllProjects($loadMilestones = false, $loadTasks = false) {
         $toReturn = array();
-        $sql = "SELECT * FROM projects WHERE;";
+        $sql = "SELECT * FROM projects;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC); // TODO: Error handling
         
         foreach ($result as $r) {            
@@ -40,6 +40,7 @@ class ProjectManager {
             }
             array_push($toReturn, $project);
         }
+        return $toReturn;
     }
     
     public static function getProjectFromId($id, $loadMilestones = false, $loadTasks = false) {
@@ -62,10 +63,8 @@ class ProjectManager {
         return $project;
     }
 
-    public static function addProject($name) {
-        $created = time(); // Current time in seconds
-        $endby = time() + 60*60*24*7; // 7 days ahead in seconds
-        $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', from_unixtime($created), from_unixtime($endby));";
+    public static function addProject($name, $startdate, $enddate) {
+        $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', '$startdate', '$enddate')";
         SQL::query($sql); // TODO: Error handling   
     }
     
