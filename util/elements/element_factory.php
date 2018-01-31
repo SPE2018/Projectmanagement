@@ -5,7 +5,7 @@ include_once "button_factory.php";
 class ElementFactory {
     
     public static function createTextInput($name, $val) {
-        return new TextInput($name, $val, $name);
+        return new TextInput($name, $val);
     }
     
     public static function createLabel($for, $str) {
@@ -74,11 +74,12 @@ class Html extends Element {
 
 }
 
-class TextInput extends Element {
+class TextInput extends ElementUnique {
     
     public $id;    
     
-    public function __construct($id) {
+    public function __construct($id, $val) {
+        parent::__construct(null, $id, $val);
         $this->id = $id;
     }
     

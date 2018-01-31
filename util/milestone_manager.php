@@ -111,16 +111,18 @@ class MilestoneManager {
         //$out = "";       
 
         //$out = $out . "<h1>Milestone " . $milestone->name . "</h1><br>";
-        $h1 = ElementFactory::createHtml(
-                "<h1>Milestone " . $milestone->name . "</h1><br>");
-        $builder->add($h1->open);
+        $builder->add(ElementFactory::createHtml(
+                "<h1>Milestone " . $milestone->name . "</h1><br>")->open);
         
         //$out = $out . "<form method='post'>"; 
         //$out = $out . '<div class="form-group">';
-        $builder->add(ElementFactory::createHtml(
-                "<form method='post'>"));
-        $builder->add(ElementFactory::createHtml(
-                '<div class="form-group">'));
+        $form = ElementFactory::createHtml(
+                "<form method='post'>", "</form>");
+        $form_group = ElementFactory::createHtml(
+                '<div class="form-group">', "</div>");
+        
+        $builder->add($form->open);        
+        $builder->add($form_group->open);
         
         //$out = $out . BUtil::getLabel("name", "Name:");
         //$out = $out . "<input class='form-control' id='name' type='text' name='name' value='" . $milestone->name . "'>";     
@@ -143,26 +145,41 @@ class MilestoneManager {
         $out = $out . BUtil::getLabel("stop", "Endzeit:");
         $out = $out . BUtil::getDatepicker("stop", "stop_picker", $milestone->stop);*/
         
-        $out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";     
-        $out = $out . "</div>"; // Close form group
-        $out = $out . "</form>";   
+        //$out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";
+        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Speichern", true, "save", "true"));
         
-        $out = $out . "<ol>";            
+        //$out = $out . "</div>"; // Close form group
+        //$out = $out . "</form>";   
+        $builder->add($form->close);        
+        $builder->add($form_group->close);
+        
+        $ol = ElementFactory::createHtml("<ol>", "</ol>");
+        
+        $builder->add($ol->open);
+        
+        //$out = $out . "<ol>";            
         $tasks_array = $milestone->tasks;
         foreach ($tasks_array as $task) {
             $finished = $task->finished ? "Fertig" : "Nicht fertig";
             
-            $out = $out . "<li>";
-            $out = $out . "<h4>" . $task->name . " ($finished)</h4>";
-            $out = $out . TaskEditor::displayTask($project_id, $milestone_id, $task->id);
-            $out = $out . "</li>";
+            $li = ElementFactory::createHtml("<li>", "</li>");
+            //$out = $out . "<li>";
+            $builder->add($li->open);
+            //$out = $out . "<h4>" . $task->name . " ($finished)</h4>";
+            $builder->add(ElementFactory::createHtml("<h4>" . $task->name . " ($finished)</h4>")->open);
+            //$out = $out . TaskEditor::displayTask($project_id, $milestone_id, $task->id);
+            $builder->add(ElementFactory::createHtml(TaskEditor::displayTask($project_id, $milestone_id, $task->id))->open);
+            //$out = $out . "</li>";
+            $builder->add($li->close);
         }
-        $out = $out . "</ol>";
+        //$out = $out . "</ol>";
+        $builder->add($ol->close);
         
           
         
         
-        echo $out;
+        //echo $out;
+        $builder->show();
     }
     
     public static function shouldDisplayMilestoneModal() {

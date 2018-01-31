@@ -9,6 +9,10 @@ class PageBuilder {
     }
     
     public function add($elem) {
+        if ($elem == null) {
+            echo "<br>ERROR: NULL<br>";
+            return;
+        }
         array_push($this->elements, $elem);
     }
     

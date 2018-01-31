@@ -8,6 +8,7 @@ abstract class ButtonType {
     const DANGER = "btn btn-danger";
     const SUCCESS = "btn btn-success";
     const BASIC = "btn btn-default";
+    const PRIMARY = "btn btn-primary";
     
 }
 
