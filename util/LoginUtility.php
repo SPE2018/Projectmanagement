@@ -15,30 +15,27 @@ class Login {
             $pass = filter_input(INPUT_POST, 'login_password');
         }
         $user = UserManager::getUser($name);
-        if($user != NULL) {
-            if($pass != $user->password){
-                echo '<p style="Color: red; Font-Size:24">wrong password for ' . $name . '</p>';            
-            } elseif(($user->enabled) == false) {
-                echo '<p style="Color: orange; Font-Size:24">' . $name .  ' does exists but is not enabled yet</p>';            
-            } else {
-                Login::admincheck($user->name, $pass);
-                $_SESSION['user'] = $user->name;
-                if((UserManager::getUser($name)->enabled) == true) {
-                    header("Location: ../index.php");  
-                }
-            }
+        var_dump($user);
+        if($pass != $user->password){
+            echo '<p style="Color: red; Font-Size:24">wrong password for ' . $name . '</p>';            
         } else {
-            echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
+            $_SESSION['user'] = $user->name;
+            if($user->admin == true) {
+                Login::admincheck($user->name, $pass);
+            } elseif($user->enabled == true) {
+                header("Location: ../index.php");  
+            } else {
+                echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
+            }
         }
     }
 
     public static function admincheck($name, $pass) {
-        if(UserManager::getUser($name)->admin == true) {
+        $admin = UserManager::getUser($name);
+        if($pass == $admin->password) {
             $_SESSION['user'] = $name;
             header("Location: ../Admin/admin.php");
             return true;
-        } elseif ($pass == UserManager::getUser($name)->password) {
-            $_SESSION['user'] = $name;
         } else {
             echo "Wrong password for " . $name;
         }

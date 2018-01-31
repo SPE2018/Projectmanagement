@@ -38,7 +38,7 @@ class Admin{
                     . (($_SESSION['user'] == 'admin') ? '<td>cannot be demoted!</td>' : ('<td><a href="admin.php?demote=' . $u->name . '">hand back administrator-permissions</a></td>'));
                 } else {
                     echo '<tr><td colspan=5>' . $u->name . '</td>'
-                    . (($u->name == 'admin') ? '<td>cannot be demoted!</td>' : ('<td>only "admin" can demote admins</td>'));
+                    . (($_SESSION['user'] == 'admin') ? ('<td><a href="admin.php?demote=' . $u->name . '">demote</a></td>') : ('<td>only "admin" can demote admins</td>'));
                 }        
             }
         }
