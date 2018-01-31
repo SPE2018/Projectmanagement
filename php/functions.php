@@ -95,8 +95,7 @@ function get_projecttable($projectname, $startdate, $enddate)
     $startDate = date_create($startdate);
     $endDate = date_create($enddate);
 
-    $s = '<div class="col-md-4">';
-    $s = $s . '<table class="table table-responsive">';
+    $s = '<table class="table table-responsive">';
     $s = $s . '<tr><th class="bg-info">Progress</th><th class="bg-info">Date</th><th class="bg-info">Milestones</th></tr>';
     $s = $s . '<tr><td id="progress-td-'.$projectname.'" class="progress-td align-middle" rowspan="'. $rowspan .'"><div id="progress-'.$projectname.'" class="progress progress-bar-vertical"><div id="'.$projectname.'" style="width: 100%" class="progress-bar bg-success" role="progressbar" aria-valuenow="'. $progress.'" aria-valuemin="0" aria-valuemax="100"></div></div></td>
                         <td class="align-middle custom-td">
@@ -140,10 +139,10 @@ function get_projecttable($projectname, $startdate, $enddate)
 
 function get_chart($projectname)
 {
-    $s = '<div class="col-md-auto"><table class="table table-responsive">
-    <tr><th class="bg-info" style="width: 624px"><i id="pm-btn-line-chart" class="fa fa-plus"></i>Milestone Trend Analysis</th></tr>
+    $s = '<table class="table table-responsive">
+    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-line-chart" class="fa fa-plus"></i>Milestone Trend Analysis</th></tr>
     <tr class="collapse-line-chart"><td id="line-chart-'.$projectname.'" class="bg-primary"></td></tr>
-    <tr><th class="bg-info" style="width: 624px"><i id="pm-btn-pie-chart" class="fa fa-plus"></i>Milestones reached...</th></tr>
+    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-pie-chart" class="fa fa-plus"></i>Milestones reached...</th></tr>
     <tr class="collapse-pie-chart"><td id="pie-chart-'.$projectname.'" class="bg-primary"></td></tr></table>';
     return $s;
 }

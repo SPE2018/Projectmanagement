@@ -63,6 +63,11 @@ i {
 .icon-46:before { content: "U"; }
 .icon-47:before { content: "S"; }
 
+#infoBox{
+    border-right: 4px solid #20c997;
+    text-align: right;
+}
+
 .jumbotron-billboard .img {
     margin-bottom: 0px;
     opacity: 0.4;
@@ -97,6 +102,11 @@ i {
 th{
     text-align: center;
 }
+
+.nav-tabs {
+    border-bottom: none;
+}
+
 .progress-bar-vertical {
     transform: rotate(180deg);
     width: 15px;

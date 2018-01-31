@@ -184,7 +184,7 @@ function createChart(project){
     var layout = {
         autosize: true,
         height: 450,
-        width: 600,
+        width: 700,
         font: {
             color: '#ffffff'
         },
@@ -219,7 +219,7 @@ function createChart(project){
 
     var layout = {
         height: 450,
-        width: 600,
+        width: 700,
         font: {
             color: '#ffffff'
         },
