@@ -16,7 +16,7 @@ class ElementFactory {
         return new HtmlElement($html, $close);
     }
     
-    public static function createDatepicker($name, $id, $val) {
+    public static function createDatepicker($name, $val, $id) {
         return new Datepicker($name, $id, $val);
     }
     

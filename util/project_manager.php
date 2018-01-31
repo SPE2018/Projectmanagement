@@ -106,7 +106,7 @@ class ProjectManager {
             $out = $out . "<li>";
             //$out = $out . "<p><h3>Milestone " . $milestone->name . " (" . $milestone->id . ")</h3>";            
             $out = $out . MilestoneManager::getMilestoneModal($project_id, $milestone);
-            $out = $out . "" . $milestone->desc . "</p>";
+            $out = $out . "<p>" . $milestone->desc . "</p>";
             $out = $out . "  <ol>";            
             $tasks_array = $milestone->tasks;
             foreach ($tasks_array as $task) {

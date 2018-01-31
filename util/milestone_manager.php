@@ -199,6 +199,7 @@ class MilestoneManager {
     
     public static function getMilestoneModal($projectid, $milestone) {        
         $modalname = $milestone->name;
+        $modalname = str_replace(" ", "_", $modalname);
         $out = "";
         
         $out = $out . '<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#' . $modalname . '">Meilenstein ' . $milestone->name . '</button><br>';
@@ -224,7 +225,7 @@ class MilestoneManager {
         
         $out = $out . "<p>Beschreibung: " . $milestone->desc . "</p>";
                 
-        $out = $out . var_export($milestone, true);
+        //$out = $out . var_export($milestone, true);
         
         $out = $out . '</div>';
         // End Modal Body
