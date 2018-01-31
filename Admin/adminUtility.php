@@ -8,5 +8,5 @@ include_once 'util/sql_util.php';
 //include_once 'functions.php';
 
 class Admin{
-    public static function
+    //public static function
 }

@@ -18,7 +18,7 @@ class SQL {
     public static function connect() {
         static $con = null;
         if ($con == null) {
-            $con = new mysqli("localhost", "root", "root", "planit-db");
+            $con = new mysqli("localhost", "root", "", "planit");
             if ($con->connect_errno) {
                 echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
                 die();
@@ -35,29 +35,7 @@ class SQL {
             die("Error while querying: $sql: " . $con->error);
         }
         return $result;
-    }
+    }    
 
-    /*
-     * Users
-     */
-
-    
-
-    /*
-     * Users end
-     */
-
-    /*
-     * Projects
-     */
-
-
-    
-
-   
-
-    /*
-     * Projects end
-     */
 
 }

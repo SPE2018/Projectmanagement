@@ -108,7 +108,7 @@ function get_projecttable($projectname, $startdate, $enddate)
     $interval = new DateInterval('P1D');
     $startDate = date_add($startDate, date_interval_create_from_date_string('1 days'));
     $daterange = new DatePeriod($startDate, $interval, $endDate);
-    $milestones = new Milestone(1, "Milestone", date_create("2018-01-18"), date_create("2018-01-19"), "Hallo Welt!");
+    $milestones = new Milestone(1, "Milestone", "2018-01-18", "2018-01-19", "Hallo Welt!");
     foreach($daterange as $date)
     {
 

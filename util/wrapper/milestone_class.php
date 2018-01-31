@@ -12,8 +12,8 @@ class Milestone {
     public function __construct($id, $name, $startdate, $enddate, $desc) {
         $this->id = intval($id);        
         $this->name = $name;
-        $this->startdate=$startdate;
-        $this->enddate=$enddate;
+        $this->startdate = date_create($startdate);
+        $this->enddate = date_create($enddate);
         $this->desc = $desc;
     }
     

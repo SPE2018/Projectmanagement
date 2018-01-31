@@ -18,7 +18,7 @@ include_once "util/edit_task_util.php";
     <body>
         <?php
         
-        TaskEditor::displayTask();
+        TaskEditor::editTask();
         
         ?>
     </body>
