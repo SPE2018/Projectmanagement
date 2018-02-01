@@ -136,16 +136,16 @@ class MilestoneManager {
                 $trClass = "class='bg-danger'";
                 $name = "<b>" . $name . "</b>";
             }
-            
-            $tr = ElementFactory::createHtml("<tr $trClass>", "</tr>");            
+
+            $tr = ElementFactory::createHtml("<tr>", "</tr>");
             $builder->add($tr->open);
-            
+
             $td = ElementFactory::createHtml("<td>", "</td>");
             $builder->add($td->open);
-            
-            $builder->add(ElementFactory::createHtml("<div class='task' value='$t->id'>$name</div>"));
-            
-            $builder->add($td->close);            
+
+            $builder->add(ElementFactory::createHtml("<button type='button' class='btn btn-info task' value='$t->id'>$name</button>"));
+
+            $builder->add($td->close);
             $builder->add($tr->close);
         }
         
@@ -157,8 +157,6 @@ class MilestoneManager {
         ////////////////
         
         $builder->show();
-        
-        ProjectManager::displayProjectUsers($project_id);
     }
     
     public static function displayEditMilestone($project_id, $milestone_id) {

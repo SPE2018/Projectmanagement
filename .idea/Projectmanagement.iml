@@ -12,5 +12,6 @@
     <orderEntry type="library" name="bootstrap-datetimepicker" level="application" />
     <orderEntry type="library" name="tempusdominus-bootstrap-4" level="application" />
     <orderEntry type="library" name="all" level="application" />
+    <orderEntry type="library" name="bootstrap-select" level="application" />
   </component>
 </module>

@@ -63,6 +63,29 @@ class ProjectManager {
         return $project;
     }
 
+    public static function getProjectFromName($name) {
+        $sql = "SELECT * FROM projects WHERE `name`='$name';";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        $id = $result['id'];
+        $project = new Project($id, $result['name'], $result['created'], $result['endby']);
+
+        $sql = "SELECT * FROM milestones WHERE project_id=$id;";
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
+        foreach ($result as $i) {
+            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+            array_push($project->milestones, $milestone);
+            $milestone->tasks = TaskManager::loadTasks($milestone->id);
+        }
+        return $project;
+    }
+
+    public static function getProjectIdFromName($name) {
+        $sql = "SELECT * FROM projects WHERE `name`='$name';";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+
+        return $result['id'];
+    }
+
     public static function addProject($name, $startdate, $enddate) {
         $sql = "INSERT INTO projects (name, created, endby) VALUES('$name', '$startdate', '$enddate')";
         SQL::query($sql); // TODO: Error handling   
@@ -210,9 +233,17 @@ class ProjectManager {
         
         $builder->add($table->close);
         $builder->add($divTable->close);
-        
+
+        $allUsers = UserManager::getAllUsers();
+
         $builder->add(ElementFactory::createLabel("add_user", "Add User:"));
-        $builder->add(ElementFactory::createTextInput("add_user_input", "username"));
+        //$builder->add(ElementFactory::createTextInput("add_user_input", "username"));
+        $searchBox = ElementFactory::createHtml("<select class='form-control' id='add_user'>", "</select>");
+        $builder->add($searchBox->open);
+        foreach ($allUsers as $u) {
+            $builder->add(ElementFactory::createHtml("<option>$u->name</option>"));
+        }
+        $builder->add($searchBox->close);
         $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add to project", false, "add_user_button", " "));            
         
         $builder->show();

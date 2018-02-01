@@ -30,10 +30,23 @@ class UserManager {
     
     public static function getDisabledUsers() {
         $sql = "SELECT * FROM users WHERE enabled=0;";
-        $result = SQL::query($sql)->fetch_all();
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
         
         $toReturn = array();
         
+        foreach ($result as $r) {
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['enabled']);
+            array_push($toReturn, $user);
+        }
+        return $toReturn;
+    }
+
+    public static function getAllUsers() {
+        $sql = "SELECT * FROM users WHERE enabled=1;";
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
+
+        $toReturn = array();
+
         foreach ($result as $r) {
             $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['enabled']);
             array_push($toReturn, $user);

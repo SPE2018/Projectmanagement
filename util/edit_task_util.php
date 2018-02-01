@@ -40,9 +40,10 @@ class TaskEditor {
     }
     
     public static function displayTask($project_id, $milestone_id, $task_id) {   
-        $builder = new PageBuilder();
-        
-        $table = new HtmlBuilder();
+        //$builder = new PageBuilder();
+
+        //$table = new HtmlBuilder();
+        echo ($task_id);
         
     }
     
@@ -50,11 +51,8 @@ class TaskEditor {
         $task = TaskManager::getTask($task_id);
         
         $modalname = $task_id . "_task";
-        
+
         $out = "";
-        
-        $out = $out . '<button type="button" class="btn btn-dark" data-toggle="modal" data-target="#' . $modalname . '">Open Modal</button>';
-        
         
         $out = $out . "<div id='$modalname' class='modal fade' role='dialog'>";
         $out = $out . "<div class='modal-dialog'>";
