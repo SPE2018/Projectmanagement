@@ -88,7 +88,7 @@ class MilestoneManager {
         }
         $builder = new PageBuilder();
         
-        $builder->add(ElementFactory::createImg("php/css/milestone.jpeg"));
+        //$builder->add(ElementFactory::createImg("php/css/milestone.jpeg"));
         
         $builder->add(ElementFactory::createHeader("Milestone <small class='text-muted'>$milestone->name</small>", "h1"));
         $builder->add(ElementFactory::createHtml("<hr style='border-color: #EEEEEE; max-width: 700px' align='left'>")->open);

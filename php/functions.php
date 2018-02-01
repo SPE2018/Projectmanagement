@@ -103,7 +103,7 @@ function get_projecttable($id, $projectname, $startdate, $enddate)
     $endDate = date_create($enddate);
     $milestones = MilestoneManager::loadMilestones($id);
 
-    $s = '<table class="table table-responsive">';
+    $s = '<table class="table">';
     $s = $s . '<tr><th class="bg-info">Progress</th><th class="bg-info">Date</th><th class="bg-info">Milestones</th></tr>';
     $s = $s . '<tr><td id="progress-td-'.$projectname.'" class="progress-td align-middle" rowspan="'. $rowspan .'"><div id="progress-'.$projectname.'" class="progress progress-bar-vertical"><div id="'.$projectname.'" style="width: 100%" class="progress-bar bg-success" role="progressbar" aria-valuenow="'. $progress.'" aria-valuemin="0" aria-valuemax="100"></div></div></td>
                         <td class="align-middle custom-td">
