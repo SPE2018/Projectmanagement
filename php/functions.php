@@ -1,4 +1,6 @@
 <?php
+include_once('util/milestone_manager.php');
+
 function get_head()
 {
     return file_get_contents("php/html/head.html");
@@ -29,11 +31,16 @@ function get_tabs()
     return file_get_contents("php/html/tabs.html");
 }
 
-function get_parameter($name, $default)
+function get_parameter($name, $method, $default)
 {
-    if(isset($_GET[$name]))
-    {
-        return $_GET[$name];
+    if ($method == "GET" || $method == "get") {
+        if (isset($_GET[$name])) {
+            return $_GET[$name];
+        }
+    } else if ($method == "POST" || $method == "post") {
+        if (isset($_POST[$name])) {
+            return $_POST[$name];
+        }
     }
     return $default;
 }
@@ -84,7 +91,7 @@ function get_d_m_Y($date)
 }
 
 // Create a new project table
-function get_projecttable($projectname, $startdate, $enddate)
+function get_projecttable($id, $projectname, $startdate, $enddate)
 {
     $progress = get_progress($startdate, $enddate);
     $rowspan = get_diffStartEnd($startdate, $enddate) + 1;
@@ -94,6 +101,7 @@ function get_projecttable($projectname, $startdate, $enddate)
     $end = get_d_m_Y($enddate);
     $startDate = date_create($startdate);
     $endDate = date_create($enddate);
+    $milestones = MilestoneManager::loadMilestones($id);
 
     $s = '<table class="table table-responsive">';
     $s = $s . '<tr><th class="bg-info">Progress</th><th class="bg-info">Date</th><th class="bg-info">Milestones</th></tr>';
@@ -105,23 +113,42 @@ function get_projecttable($projectname, $startdate, $enddate)
                             <div>START</div>
                         </td>                     
               </tr>';
+
     $interval = new DateInterval('P1D');
     $startDate = date_add($startDate, date_interval_create_from_date_string('1 days'));
     $daterange = new DatePeriod($startDate, $interval, $endDate);
-    $milestones = new Milestone(1, "Milestone", "2018-01-18", "2018-01-19", "Hallo Welt!");
     foreach($daterange as $date)
     {
+        $milestoneStr = "";
+        $milestoneCount = 0;
+        $url = $_SERVER['REQUEST_URI'];
 
-            if ($milestones->enddate == $date) {
-                $s = $s . '<tr>
-                    <td class="align-middle custom-td"><div>' . $date->format('d-m-Y') . '</div></td>
-                    <td class="align-middle custom-td"><div class="btn-group">
-                            <a href="#">'. $milestones->name .'</a></div></td></tr>';
-            } else {
-                $s = $s . '<tr>
-                    <td class="align-middle"><div></div>
-                    <td class="align-middle" style="opacity: 0"><div>-</div></tr>';
+        foreach ($milestones as $milestone) {
+            if (date_sameDay($milestone->enddate, $date)) {
+                $milestoneCount++;
+                $milestoneStr = $milestoneStr . '<div class="btn-group">         
+                        <button type="button" class="btn dropdown-item text-success msBtn" value="'. $milestone->id .'">'. $milestone->name .'</button></form></div><br>';
             }
+        }
+
+        if ($milestoneCount == 0) {
+            $s = $s . '
+                <td class="align-middle"><div></div></td>
+                <td class="align-middle" style="opacity: 0"><div>-</div>';
+        } else {
+            $s = $s . '<tr>
+                <td class="align-middle custom-td"><div>' . $date->format('d-m-Y') . '</div></td>
+                <td class="align-middle custom-td">';
+            if ($milestoneCount > 1) {
+                $s = $s . '<div class="dropdown"><button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Milestones <span class="badge badge-info" style="font-size: 13px">'.$milestoneCount.'</span></button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+            }
+            $s = $s . $milestoneStr;
+            if ($milestoneCount > 1) {
+                $s = $s . '</div></div>';
+            }
+        }
+
+        $s = $s . '</td></tr>';
 
     }
 
@@ -135,6 +162,10 @@ function get_projecttable($projectname, $startdate, $enddate)
                </tr></div></table></div>';
 
     return $s;
+}
+
+function date_sameDay($dateA, $dateB) {
+    return $dateA->format('Y-m-d') == $dateB->format('Y-m-d');
 }
 
 function get_chart($projectname)

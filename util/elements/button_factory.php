@@ -27,7 +27,7 @@ class Button extends ElementUnique {
     public function get() {
         return "<button type='" 
                 . ($this->isSubmit ? "submit" : "button" )
-                . "' class='$this->displayType' name='$this->name' value='$this->val'>$this->text</button>";
+                . "' class='$this->displayType' id='$this->name' name='$this->name' value='$this->val'>$this->text</button>";
     }
     
 }

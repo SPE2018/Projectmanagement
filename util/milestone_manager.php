@@ -81,7 +81,7 @@ class MilestoneManager {
     
     public static function displayMilestone($project_id, $milestone_id) {
         if (MilestoneManager::pressedSave()) {
-            MilestoneManager::save($milestone_id);
+            //MilestoneManager::save($milestone_id);
             echo BUtil::success("Die Änderungen am Meilenstein wurden <strong>gespeichert.</strong>");
         }
         // If the user pressed the finish button, change the finish state of the task
@@ -146,7 +146,7 @@ class MilestoneManager {
         $out = $out . BUtil::getDatepicker("stop", "stop_picker", $milestone->stop);*/
         
         //$out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";
-        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Speichern", true, "save", "true"));
+        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Speichern", false, "save_milestone", "true"));
         
         //$out = $out . "</div>"; // Close form group
         //$out = $out . "</form>";   

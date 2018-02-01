@@ -19,18 +19,28 @@ $("#save").click(function(){
 
     $.ajax({type: "GET", url: "php/newproject.php",
         data: {name: name, startdate: startdate, enddate: enddate},
-        success: function(){
-            alert("DB entry was successfully!");
-        },
         error : function(e) {
             console.info(e.statusText);
-        },
-        done : function(e) {
-            console.info("DONE");
-        },
+        }
     });
     window.location = "projects.php?name=" + name + "&startdate=" + startdate + "&enddate=" + enddate;
 });
+
+$("#save-milestone").click(function(){
+    var name = $("#name").val();
+    var desc = $("#desc").val();
+    var start = $("[name='start']").val();
+    var stop = $("[name='stop']").val();
+
+    $.ajax({type: "GET", url: "php/editmilestone.php",
+        data: {name: name, id: milestoneid, desc: desc, start: start, stop: stop},
+        error : function(e) {
+            console.info(e.statusText);
+        }
+    });
+    window.location.reload();
+});
+
 
 // Calculate the actual project progress
 function calcProgress(startDate, endDate){
@@ -114,11 +124,13 @@ function getGeolocation(){
 
     // Get geolocation and load weather data
     navigator.geolocation.getCurrentPosition(function(position) {
+        alert(position.coords.latitude+','+position.coords.longitude);
         loadWeather(position.coords.latitude+','+position.coords.longitude);
     });
 }
 
 function loadWeather(location, woeid) {
+    alert(location);
     $.simpleWeather({
         location: location,
         woeid: woeid,
