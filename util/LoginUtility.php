@@ -1,7 +1,6 @@
 <?php
-include_once 'LoginUtility.php';
-include_once 'util/user_manager.php';
-include_once 'util/sql_util.php';
+include_once 'user_manager.php';
+include_once 'sql_util.php';
 
 if(session_status() != PHP_SESSION_ACTIVE) {
     session_start();
@@ -9,20 +8,40 @@ if(session_status() != PHP_SESSION_ACTIVE) {
 
 class Login {
     public static function checkLogin () {
-        $name = filter_input(INPUT_POST, 'login_username');
-        $pass = filter_input(INPUT_POST, 'login_password');
+        if((filter_input(INPUT_POST, 'login_username')) != NULL) {
+            $name = filter_input(INPUT_POST, 'login_username');
+        }
+        if((filter_input(INPUT_POST, 'login_password')) != NULL) {
+            $pass = filter_input(INPUT_POST, 'login_password');
+        }
         $user = UserManager::getUser($name);
-        if($user != NULL) {
-            if($user->enabled == FALSE) {
-                echo '<p style="Color: orange; Font-Size:24">' . $name . ' does exists but is not enabled yet :S</p>';            
-            }
-            if($user->password == $pass && $user->enabled == TRUE) {
-                $_SESSION['user'] = $user->name;
-                echo '<p style="Color: green; Font-Size:24">Welcome to planIT, ' . (($name == "admin") ? "my master" : $name) . '!</p>';            
+        var_dump($user);
+        if($pass != $user->password){
+            echo '<p style="Color: red; Font-Size:24">wrong password for ' . $name . '</p>';            
+        } else {
+            $_SESSION['user'] = $user->name;
+            if($user->admin == true) {
+                Login::admincheck($user->name, $pass);
+            } elseif($user->enabled == true) {
+                header("Location: ../index.php");  
+            } else {
+                echo '<p style="Color: orange; Font-Size:24">the name: ' . $name . ' does not match any existing account</p>';            
             }
         }
     }
 
+    public static function admincheck($name, $pass) {
+        $admin = UserManager::getUser($name);
+        if($pass == $admin->password) {
+            $_SESSION['user'] = $name;
+            header("Location: ../Admin/admin.php");
+            return true;
+        } else {
+            echo "Wrong password for " . $name;
+        }
+        return false;
+    }
+    
     public static function createLoginForm() {
         if((filter_input(INPUT_POST, 'btn_login')) != NULL) {
             Login::checkLogin();

@@ -1,8 +1,7 @@
 <?php
-    include_once 'LoginUtility.php';
-    include_once 'util/sql_util.php';
+    include_once '../util/LoginUtility.php';
     //include_once 'functions.php';
-    
+    Login::logout();
     //get_Head();
 ?>
 <body>

@@ -12,4 +12,4 @@ echo get_navbottom();*/
 echo get_simplenav();
 echo get_index_jumbotop();
 echo get_jumbobot();
-?>
+

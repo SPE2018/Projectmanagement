@@ -29,6 +29,7 @@ class SQL {
     }
 
     public static function query($sql) {
+        echo $sql . '<br>';
         $con = SQL::connect();
         $result = $con->query($sql);
         if (!$result) {
