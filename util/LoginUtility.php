@@ -15,7 +15,6 @@ class Login {
             $pass = filter_input(INPUT_POST, 'login_password');
         }
         $user = UserManager::getUser($name);
-        var_dump($user);
         if($pass != $user->password){
             echo '<p style="Color: red; Font-Size:24">wrong password for ' . $name . '</p>';            
         } else {
@@ -33,7 +32,7 @@ class Login {
     public static function admincheck($name, $pass) {
         $admin = UserManager::getUser($name);
         if($pass == $admin->password) {
-            $_SESSION['user'] = $name;
+            $_SESSION['user'] = $admin->name;
             header("Location: ../Admin/admin.php");
             return true;
         } else {
@@ -53,6 +52,10 @@ class Login {
         . 'name="login_password" placeholder="password" required><br><br>';
 
         echo '<button type="submit" name="btn_login" value="yes">sign in</button></form>';
+    }
+    
+    public static function logout() {
+        unset($_SESSION['user']);
     }
 }
 
