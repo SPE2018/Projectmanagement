@@ -4,6 +4,10 @@ include_once "wrapper/user_class.php";
 include_once "wrapper/project_class.php";
 include_once "wrapper/milestone_class.php";
 include_once "wrapper/task_class.php";
+include_once "task_manager.php";
+include_once "milestone_manager.php";
+include_once "user_manager.php";
+include_once "project_manager.php";
 
 class SQL {
 
@@ -32,68 +36,7 @@ class SQL {
             die("Error while querying: $sql: " . $con->error);
         }
         return $result;
-    }
+    }    
 
-    /*
-     * Users
-     */
-
-    
-
-    /*
-     * Users end
-     */
-
-    /*
-     * Projects
-     */
-
-    
-
-    public static function loadMilestones($project_id, $limit = 0, $offset = 0) {
-        $toReturn = array();
-        $sql = "SELECT * FROM milestones WHERE project_id=$project_id";
-        if ($limit > 0) {
-            $sql = $sql . " OFFSET $offset LIMIT $limit;";
-        } else {
-            $sql = $sql . ";";
-        }
-        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
-        foreach ($result as $i) {
-            $milestone = new Milestone($i['id'], $i['name'], $i['desc']);
-            echo $milestone->name . "<br>";
-           
-            array_push($toReturn, $milestone);
-            
-            $milestone->tasks = SQL::loadTasks($milestone->id);
-        }
-        return $toReturn;
-    }
-    
-    public static function addMilestone($project_id, $name, $desc) {
-        $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`) VALUES('$project_id', '$name', '$desc');";
-        $result = SQL::query($sql); // TODO: Error handling        
-    }
-
-    public static function loadTasks($milestone_id) {
-        $toReturn = array();
-        $sql = "SELECT * FROM tasks WHERE milestone_id=$milestone_id;";
-        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
-        
-        foreach ($result as $i) {
-            $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['previous_task'], $i['finished']);
-            array_push($toReturn, $task);
-        }
-        return $toReturn;
-    }
-
-    public static function addTask($milestone_id, $name, $previous_id) {
-        $sql = "INSERT INTO tasks (milestone_id, name, previous_id) VALUES('$milestone_id', '$name', '$previous_id');";
-        SQL::query($sql);
-    }
-
-    /*
-     * Projects end
-     */
 
 }
