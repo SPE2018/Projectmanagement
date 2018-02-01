@@ -134,25 +134,32 @@ class Datepicker extends ElementUnique {
     }
     
     public function get() {
-       return "<div class='container'>
-            <div class='row'>
-                <div class='form-group'>
-                    <div class='input-group date' id='$this->id'>
-                        <input type='text' class='form-control' name='$this->name' value='$this->val'/>
-                        <span class='input-group-addon'>
-                            <span class='glyphicon glyphicon-calendar'></span>
-                        </span>
+       return '
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" value="'.$this->val.'">
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text" style="height: 36.4px"><i class="far fa-calendar-alt fa-1x" style="color: white"></i></div>
                     </div>
                 </div>
-                <script type=\"text/javascript\">
-                    $(function () {
-                        $(\"#$this->id\").datetimepicker({
-                            format: 'YYYY-MM-DD HH:mm'
-                        });
-                    });
-                </script>
             </div>
-        </div>";  
+        </div>
+        <script type="text/javascript">
+            $(function () {
+                $("#datetimepicker1").datetimepicker({
+                    icons: {
+                        time: "far fa-clock",
+                        date: "far fa-calendar-alt",
+                        up: "fa fa-arrow-up",
+                        down: "fa fa-arrow-down"
+                        },
+                    format: "YYYY-MM-DD HH:mm"  
+                });
+            });
+        </script>
+    </div>';
     }
 
 }
