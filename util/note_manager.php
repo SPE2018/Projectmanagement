@@ -1,11 +1,8 @@
 <?php
+include_once 'sql_util.php';
 include_once 'wrapper/note_class.php';
-include_once 'project_manager.php';
 
-if(session_status() != PHP_SESSION_ACTIVE) {
-    session_start();
-}
-class note_manager {
+class NoteManager {
     public static function getNoteByHead($head) {
         if($head == null) {
             return null;
@@ -16,12 +13,11 @@ class note_manager {
         if ($result == null) {
             return null;
         }
-        $note = new Note($result['id'], $result['pid'], $result['uid'], $result['timestamp'], $result['header'], $result['comment']);
-        return $note;
+        return(new Note('load', $result['id']));
     }
     
     public static function addNote($note) {
-        if(note_manager::getNoteByHead($note->header) == null) {
+        if(NoteManager::getNoteByHead($note->header) == null) {
             $sql = "INSERT INTO notes (pid, uid, timestamp, header, comment) VALUES('$note->project',  '$note->user', '$note->time', '$note->header', '$note->comment');";
             SQL::query($sql); // TODO: Error handling
             return $note;
@@ -58,9 +54,22 @@ class note_manager {
         $header = filter_input(INPUT_GET, 'header');
         $comment = filter_input(INPUT_GET, 'comment');
         if(filter_input(INPUT_GET, 'btnSave') == 'true') {
-            $note = note_manager::addNote(new Note($id, $projectid, $header, $comment));
-            return $note;
+                    echo 'createNoteModal()<br>';
+            return NoteManager::addNote(new Note('create', $id, $projectid, $header, $comment));
         }
         return null;
+    }
+    
+    public static function getNoteByID($id) {
+        $getTimeSQL = "SELECT `timestamp` FROM notes WHERE id=$id;";
+        $getTimeResult = SQL::query($getTimeSQL)->fetch_assoc()['timestamp'];
+        if ($getTimeResult == null) {
+            return null;
+        }
+
+        $sql = "SELECT * FROM users WHERE id=$id;";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+
+        return new Note('create', $result['id'], UserManager::getUser('admin')->userid, $result['header'], $result['comment']);
     }
 }

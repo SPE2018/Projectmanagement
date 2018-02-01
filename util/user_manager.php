@@ -1,5 +1,4 @@
 <?php
-
 include_once "sql_util.php";
 
 class UserManager {

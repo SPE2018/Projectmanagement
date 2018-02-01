@@ -70,7 +70,7 @@
                         `admin` tinyint(1) DEFAULT '0',
                         `enabled` tinyint(1) DEFAULT '0',
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;");
+                      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;");
         
         query($con, "INSERT INTO `users` VALUES (0, 'admin', 'john.doe@example.com', 'root', 1, 1);");
         

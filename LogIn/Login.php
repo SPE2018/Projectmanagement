@@ -1,6 +1,6 @@
 <?php
     include_once '../util/LoginUtility.php';
-    include_once '../util/NoteUtility.php';
+    include_once '../util/note_manager.php';
 
     //get_Head();
 ?>
@@ -13,7 +13,6 @@
     <h1>Sign in</h1>
     <div name="loginform">
         <?php
-            Login::logout();
             Login::createLoginForm();
         ?>
         <a href="register.php">register</a>

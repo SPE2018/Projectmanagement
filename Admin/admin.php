@@ -1,6 +1,6 @@
 <?php
     include_once '../util/adminUtility.php';
-    include_once '../util/NoteUtility.php';
+    include_once '../util/note_manager.php';
     echo '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">';
     //get_Head();
 ?>
@@ -12,9 +12,6 @@
     <h1>office of da big bozz</h1>
     <div name="adminform">
         <?php
-            if(UserManager::getUser($_SESSION['user'])->admin != true) {
-                header("Location: ../index.php");
-            }
             $sql = "SELECT * FROM users;";
             $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
             echo '<p style="Color: darkgreen; Font-Size:26">Welcome, Master ' . $_SESSION['user'] . '</p><br>';       
@@ -23,11 +20,10 @@
             Admin::display_Admins();
             Admin::display_EnabledUserList();
             if(isset($_SESSION['user'])) {
-                note_manager::createNoteModal($_SESSION['user'], 2, '[usertext]');
+                NoteManager::createNoteModal($_SESSION['user'], 1, '[usertext]');
             }
         ?>
-        <a href=../LogIn/Login.php>sign out</a><br>
-        <a href=../LogIn/register.php>sign up</a><br>
+        <a href=../LogIn/Logout.php>sign out</a><br>
         <a href=../index.php>home</a><br>
     </div>
 

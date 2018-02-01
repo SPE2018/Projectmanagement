@@ -22,7 +22,7 @@ class ProjectManager {
     
     public static function getAllProjects($loadMilestones = false) {
         $toReturn = array();
-        $sql = "SELECT * FROM projects WHERE;";
+        $sql = "SELECT * FROM projects;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC); // TODO: Error handling
         
         foreach ($result as $r) {            
