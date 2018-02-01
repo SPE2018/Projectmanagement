@@ -21,6 +21,11 @@ function get_jumbotop()
     return file_get_contents("php/html/jumbotop.html");
 }
 
+function get_index_jumbotop()
+{
+    return file_get_contents("php/html/index_jumbotop.html");
+}
+
 function get_jumbobot()
 {
     return file_get_contents("php/html/jumbobot.html");
