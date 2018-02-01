@@ -6,6 +6,10 @@ function get_head()
     return file_get_contents("php/html/head.html");
 }
 
+function get_simplenav() {
+    return file_get_contents("php/html/simplenav.html");   
+}
+
 function get_navtop()
 {
     return file_get_contents("php/html/navtop.html");
