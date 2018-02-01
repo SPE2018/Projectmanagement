@@ -77,9 +77,89 @@ class MilestoneManager {
         MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
         
         //MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
+          
     }
     
     public static function displayMilestone($project_id, $milestone_id) {
+        // Load milestones including tasks
+        $milestone = MilestoneManager::loadMilestoneFromId($project_id, $milestone_id);
+        if ($milestone == null) {
+            die("Milestone not found");
+        }
+        $builder = new PageBuilder();
+        
+        $builder->add(ElementFactory::createImg("php/css/milestone.jpeg"));
+        
+        $builder->add(ElementFactory::createHeader("Milestone <small class='text-muted'>$milestone->name</small>", "h1"));
+        $builder->add(ElementFactory::createHtml("<hr style='border-color: #EEEEEE; max-width: 700px' align='left'>")->open);
+        $builder->add(ElementFactory::createP("$milestone->desc", ParagraphStyle::LEAD));
+        $builder->add(ElementFactory::createHtml("<br>"));
+        
+        /////////////////////
+        // Start & Enddate //
+        /////////////////////
+        
+        $format = "F jS";
+        if ($milestone->startdate->format("Y") != $milestone->enddate->format("Y")) {
+            // If the start and end year are different, add the year to the format
+            $format = $format . " Y";
+        }
+        $startdate = $milestone->startdate->format($format); // Monat ausgeschrieben / Tag des Monats + englischer Anhang / Jahr
+        $stopdate = $milestone->enddate->format($format); // Monat ausgeschrieben / Tag des Monats + englischer Anhang / Jahr
+        
+        $builder->add(ElementFactory::createP("<small class='text-muted'>Started</small> $startdate", ParagraphStyle::LEAD));
+        $builder->add(ElementFactory::createP("<small class='text-muted'>Ends by</small> $stopdate", ParagraphStyle::LEAD));
+        
+        $builder->add(ElementFactory::createHtml("<br>"));
+        
+        ////////////////
+        // Task Table //
+        ////////////////
+        
+        $today = new DateTime();
+        
+        $divTable = ElementFactory::createHtml("<div class='table'>", "</div>");
+        $table = ElementFactory::createHtml("<table class='table-hover'>", "</table>");
+                
+        $tasks = $milestone->tasks;
+        
+        $builder->add($divTable->open);
+        $builder->add($table->open);
+       
+        foreach ($tasks as $t) {
+            $trClass = "class='bg-primary'";
+            $name = "$t->name";
+            if ($t->finished) {
+                $trClass = "class='bg-success'";
+                $name = $name . " &#10004;";
+            } else if ($today > $t->enddate) {
+                $trClass = "class='bg-danger'";
+                $name = "<b>" . $name . "</b>";
+            }
+            
+            $tr = ElementFactory::createHtml("<tr $trClass>", "</tr>");            
+            $builder->add($tr->open);
+            
+            $td = ElementFactory::createHtml("<td>", "</td>");
+            $builder->add($td->open);
+            
+            $builder->add(ElementFactory::createHtml("<div class='task' value='$t->id'>$name</div>"));
+            
+            $builder->add($td->close);            
+            $builder->add($tr->close);
+        }
+        
+        $builder->add($table->open);
+        $builder->add($divTable->close);
+        
+        ////////////////
+        ////////////////
+        ////////////////
+        
+        $builder->show();
+    }
+    
+    public static function displayEditMilestone($project_id, $milestone_id) {
         if (MilestoneManager::pressedSave()) {
             //MilestoneManager::save($milestone_id);
             echo BUtil::success("Die Änderungen am Meilenstein wurden <strong>gespeichert.</strong>");
@@ -90,7 +170,7 @@ class MilestoneManager {
         }
         // If the user pressed the edit task button, send them
         // to the edit task page
-        if (MilestoneManager::shouldEditTask()) {
+        /*if (MilestoneManager::shouldEditTask()) {
             $project_id = filter_input(INPUT_GET, "projectid");
             $milestone_id = filter_input(INPUT_GET, "milestoneid");
             $task_id = filter_input(INPUT_GET, "taskid");
@@ -98,7 +178,7 @@ class MilestoneManager {
                     . "milestoneid=$milestone_id&"
                     . "taskid=$task_id");
             return;
-        }
+        }*/
         
         // Load milestone including tasks
         $milestone = MilestoneManager::loadMilestoneFromId($project_id, $milestone_id);
@@ -107,28 +187,17 @@ class MilestoneManager {
         }        
         
         $builder = new PageBuilder();
-        
-        //$out = "";       
 
-        //$out = $out . "<h1>Milestone " . $milestone->name . "</h1><br>";
         $builder->add(ElementFactory::createHtml(
                 "<h1>Milestone " . $milestone->name . "</h1><br>")->open);
         
-        //$out = $out . "<form method='post'>"; 
-        //$out = $out . '<div class="form-group">';
         $form = ElementFactory::createHtml(
                 "<form method='post'>", "</form>");
         $form_group = ElementFactory::createHtml(
                 '<div class="form-group">', "</div>");
         
         $builder->add($form->open);        
-        $builder->add($form_group->open);
-        
-        //$out = $out . BUtil::getLabel("name", "Name:");
-        //$out = $out . "<input class='form-control' id='name' type='text' name='name' value='" . $milestone->name . "'>";     
-        //$out = $out . BUtil::getTextInput("name", $milestone->name);
-        //$out = $out . BUtil::getLabel("desc", "Beschreibung:");
-        //$out = $out . BUtil::getTextInput("desc", $milestone->desc);   
+        $builder->add($form_group->open); 
         
         $builder->add(ElementFactory::createLabel("name", "Name:"));
         $builder->add(ElementFactory::createTextInput("name", $milestone->name));
@@ -140,16 +209,8 @@ class MilestoneManager {
         $builder->add(ElementFactory::createLabel("stop", "Endzeit:"));
         $builder->add(ElementFactory::createDatepicker("stop", "stop_picker", $milestone->enddate));
         
-        /*$out = $out . BUtil::getLabel("start", "Startzeit:");
-        $out = $out . BUtil::getDatepicker("start", "start_picker", $milestone->start);
-        $out = $out . BUtil::getLabel("stop", "Endzeit:");
-        $out = $out . BUtil::getDatepicker("stop", "stop_picker", $milestone->stop);*/
-        
-        //$out = $out . "<button class='btn btn-primary' type='submit' name='save' value='true'>Speichern</button>";
         $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Speichern", false, "save_milestone", "true"));
         
-        //$out = $out . "</div>"; // Close form group
-        //$out = $out . "</form>";   
         $builder->add($form->close);        
         $builder->add($form_group->close);
         
@@ -157,28 +218,21 @@ class MilestoneManager {
         
         $builder->add($ol->open);
         
-        //$out = $out . "<ol>";            
         $tasks_array = $milestone->tasks;
         foreach ($tasks_array as $task) {
             $finished = $task->finished ? "Fertig" : "Nicht fertig";
             
             $li = ElementFactory::createHtml("<li>", "</li>");
-            //$out = $out . "<li>";
             $builder->add($li->open);
-            //$out = $out . "<h4>" . $task->name . " ($finished)</h4>";
             $builder->add(ElementFactory::createHtml("<h4>" . $task->name . " ($finished)</h4>")->open);
-            //$out = $out . TaskEditor::displayTask($project_id, $milestone_id, $task->id);
             $builder->add(ElementFactory::createHtml(TaskEditor::displayTask($project_id, $milestone_id, $task->id))->open);
-            //$out = $out . "</li>";
             $builder->add($li->close);
         }
-        //$out = $out . "</ol>";
         $builder->add($ol->close);
         
           
         
         
-        //echo $out;
         $builder->show();
     }
     

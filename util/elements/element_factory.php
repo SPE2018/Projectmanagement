@@ -1,6 +1,7 @@
 <?php
 
 include_once "button_factory.php";
+include_once "page_builder.php";
 
 class ElementFactory {
     
@@ -19,6 +20,24 @@ class ElementFactory {
     public static function createDatepicker($name, $val, $id) {
         $id = $id->format("Y-m-d H:i");
         return new Datepicker($name, $id, $val);
+    }
+    
+    public static function createImg($src) {
+        return new Image($src);
+    }
+    
+    public static function createHeader($str, $hType) {
+        return new Header($str, $hType);
+    }
+    
+    /**
+     * 
+     * @param String $str
+     * @param ParagraphStyle $style
+     * @return \Paragraph
+     */
+    public static function createP($str, $style) {
+        return new Paragraph($str, $style);
     }
     
 }
@@ -134,6 +153,58 @@ class Datepicker extends ElementUnique {
                 </script>
             </div>
         </div>";  
+    }
+
+}
+
+class Image extends Element {
+    
+    public $src;
+    
+    public function __construct($src) {
+        $this->src = $src;
+    }
+    
+    public function get() {
+        return "<img src='$this->src' "
+                . "style='width:100%; max-width:700px;'>";
+    }
+
+}
+
+class Header extends Element {
+    
+    public $str;
+    public $hType;
+    
+    public function __construct($str, $hType) {
+        $this->str = $str;
+        $this->hType = $hType;
+    }
+    
+    public function get() {
+        return "<$this->hType>$this->str</$this->hType>";
+    }
+    
+}
+
+class ParagraphStyle {
+    const NORMAL = "";
+    const LEAD = "class='lead'";
+}
+
+class Paragraph extends Element {
+    
+    public $str;
+    public $class;
+    
+    public function __construct($str, $class) {
+        $this->str = $str;
+        $this->class = $class;
+    }
+    
+    public function get() {
+        return "<p $this->class>$this->str</p>";
     }
 
 }

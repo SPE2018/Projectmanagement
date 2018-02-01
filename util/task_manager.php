@@ -20,14 +20,14 @@ class TaskManager {
             $previous_task_id = $i['previous_task'];
             $previous_task = TaskManager::getExistingTask($toReturn, $previous_task_id);
             
-            $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['desc'], $previous_task, $i['finished']);
+            $task = new Task($i['id'], $i['milestone_id'], $i['name'], $i['desc'], $previous_task, $i['finished'], $i['enddate']);
             array_push($toReturn, $task);
         }
         return $toReturn;
     }
 
-    public static function addTask($milestone_id, $name, $previous_id) {
-        $sql = "INSERT INTO tasks (milestone_id, name, previous_id) VALUES('$milestone_id', '$name', '$previous_id');";
+    public static function addTask($milestone_id, $name, $previous_id, $enddate) {
+        $sql = "INSERT INTO tasks (milestone_id, name, previous_id, enddate) VALUES('$milestone_id', '$name', '$previous_id', '$enddate');";
         SQL::query($sql);
     }
     
@@ -41,7 +41,7 @@ class TaskManager {
             $previous_task = TaskManager::getTask($previous_task_id);
         }
         
-        return new Task($result['id'], $result['milestone_id'], $result['name'], $result['desc'], $previous_task, $result['finished']);
+        return new Task($result['id'], $result['milestone_id'], $result['name'], $result['desc'], $previous_task, $result['finished'], $result['enddate']);
     }
     
     public static function setFinished($taskid, $finished) {

@@ -120,7 +120,7 @@ th{
 }
 
 .fa-plus{
-    float: right;:before
+    float: right;
 }
 
 .fa-minus:hover{
@@ -135,6 +135,13 @@ th{
     cursor: pointer;
 }
 
+.task {
+    color: white;
+    font-size: 17px;
+}
 
-
+.task:hover {
+    color: lightskyblue;
+    text-decoration: underline;
+}
 

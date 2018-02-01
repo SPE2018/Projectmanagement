@@ -39,7 +39,14 @@ class TaskEditor {
         echo $out;
     }
     
-    public static function displayTask($project_id, $milestone_id, $task_id) {                
+    public static function displayTask($project_id, $milestone_id, $task_id) {   
+        $builder = new PageBuilder();
+        
+        $table = new HtmlBuilder();
+        
+    }
+    
+    public static function displayTaskModal($project_id, $milestone_id, $task_id) {                
         $task = TaskManager::getTask($task_id);
         
         $modalname = $task_id . "_task";
