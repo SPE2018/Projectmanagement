@@ -21,7 +21,6 @@ echo get_jumbotop();
                     <table class="table">
                         <tr><td></td><td class="col-12"><?php echo get_tabs(); ?></td></tr>
                         <tr><td><?php echo get_projecttable($id, $name, $startdate, $enddate); ?></td><td id="content">
-
                             </td></tr>
                     </table>
             </main>
