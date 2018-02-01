@@ -17,3 +17,19 @@ class User {
     }
     
 }
+
+class ProjectUser {
+    
+    public $userid;
+    public $name;
+    public $project_id;
+    public $permission;
+    
+    public function __construct($userid, $name, $project_id, $permission) {
+        $this->userid = $userid;
+        $this->name = $name;
+        $this->project_id = $project_id;
+        $this->permission = $permission;
+    }
+    
+}

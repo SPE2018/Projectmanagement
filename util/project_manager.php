@@ -77,6 +77,23 @@ class ProjectManager {
         SQL::query($sql); // TODO: Error handling  
     }
     
+    public static function getProjectUsers($id) {
+        $sql = "SELECT project_id, user_id, permission, `name` FROM projects_users
+                JOIN users on users.id = projects_users.user_id
+                WHERE project_id='$id'";
+        $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC); // TODO: Error handling
+        
+        $toReturn = array();
+        
+        foreach ($result as $r) {
+            $user = new ProjectUser($r['user_id'], $r['name'], $id, $r['permission']);
+            
+            array_push($toReturn, $user);
+        }
+        
+        return $toReturn;
+    }
+    
     public static function getProjectId() {
         $project_id = filter_input(INPUT_GET, "projectid");
         if ($project_id == null) {
@@ -120,6 +137,85 @@ class ProjectManager {
         
         
         echo $out;
+    }
+    
+    public static function displayProjectUsers($project_id) {
+        $builder = new PageBuilder();
+        
+        $project = ProjectManager::getProjectFromId($project_id);
+        if ($project == null) {
+            die("Could not find project");
+        }
+        
+        $builder->add(ElementFactory::createHeader("Users", "h1"));
+        
+        $divTable = ElementFactory::createHtml("<div class='table'>", "</div>");
+        $table = ElementFactory::createHtml("<table class='table-hover'>", "</table>");
+                
+        $users = ProjectManager::getProjectUsers($project_id);
+        
+        $builder->add($divTable->open);
+        $builder->add($table->open);
+       
+        $firstLeader = true; // The first leader can't be demoted
+        
+        foreach ($users as $u) {
+            $trClass = "class='bg-primary'";
+            if ($u->permission == 'leader') {
+                $trClass = "class='bg-success'";
+            }
+            
+            $tr = ElementFactory::createHtml("<tr $trClass>", "</tr>");            
+            $builder->add($tr->open);
+            
+            // Username column
+            $td = ElementFactory::createHtml("<td>", "</td>");
+            $builder->add($td->open);            
+            $builder->add(ElementFactory::createHtml("$u->name ($u->userid)"));            
+            $builder->add($td->close);
+            // Permission column
+            $td = ElementFactory::createHtml("<td>", "</td>");
+            $builder->add($td->open);            
+            $builder->add(ElementFactory::createHtml("$u->permission"));            
+            $builder->add($td->close);            
+            // Remove button column
+            $td = ElementFactory::createHtml("<td>", "</td>");
+            $builder->add($td->open);    
+            if ($u->permission != 'leader') {
+                $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Remove", false, "remove_user", "$u->userid"));            
+            }
+            $builder->add($td->close); 
+            if ($u->permission == 'leader') {
+                // Make project leader demote button column
+                $td = ElementFactory::createHtml("<td>", "</td>");
+                $builder->add($td->open);
+                if ($firstLeader) {
+                    //$builder->add(ButtonFactory::createButton(ButtonType::DISABLED, "Can't demote", false, "disabled", " "));            
+                    $firstLeader = false;
+                } else {
+                    $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Demote", false, "demote_user", "$u->userid"));            
+                }
+                $builder->add($td->close);                
+            } else {
+                // Make project leader promote button column
+                $td = ElementFactory::createHtml("<td>", "</td>");
+                $builder->add($td->open);            
+                $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Promote", false, "promote_user", "$u->userid"));            
+                $builder->add($td->close); 
+            }
+            
+            
+            $builder->add($tr->close);
+        }
+        
+        $builder->add($table->close);
+        $builder->add($divTable->close);
+        
+        $builder->add(ElementFactory::createLabel("add_user", "Add User:"));
+        $builder->add(ElementFactory::createTextInput("add_user_input", "username"));
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add to project", false, "add_user_button", " "));            
+        
+        $builder->show();
     }
     
 }

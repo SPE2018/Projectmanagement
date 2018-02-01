@@ -149,7 +149,7 @@ class MilestoneManager {
             $builder->add($tr->close);
         }
         
-        $builder->add($table->open);
+        $builder->add($table->close);
         $builder->add($divTable->close);
         
         ////////////////
@@ -157,6 +157,8 @@ class MilestoneManager {
         ////////////////
         
         $builder->show();
+        
+        ProjectManager::displayProjectUsers($project_id);
     }
     
     public static function displayEditMilestone($project_id, $milestone_id) {

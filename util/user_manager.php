@@ -19,6 +19,15 @@ class UserManager {
         return $user;
     }
     
+    public static function getUsernameFromId($id) {
+         $sql = "SELECT `id`, `name` FROM users WHERE id='$id';";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        if ($result == null) {
+            return null;
+        }
+        return $result['name'];
+    }
+    
     public static function getDisabledUsers() {
         $sql = "SELECT * FROM users WHERE enabled=0;";
         $result = SQL::query($sql)->fetch_all();
