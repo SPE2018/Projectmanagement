@@ -1,4 +1,6 @@
 var theme = 'php/css/darkly.css';
+var mid;
+var tid;
 
 onload = function() {
     var progress = calcProgress(startdate, enddate);
@@ -7,7 +9,7 @@ onload = function() {
     adjustmentHeight(project);
     getGeolocation();
     //createChart(project);
-}
+};
 
 $("#save").click(function(){
     var name = $("#name").val();
@@ -26,8 +28,23 @@ $("#save").click(function(){
     window.location = "projects.php?name=" + name + "&startdate=" + startdate + "&enddate=" + enddate;
 });
 
-$("#save_milestone").click(function(){
-    alert("Btn works");
+$(".msBtn").click(function () {
+    mid = ($(this).val());
+    $('html, body').animate({scrollTop : 110},600);
+    $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=milestoneview");
+});
+
+$(".projectTab").click(function () {
+    var mode = ($(this).val());
+    $("#content").load("content_loader.php?pid=" + pid + "&mode=project" + mode);
+});
+
+$("#content").on("click", ".task", function () {
+    tid = ($(this).val());
+    $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
+});
+
+$("#content").on("click", "#save_milestone", function(){
     var name = $("#name").val();
     var desc = $("#desc").val();
     var start = $("[name='start']").val();
