@@ -21,6 +21,7 @@
             Admin::display_EnabledUserList();
             if(isset($_SESSION['user'])) {
                 NoteManager::createNoteModal($_SESSION['user'], 1, '[usertext]');
+                echo '<a href=../LogIn/note.php>note</a><br>';
             }
         ?>
         <a href=../LogIn/Logout.php>sign out</a><br>

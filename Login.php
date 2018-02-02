@@ -1,7 +1,6 @@
 <?php
     include_once '../util/LoginUtility.php';
     include_once '../util/note_manager.php';
-
     //get_Head();
 ?>
 

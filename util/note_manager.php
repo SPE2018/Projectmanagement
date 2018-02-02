@@ -13,21 +13,20 @@ class NoteManager {
         if ($result == null) {
             return null;
         }
-        return(new Note('load', $result['id']));
+        return new Note(ProjectManager::getProjectFromId($result['pid'])->id, 'now', UserManager::getUserByID('uid')->userid,  $result['header'], $result['comment']);
+    }
+
+    public static function addNote($project, $header, $comment) {
+        $sql = "INSERT INTO notes (pid, uid, timestamp, header, comment) VALUES('$project', '" . $_SESSION['user'] . "', '" . date("Y-m-d h:m") . "', '$header', '$comment')";
+        SQL::query($sql); // TODO: Error handling   
     }
     
-    public static function addNote($note) {
-        if(NoteManager::getNoteByHead($note->header) == null) {
-            $sql = "INSERT INTO notes (pid, uid, timestamp, header, comment) VALUES('$note->project',  '$note->user', '$note->time', '$note->header', '$note->comment');";
-            SQL::query($sql); // TODO: Error handling
-            return $note;
-        } else {
-            echo '<p style="Color: red; Font-Size:24">headline already in use</p>';            
-        }
-        return 'schade';
+    public static function getNote($id) {
+        $helpvar = NoteManager::getNoteByID($id);
+        echo ProjectManager::getProjectFromId($helpvar->project)->name . '<br>' . $helpvar->user . '<br>' . $helpvar->time . '<br>' . $helpvar->header . '<br>' . $helpvar->comment;
     }
     
-    public static function createNoteModal($id, $projectid, $text) {
+    public static function createNoteModal($projectid, $text) {
         if(!isset($_SESSION['user'])) {
             return null;
         }
@@ -54,8 +53,7 @@ class NoteManager {
         $header = filter_input(INPUT_GET, 'header');
         $comment = filter_input(INPUT_GET, 'comment');
         if(filter_input(INPUT_GET, 'btnSave') == 'true') {
-                    echo 'createNoteModal()<br>';
-            return NoteManager::addNote(new Note('create', $id, $projectid, $header, $comment));
+            NoteManager::addNote(ProjectManager::getProjectFromId($projectid)->id, $header, $comment);
         }
         return null;
     }
@@ -66,10 +64,11 @@ class NoteManager {
         if ($getTimeResult == null) {
             return null;
         }
-
-        $sql = "SELECT * FROM users WHERE id=$id;";
+        $sql = "SELECT * FROM notes WHERE id=$id;";
         $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
-
-        return new Note('create', $result['id'], UserManager::getUser('admin')->userid, $result['header'], $result['comment']);
+        if($result == null) {
+            return null;
+        }
+        return new Note(UserManager::getUser('admin')->userid, 'now', $result['header'], $result['comment']);
     }
 }
