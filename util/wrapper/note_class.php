@@ -23,7 +23,7 @@ class Note {
                 </script>';
             return null;
         }
-        if(UserManager::getUser($_SESSION['user']) == null) {
+        if(UserManager::getUser(isset($_SESSION['user'])) == null) {
             echo '<script type="text/javascript" language="javascript">
                 alert("UnknownUserID");
                 </script>';

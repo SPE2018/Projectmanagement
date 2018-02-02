@@ -24,7 +24,6 @@ class UserManager {
         if ($result == null) {
             return null;
         }
-
         $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
         return $user;
     }

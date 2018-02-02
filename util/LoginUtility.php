@@ -66,7 +66,9 @@ class Registration {
         $pass = filter_input(INPUT_POST, 'register_password');
         $rptpw = filter_input(INPUT_POST, 'register_rptPassword');
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
-            if($pass != $rptpw) {
+            if(UserManager::getUser($name) != null) {
+                echo '<p style="Color: red; Font-Size:24">username already in use!</p>';            
+            } elseif($pass != $rptpw) {
                 echo '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
                 UserManager::addUser($name, $mail, $pass);
