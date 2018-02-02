@@ -62,32 +62,31 @@ class TaskEditor {
         
         // Modal Header
         $out = $out . "<div class='modal-header'>";
-        $out = $out . '<button type="button" class="close" data-dismiss="modal">&times;</button>
-                       <h4 class="modal-title">' . $task->name . '</h4>';
+        $out = $out . '<h4 class="modal-title">' . $task->name . '</h4><button type="button" class="close" data-dismiss="modal">&times;</button>';
         $out = $out . "</div>";
         // End Modal Header        
         
         // Modal Body
         $out = $out . '<div class="modal-body">';
         
-        $isFinished = $task->finished ? "Ja" : "Nein";        
-        $out = $out . "<p>Fertig: " . $isFinished . "</p><br>";
+        $isFinished = $task->finished ? '<i class="fas fa-check fa-1x text-primary"></i>' : '<i class="fas fa-times fa-1x text-danger"></i>';
+        $out = $out . "<p><b>Completed:&emsp;</b>" . $isFinished . "</p><br>";
         
         $previous_task = $task->previous_task;
-        $previous = "Kein vorheriger Task";
+        $previous = "No previous task";
         if ($previous_task != null) {
             $previous = $previous_task->name;
             if ($previous_task->finished) {
-                $previous = $previous . " (Fertig)";
+                $previous = $previous . " ( completed)";
             } else {
-                $previous = $previous . " (Nicht Fertig)";
+                $previous = $previous . " ( in processing)";
             }
         }
-        $out = $out . "<p>Vorheriger Task: " . $previous . "</p><br>";
+        $out = $out . "<p><b>Previous Task:&emsp;</b>" . $previous . "</p><br>";
                 
         //$out = $out . var_export($task, true);
         
-        $out = $out . $task->desc;
+        $out = $out . "<p><b>Description: &emsp;</b></p><p>" . $task->desc ."</p>";
         
         $out = $out . '</div>';
         // End Modal Body
@@ -101,11 +100,11 @@ class TaskEditor {
         $out = $out . "<input type='hidden' name='milestoneid' value='$milestone_id'>";
         $out = $out . "<input type='hidden' name='taskid' value='$task_id'>";
         if ($task->finished) {
-            $out = $out . '<button type="submit" class="btn btn-danger" name="finished" value="false">Task als nicht fertiggestellt setzen</button>';
+            $out = $out . '<button type="submit" class="btn btn-danger" name="finished" value="false">Set Task Incompleted</button>';
         } else {
             if ($previous_task != null && !$previous_task->finished) {
                 $out = $out . '<button type="button" class="btn btn-disabled disabled"'
-                        . ' data-toggle="tooltip" data-placement="auto top" title="Der vorherige Task ist noch nicht fertig!">Task fertigstellen</button>';
+                        . ' data-toggle="tooltip" data-placement="auto top" title="Der vorherige Task ist noch nicht fertig!">Finish Task</button>';
                 $out = $out . "<script>
                                 $(document).ready(function(){
                                     $('[data-toggle=\"tooltip\"]').tooltip(); 
@@ -113,11 +112,11 @@ class TaskEditor {
                                 </script>
                                 ";
             } else {
-                $out = $out . '<button type="submit" class="btn btn-success" name="finished" value="true">Task fertigstellen</button>';
+                $out = $out . '<button type="submit" class="btn btn-success mr-2" name="finished" value="true">Finish Task</button>';
             }
         }
         
-        $out = $out . '<button type="submit" class="btn btn-default" name="edit" value="true">Bearbeiten</button>';
+        $out = $out . '<button type="submit" class="btn btn-default" name="edit" value="true">Edit</button>';
         
         // Close form container
         $out = $out . '</div>'; 
