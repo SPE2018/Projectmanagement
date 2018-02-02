@@ -25,7 +25,7 @@ $("#save").click(function(){
             console.info(e.statusText);
         }
     });
-    window.location = "projects.php?name=" + name + "&startdate=" + startdate + "&enddate=" + enddate;
+    window.location = "projects.php?name=" + name;
 });
 
 $(".msBtn").click(function () {

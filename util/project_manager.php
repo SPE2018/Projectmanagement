@@ -194,6 +194,11 @@ class ProjectManager {
         echo $out;
     }
     
+    public static function addUserToProject($project_id, $user_id, $role) {
+        $sql = "insert into projects_users (project_id, user_id, permission) VALUES ($project_id, $user_id, '$role');";
+        SQL::query($sql); // TODO: Error handling
+    }
+    
     public static function displayProjectUsers($project_id) {
         $builder = new PageBuilder();
         
