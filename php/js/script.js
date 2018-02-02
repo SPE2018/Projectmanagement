@@ -39,6 +39,11 @@ $(".projectTab").click(function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mode=project" + mode);
 });
 
+$(".statsTab").click(function () {
+    var mode = ($(this).val());
+    $("#content").load("content_loader.php?pid=" + pid + "&mode=stats" + mode);
+});
+
 $("#content").on("click", ".task", function () {
     tid = ($(this).val());
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
@@ -165,7 +170,7 @@ function loadWeather(location, woeid) {
 }
 
 // Create the chart for the trend analysis
-function createChart(project){
+function createLineChart() {
     var trace01 = {
         x: ["01-01-2018", "02-01-2018", "03-01-2018", "04-01-2018"],
         y: [0, 0, 0, 0],
@@ -218,24 +223,30 @@ function createChart(project){
         font: {
             color: '#ffffff'
         },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: '#2C3E50',
+        plot_bgcolor: '#2C3E50',
         margin: {
-            l: 50,
-            r: 50,
-            b: 50,
-            t: 50,
-            pad: 5
+            l: 70,
+            r: 70,
+            b: 70,
+            t: 70,
+            pad: 7
         },
+        title: 'Milestone Deviation',
         xaxis: {
-            title: 'Dates'
+            title: 'Dates',
+            gridcolor: 'white'
         },
         yaxis: {
-            title: 'Deviation'
+            title: 'Deviation',
+            gridcolor: 'white'
         }
     };
-    Plotly.newPlot("line-chart-"+project, data, layout);
+    Plotly.newPlot("line-chart", data, layout);
+}
 
+function createPieChart()
+{
     var colorSelection = ['#3498db', '#f39c12', '#dc3545'];
 
     var data = [{
@@ -253,16 +264,17 @@ function createChart(project){
         font: {
             color: '#ffffff'
         },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(0,0,0,0)',
+        paper_bgcolor: '#2C3E50',
+        plot_bgcolor: '#2C3E50',
         margin: {
-            l: 50,
-            r: 50,
-            b: 50,
-            t: 50,
-            pad: 5
-        }
+            l: 70,
+            r: 70,
+            b: 70,
+            t: 70,
+            pad: 7
+        },
+        title: 'Milestones reached...'
     };
 
-    Plotly.newPlot("pie-chart-"+project, data, layout);
+    Plotly.newPlot("pie-chart", data, layout);
 }
