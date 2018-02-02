@@ -28,6 +28,16 @@ class UserManager {
         return $user;
     }
     
+    public static function getUserByMail($mail) {
+        $sql = "SELECT * FROM users WHERE email=$mail;";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        if ($result == null) {
+            return null;
+        }
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
+        return $user;
+    }
+    
     public static function getEnabledUsers() {
         $sql = "SELECT * FROM users WHERE enabled=1;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        

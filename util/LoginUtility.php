@@ -68,6 +68,8 @@ class Registration {
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
             if(UserManager::getUser($name) != null) {
                 echo '<p style="Color: red; Font-Size:24">username already in use!</p>';            
+            } elseif(UserManager::getUserByMail($mail) != null) {
+                echo '<p style="Color: red; Font-Size:24">this e-mail address is already assigne for an account!</p>';            
             } elseif($pass != $rptpw) {
                 echo '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
