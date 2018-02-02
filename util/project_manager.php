@@ -99,6 +99,11 @@ class ProjectManager {
         $sql = "UPDATE projects SET `name`='$name', `endby`='$endDate' WHERE id=$id";
         SQL::query($sql); // TODO: Error handling  
     }
+
+    public static function deleteProject($id) {
+        $sql = "DELETE FROM projects WHERE id=$id";
+        SQL::query($sql); // TODO: Error handling
+    }
     
     public static function getProjectUsers($id) {
         $sql = "SELECT project_id, user_id, permission, `name` FROM projects_users
@@ -244,7 +249,7 @@ class ProjectManager {
             $builder->add(ElementFactory::createHtml("<option>$u->name</option>"));
         }
         $builder->add($searchBox->close);
-        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add to project", false, "add_user_button", " "));            
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add to project", false, "add_user", " "));
         
         $builder->show();
     }

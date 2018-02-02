@@ -69,7 +69,7 @@ class TaskEditor {
         // Modal Body
         $out = $out . '<div class="modal-body">';
         
-        $isFinished = $task->finished ? '<i class="fas fa-check fa-1x text-primary"></i>' : '<i class="fas fa-times fa-1x text-danger"></i>';
+        $isFinished = $task->finished ? '<i class="fas fa-check fa-1x text-success"></i>' : '<i class="fas fa-times fa-1x text-danger"></i>';
         $out = $out . "<p><b>Completed:&emsp;</b>" . $isFinished . "</p><br>";
         
         $previous_task = $task->previous_task;
@@ -100,7 +100,7 @@ class TaskEditor {
         $out = $out . "<input type='hidden' name='milestoneid' value='$milestone_id'>";
         $out = $out . "<input type='hidden' name='taskid' value='$task_id'>";
         if ($task->finished) {
-            $out = $out . '<button type="submit" class="btn btn-danger" name="finished" value="false">Set Task Incompleted</button>';
+            $out = $out . '<button type="submit" class="btn btn-danger mr-2" name="finished" value="false">Set Task Incompleted</button>';
         } else {
             if ($previous_task != null && !$previous_task->finished) {
                 $out = $out . '<button type="button" class="btn btn-disabled disabled"'
