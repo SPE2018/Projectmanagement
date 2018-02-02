@@ -6,6 +6,10 @@ function get_head()
     return file_get_contents("php/html/head.html");
 }
 
+function get_simplenav() {
+    return file_get_contents("php/html/simplenav.html");   
+}
+
 function get_navtop()
 {
     return file_get_contents("php/html/navtop.html");
@@ -19,6 +23,11 @@ function get_navbottom()
 function get_jumbotop()
 {
     return file_get_contents("php/html/jumbotop.html");
+}
+
+function get_index_jumbotop()
+{
+    return file_get_contents("php/html/index_jumbotop.html");
 }
 
 function get_jumbobot()
