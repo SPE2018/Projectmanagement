@@ -1,8 +1,11 @@
 <?php
 include_once("util/sql_util.php");
 include_once("php/functions.php");
+include_once("util/LoginUtility.php");
+if (!Login::isLoggedIn()) {
+    header("Location: login.php");
+}
 echo get_head();
-$Projects = ProjectManager::getAllProjects(false, false);
 
 $name = get_parameter('name', 'GET', false);
 $project = ProjectManager::getProjectFromName($name);
@@ -11,9 +14,7 @@ $startdate = $project->createdDate; //get_parameter('startdate', 'GET', false);
 $enddate = $project->endDate; //get_parameter('enddate', 'GET',false);
 
 echo get_navtop();
-foreach($Projects as $v) {
-    echo '<a class="dropdown-item" href="projects.php?name=' . $v->name . '">' . $v->name . '</a>';
-}
+ProjectManager::displayProjectList();    
 echo get_navbottom();
 echo get_jumbotop();
 ?>
@@ -21,7 +22,7 @@ echo get_jumbotop();
 <?php echo get_jumbobot();?>
             <main>
                 <div class="container">
-                    <table class="table">
+                    <table class="table table-responsive">
                         <tr><td style="width: 21.75rem"></td><td><?php echo get_tabs(); ?></td></tr>
                         <tr><td><?php echo get_projecttable($id, $name, $startdate, $enddate); ?></td><td id="content">
                             </td></tr>

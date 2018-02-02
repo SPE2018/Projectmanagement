@@ -8,10 +8,7 @@ echo get_head();
 $loggedIn = Login::isLoggedIn();
 if ($loggedIn) {
     echo get_navtop();
-    $Projects = ProjectManager::getAllProjects(false, false);    
-    foreach($Projects as $v) {
-        echo '<a class="dropdown-item" href="projects.php?name='.$v->name.'">'.$v->name.'</a>';
-    }
+    ProjectManager::displayProjectList();    
     echo get_navbottom();
 } else {
     echo get_simplenav();
@@ -28,6 +25,15 @@ if ($loggedIn) {
     
     echo "</div>";
     echo "<script>$('#user').fadeIn(3000);</script>";
+} else {
+    if (filter_input(INPUT_GET, "newuser") != null) {
+        echo "<div id='user' class='container' style='border:2px solid #cecece; border-radius: 10px; padding: 20px 20px 20px 20px;"
+        . "background-color: #353545; margin-bottom: 20px'>";
+    
+        echo "<p style='font-size: 25px'>Welcome to planIT!<br><b>You can log into your account after an admin has enabled it.</b></p>";
+
+        echo "</div>";
+    }
 }
 
 echo "<div id='quote' class='container' style='border:2px solid #cecece; border-radius: 10px; padding: 20px 20px 20px 20px;"

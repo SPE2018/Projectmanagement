@@ -20,11 +20,15 @@ class Login {
         $user = UserManager::getUser($name);
         if ($user == null) {
             return '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';      
-        }
+        }        
         if($pass != $user->password){
             return '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';             
         } else {
+            if (!($user->enabled)) {
+                return '<p style="Color: orange; Font-Size:20px"><b>Your account has to be enabled by an admin before you are able to login</b></p>';     
+            }
             $_SESSION['user'] = $user->name;
+            $_SESSION['userid'] = $user->userid;
             if($user->admin == true) {
                 Login::admincheck($user->name, $pass);
             } elseif($user->enabled == true) {
@@ -85,56 +89,67 @@ class Login {
     }
     
     public static function isLoggedIn() {
-        return isset($_SESSION['user']);
+        return isset($_SESSION['user']) && isset($_SESSION['userid']);
     }
     
     public static function getLoggedInName() {
         return $_SESSION['user'];
     }
     
+    public static function getLoggedInId() {
+        return $_SESSION['userid'];
+    }
+    
     public static function logout() {
         unset($_SESSION['user']);
+        unset($_SESSION['userid']);
     }
 }
 
 class Registration {
-    public static function checkRegistration () {
+    public static function checkRegistration() {
         $name = filter_input(INPUT_POST, 'register_username');
         $mail = filter_input(INPUT_POST, 'register_email');
         $pass = filter_input(INPUT_POST, 'register_password');
         $rptpw = filter_input(INPUT_POST, 'register_rptPassword');
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
             if($pass != $rptpw) {
-                echo '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
+                return '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
-                UserManager::addUser($name, $mail, $pass);
-                header("Location: login.php");
+                if (UserManager::addUser($name, $mail, $pass)) {
+                    header("Location: index.php?newuser=true");
+                } else {
+                    return '<p style="Color: red; Font-Size:20px">User with this name already exists</p>';         
+                }
             }
         }
+        return "";
     }
     
     public static function createRegisterForm() {
+        $out = "";
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
-            Registration::checkRegistration();
+            $out = $out . Registration::checkRegistration();
         }
-        echo "<div class='form-group'>";
-        echo '<label>Username:</label>';
-        echo '<form action="register.php" method="post"><input type="text" '
+        $out = $out .  "<div class='form-group'>";
+        $out = $out .  '<label>Username:</label>';
+        $out = $out .  '<form action="register.php" method="post"><input type="text" '
         . 'name="register_username" placeholder="username" class="form-control" required><br>';
 
-        echo '<label>E-Mail:</label>';
-        echo '<input type="email" placeholder="john.doe@example.gg" '
+        $out = $out .  '<label>E-Mail:</label>';
+        $out = $out .  '<input type="email" placeholder="john.doe@example.gg" '
         . 'name="register_email" class="form-control" required><br>';
 
-        echo '<label>Password:</label>';
-        echo '<input type="password" placeholder="password" '
+        $out = $out .  '<label>Password:</label>';
+        $out = $out .  '<input type="password" placeholder="password" '
         . 'name="register_password" class="form-control" required><br>';
 
-        echo '<label>Repeat Password:</label>';
-        echo '<input type="password" placeholder="confirm password" '
+        $out = $out .  '<label>Repeat Password:</label>';
+        $out = $out .  '<input type="password" placeholder="confirm password" '
         . 'name="register_rptPassword" class="form-control" required><br>';
         
-        echo '<button type="submit" name="btn_register" value="yes">sign up</button></form>';
-        echo "</div>";
+        $out = $out .  '<button type="submit" name="btn_register" value="yes">sign up</button></form>';
+        $out = $out .  "</div>";
+        return $out;
     }
 }

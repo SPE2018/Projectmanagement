@@ -1,6 +1,7 @@
 <?php
 
 include_once "sql_util.php";
+include_once 'LoginUtility.php';
 
 class ProjectManager {
     
@@ -19,10 +20,36 @@ class ProjectManager {
         return null;
     }
     
+    public static function displayProjectList() {
+        $user_id = Login::getLoggedInId();
+        $projects = ProjectManager::getAllProjects($user_id);
+        if (count($projects) == 0) {
+            echo '<p>No projects found</p>';
+        }
+        foreach($projects as $v) {
+            echo '<a class="dropdown-item" href="projects.php?name=' . $v->name . '">' . $v->name . '</a>';
+        }
+    }
     
-    public static function getAllProjects($loadMilestones = false, $loadTasks = false) {
-        $toReturn = array();
-        $sql = "SELECT * FROM projects;";
+    public static function getAllProjects($user_id, $loadMilestones = false, $loadTasks = false) {        
+        $user = UserManager::getUserByID($user_id);
+        if ($user == null) {
+            return array();
+        } else if (!($user->enabled)) {
+            return array();
+        }
+        
+        $sql = "";
+        
+        if ($user->admin) {
+            $sql = "SELECT * FROM projects;";
+        } else {
+            $sql = "SELECT * FROM projects as p "
+                    . "JOIN projects_users as pu ON pu.project_id=p.id "
+                    . "WHERE user_id=$user_id;";
+        }
+        
+        $toReturn = array();        
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC); // TODO: Error handling
         
         foreach ($result as $r) {            

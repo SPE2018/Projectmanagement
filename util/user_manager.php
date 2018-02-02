@@ -18,6 +18,15 @@ class UserManager {
         return $user;
     }
     
+    public static function userExists($username) {
+        $sql = "SELECT count(*) as amount FROM users WHERE name='$username';";
+        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        if ($result == null) {
+            return null;
+        }
+        return intval($result['amount']) > 0;
+    }
+    
     public static function getUserByID($id) {
         $sql = "SELECT * FROM users WHERE id=$id;";
         $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
@@ -25,7 +34,7 @@ class UserManager {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['enabled']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['admin'], $result['enabled']);
         return $user;
     }
     
@@ -68,7 +77,7 @@ class UserManager {
         $toReturn = array();
         
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -81,7 +90,7 @@ class UserManager {
         $toReturn = array();
 
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -92,12 +101,12 @@ class UserManager {
      * This user needs to be activated/enabled by an admin
      */
     public static function addUser($username, $mail, $password) {
-        if(UserManager::getUser($username) == NULL) {
+        if((UserManager::userExists($username)) == false) {
             $sql = "INSERT INTO users (name, mail, password, enabled) VALUES('$username', '$mail', '$password', 0);";
             SQL::query($sql); // TODO: Error handling
-        } else {
-            echo '<p style="Color: red; Font-Size:24">user with this name does already exists</p>';            
-        }
+            return true;
+        }           
+        return false;
     }
     
     public static function promoteUser($username) {
