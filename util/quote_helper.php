@@ -22,6 +22,13 @@ class QuoteHelper {
         $this->add("It’s Not Whether You Get Knocked Down, It’s Whether You Get Up.", "Vince Lombardi");
         $this->add("If You Are Working On Something That You Really Care About,<br>You Don’t Have To Be Pushed. The Vision Pulls You.", "Steve Jobs");
         $this->add("We May Encounter Many Defeats But We Must Not Be Defeated.", "Maya Angelou");
+        $this->add("My Fake Plants Died Because I Did Not Pretend To Water Them.", "Mitch Hedberg");
+        $this->add("The beauty of me is that I’m very rich.", "Donald Trump");
+        $this->add("It’s freezing and snowing in New York – we need global warming!", "Donald Trump");
+        $this->add("You’re disgusting.", "Donald Trump");
+        $this->add("People will stab you in your back and then ask why you're bleeding.", "Tronald Dump");
+        $this->add("I never said half the crap people said I did.", "Albert Einstein");
+        $this->add("Don't believe everything you read on the internet, just because it's a quote from some famous person.", "Abraham Lincoln");
     }
     
 }

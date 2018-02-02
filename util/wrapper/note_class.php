@@ -2,12 +2,12 @@
 if(session_status() != PHP_SESSION_ACTIVE) {
     session_start();
 }
-include_once 'note_class.php';
-include_once 'user_class.php';
-include_once 'project_class.php';
-include_once '../util/user_manager.php';
-include_once '../util/project_manager.php';
-include_once '../util/note_manager.php';
+echo getcwd();
+include_once 'util/wrapper/user_class.php';
+include_once 'util/wrapper/project_class.php';
+include_once 'util/user_manager.php';
+include_once 'util/project_manager.php';
+include_once 'util/note_manager.php';
 
 class Note {
     public $project;

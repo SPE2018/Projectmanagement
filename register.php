@@ -20,7 +20,8 @@
 </body>-->
 
 <?php
-include_once '../util/LoginUtility.php';
+include_once 'util/LoginUtility.php';
+include_once 'php/functions.php';
 Login::logout();
 
 echo get_head();
@@ -31,7 +32,7 @@ echo get_index_jumbotop();
 echo get_jumbobot();
 
 echo "<div id='quote' class='container' style='border:2px solid #cecece; border-radius: 10px; padding: 20px 20px 20px 20px;"
-        . "background-color: #201515; display: none'>";
+        . "margin-bottom: 50px; background-color: #201515; max-width: 600px'>";
 
 Registration::createRegisterForm();
 

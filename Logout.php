@@ -1,5 +1,5 @@
 <?php
-    include_once '../util/LoginUtility.php';
+    include_once 'util/LoginUtility.php';
 
     unset($_SESSION['user']);
-    header("Location: ../index.php");
+    header("Location: index.php");
