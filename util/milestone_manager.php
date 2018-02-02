@@ -117,9 +117,9 @@ class MilestoneManager {
         ////////////////
         
         $today = new DateTime();
-        
+
         $divTable = ElementFactory::createHtml("<div class='table'>", "</div>");
-        $table = ElementFactory::createHtml("<table class='table-hover'>", "</table>");
+        $table = ElementFactory::createHtml("<table class='table'>", "</table>");
                 
         $tasks = $milestone->tasks;
         
@@ -140,7 +140,7 @@ class MilestoneManager {
             $tr = ElementFactory::createHtml("<tr>", "</tr>");
             $builder->add($tr->open);
 
-            $td = ElementFactory::createHtml("<td>", "</td>");
+            $td = ElementFactory::createHtml("<td style='border: none'>", "</td>");
             $builder->add($td->open);
 
             $builder->add(ElementFactory::createHtml("<button type='button' class='btn btn-info task' value='$t->id'>$name</button>"));
