@@ -22,8 +22,9 @@ echo get_jumbotop();
 <?php echo get_jumbobot();?>
             <main>
                 <div class="container">
-                    <table class="table table-responsive">
-                        <tr><td style="width: 21.75rem"></td><td><?php echo get_tabs(); ?></td></tr>
+                    <table class="table">
+                        <tr><td style="width: 25rem"></td><td style="width: 50rem"><?php echo get_tabs(); ?></td></tr>
+
                         <tr><td><?php echo get_projecttable($id, $name, $startdate, $enddate); ?></td><td id="content">
                             </td></tr>
                     </table>
