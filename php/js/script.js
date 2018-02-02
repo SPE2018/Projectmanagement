@@ -34,20 +34,44 @@ $(".msBtn").click(function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=milestoneview");
 });
 
-$(".projectTab").click(function () {
-    var mode = ($(this).val());
-    $("#content").load("content_loader.php?pid=" + pid + "&mode=project" + mode);
-});
+tabButtons(".projectTab", "project");
+tabButtons(".statsTab", "stats");
+tabButtons(".milestoneTab", "milestone");
+tabButtons(".meetingTab", "meeting");
+tabButtons(".statsTab", "stats")
 
-$(".statsTab").click(function () {
-    var mode = ($(this).val());
-    $("#content").load("content_loader.php?pid=" + pid + "&mode=stats" + mode);
-});
+function tabButtons(button, name){
+    $(button).click(function () {
+        var mode = ($(this).val());
+        if(name === "milestone"  && mode !== "add"){
+            $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=" + name + mode);
+        } else {
+            $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
+        }
+
+    });
+}
 
 $("#content").on("click", ".task", function () {
     tid = ($(this).val());
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
 });
+
+dynamicButtonsUsers("#remove_user", "removeuser");
+dynamicButtonsUsers("#promote_user", "promoteuser");
+dynamicButtonsUsers("#add_user", "adduser");
+
+function dynamicButtonsUsers(button, mode){
+    $("#content").on("click", button, function () {
+        var uid = ($(this).val());
+        if(button === "#add_user")
+        {
+            $("#content").load("content_loader.php?pid=" + pid + "&mode=" + mode);
+        }else{
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
+        }
+    });
+}
 
 $("#content").on("click", "#save_milestone", function(){
     var name = $("#name").val();
