@@ -54,6 +54,10 @@ class Login {
 
         echo '<button type="submit" name="btn_login" value="yes">sign in</button></form>';
     }
+    
+    public static function isLoggedIn() {
+        return isset($_SESSION['user']);
+    }
 }
 
 class Registration {
