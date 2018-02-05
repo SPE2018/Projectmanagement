@@ -59,8 +59,7 @@ else if($mode === "projectedit")
 }
 else if($mode === "projectdelete")
 {
-    echo "delete_project";
-    //ProjectManager::deleteProject($pid);
+    ProjectManager::deleteProject($pid);
 }
 else if($mode === "milestoneedit")
 {
@@ -69,12 +68,10 @@ else if($mode === "milestoneedit")
 else if($mode === "milestonedelete")
 {
     echo "delete_milestone";
-    //ProjectManager::deleteProject($pid);
 }
 else if($mode === "milestoneadd")
 {
     echo "add_milestone";
-    //ProjectManager::deleteProject($pid);
 }
 else if($mode === "meetingview")
 {
@@ -88,10 +85,8 @@ else if($mode === "meetingadd")
 else if($mode === "meetingdelete")
 {
     echo "delete_meetings";
-    //ProjectManager::deleteProject($pid);
 }
 else if($mode === "meetingedit")
 {
     echo "edit_meetings";
-    //ProjectManager::deleteProject($pid);
 }

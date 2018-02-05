@@ -43,12 +43,15 @@ tabButtons(".statsTab", "stats");
 function tabButtons(button, name){
     $(button).click(function () {
         var mode = ($(this).val());
-        if(name === "milestone"  && mode !== "add"){
+        if (name === "milestone" && mode !== "add") {
             $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=" + name + mode);
-        } else {
+        } else if (name === "project" && mode === "delete") {
+            $.ajax({type: "GET", url: "content_loader.php",data: {pid: pid, mode: name + mode}});
+                window.location = "index.php";
+        }
+        else {
             $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
         }
-
     });
 }
 
