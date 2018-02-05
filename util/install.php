@@ -89,6 +89,18 @@
                         `permission` varchar(45) NOT NULL DEFAULT 'user'
                       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
                       ");
+        
+        query($con, "CREATE TABLE `calendarlist` (
+                        `id` mediumint(8) unsigned NOT NULL auto_increment,
+                        `meetingdate` date default NULL,
+                        `title` varchar(255) default NULL,
+                        `timestart` time default NULL,
+                        `timeend` time default NULL,
+                        `location` varchar(255) default NULL,
+                        `description` varchar(255) default NULL,
+                        `project_id` INT default NULL,
+                        PRIMARY KEY (`id`)
+                      ) AUTO_INCREMENT = 1;");
 
         $installed = true;
     }

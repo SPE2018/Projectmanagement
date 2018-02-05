@@ -8,6 +8,7 @@ include_once "task_manager.php";
 include_once "milestone_manager.php";
 include_once "user_manager.php";
 include_once "project_manager.php";
+include_once "calendar_util.php";
 
 class SQL {
 
@@ -18,7 +19,7 @@ class SQL {
     public static function connect() {
         static $con = null;
         if ($con == null) {
-            $con = new mysqli("localhost", "root", "root", "planit-db");
+            $con = new mysqli("localhost", "root", "", "planit");
             if ($con->connect_errno) {
                 echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
                 die();

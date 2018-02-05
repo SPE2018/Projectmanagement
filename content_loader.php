@@ -1,6 +1,8 @@
 <?php
 include_once("util/sql_util.php");
 include_once("php/functions.php");
+//include_once("Kalenderliste/calendar_util.php");
+
 $mode = get_parameter('mode', 'GET', false);
 $mid = get_parameter('mid', 'GET', false);
 $pid = get_parameter('pid', 'GET', false);
@@ -75,8 +77,7 @@ else if($mode === "milestoneadd")
 }
 else if($mode === "meetingview")
 {
-    echo "view_meetings sjdfishjdfuisdhfihf";
-    //ProjectManager::deleteProject($pid);
+    CalendarUtil::get_meetinglist($pid);
 }
 else if($mode === "meetingadd")
 {

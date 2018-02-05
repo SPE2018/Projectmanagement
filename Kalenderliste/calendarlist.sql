@@ -10,6 +10,7 @@ CREATE TABLE `calendarlist` (
   `timeend` time default NULL,
   `location` varchar(255) default NULL,
   `description` varchar(255) default NULL,
+  `project_id` INT default NULL,
   PRIMARY KEY (`id`)
 ) AUTO_INCREMENT = 1;
 

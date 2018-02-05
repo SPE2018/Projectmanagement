@@ -146,3 +146,9 @@ th{
     text-decoration: underline;
 }
 
+#calendar_list pre {
+    font-size: 20px;
+    color: lightgray;
+    background-color: #505050;
+    padding: 10px 10px 10px 10px;
+}
