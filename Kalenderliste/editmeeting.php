@@ -45,8 +45,9 @@ echo get_head();
                     $id=$_GET["id"];
                 }
 
-                echo  edit_meeting($id);
-                ?>
+
+                          echo  edit_meeting($id);
+            ?>
             </main>
         </div>
 

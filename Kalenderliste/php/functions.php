@@ -63,7 +63,7 @@ function getmeetingdata($id)
     }
 }
 
-function get_meetinglist()
+function get_meetinglist($project_id)
 {
     // Verbindung zur Datenbank aufbauen
     $offset = 0;
@@ -76,7 +76,10 @@ function get_meetinglist()
 
     //ID AND SORT
     $con=dbconnect_calendarlist();
-    $sql="select id, meetingdate, title, timestart, timeend, location, description, id as editid from calendarlist order by meetingdate ASC limit $limit  offset $offset;";
+    $sql="select id, meetingdate, title, timestart, timeend, location, description, id as editid 
+                  from calendarlist 
+                  where project_id = $project_id 
+                  order by meetingdate ASC;";
     $res=dbquery($con,$sql);
 
 
@@ -170,7 +173,7 @@ function restolist($res, $editpage)
                 $s = $s . "</i>";
             } else if($k == "editid") {
                 $s = $s . "<p>";
-                $s = $s ."<a href='$editpage?id=$v'>EDIT</a>";
+                $s = $s ."<a href='$editpage?id=$v'><button type=\"button\" class=\"btn\">EDIT</button></a>";
                 $s = $s . "</p>";
             }
         }
@@ -183,7 +186,23 @@ function restolist($res, $editpage)
     //$v++;
     //$s = $s . "<div>I WANT TO INSERT AN APPEND BUTTON RIGHT HERE</div>";
 
-    $s = $s . "<a href='newmeeting.php'><div class=\"jumbotron\">ADD MEETING</div></a>";
+    $s = $s . "<a href='newmeeting.php'>";
+    $s = $s . "<br>";
+    $s = $s . "<button type=\"button\" class=\"btn btn-default btn-block\">ADD MEETING</button>";
+    $s = $s . "<br>";
+    $s = $s . "</a>";
+
+
+
+    //$s = $s . "<div class=\"panel-group\>";
+    //$s = $s . "<br>";
+    //$s = $s . "<div class=\"panel-body\">";
+    //$s = $s . "<a href='newmeeting.php'>";
+    //$s = $s . "NEW MEETING</a>";
+    //$s = $s . "</div>";
+    //$s = $s . "<br>";
+    //$s = $s . "</div>";
+
 
     //REMOVE OLD ENTRIES
     $con=dbconnect_calendarlist();
@@ -192,6 +211,7 @@ function restolist($res, $editpage)
 
     return $s;
 }
+
 
 function edit_meeting($id)
 {
@@ -202,7 +222,7 @@ function edit_meeting($id)
         if(isset($_GET["first"]))
         {
             $id=dbquery($con, "select min(id) from calendarlist;")->fetch_assoc()['min(id)'];
-        }elseif(isset($_GET["previous"]))
+        }elseif(isset($_GET["prev"]))
         {
             $id=dbquery($con, "select max(id) from calendarlist where id<$id;")->fetch_assoc()['max(id)'];
         }else if(isset($_GET["next"]))
@@ -252,6 +272,63 @@ function edit_meeting($id)
 
     return $s;
 }
+
+/*
+function edit_meeting($id)
+{
+    $con = dbconnect_calendarlist();
+    $date = "";
+
+    if ($con !== NULL)
+        if (isset($_GET["first"])) {
+            $date = dbquery($con, "SELECT min(meetingdate as meetingdate) FROM calendarlist;")->fetch_assoc()['min(meetingdate)'];
+        } elseif (isset($_GET["previous"])) {
+            $date = dbquery($con, "select max(meetingdate as meetingdate) from calendarlist where id<$id;")->fetch_assoc()['max(meetingdate)'];
+        } else if (isset($_GET["next"])) {
+            $date = dbquery($con, "select min(meetingdate as meetingdate) from calendarlist where id>$id;")->fetch_assoc()['min(meetingdate)'];
+        } else if (isset($_GET["last"])) {
+            $date = dbquery($con, "SELECT max(meetingdate as meetingdate) FROM calendarlist;")->fetch_assoc()['max(meetingdate)'];
+        } else if (isset($_GET["del"])) {
+            dbquery($con, "delete from calendarlist where id=$id;");
+        } else if (isset($_GET["save"])) {
+            //, familienstand='" . $_GET["fam"] . "'
+        }
+    if(count($date) != 6) {
+        dbquery($con, "update calendarlist set meetingdate='" . $date["meetingdate"] . "', title='" . $date["title"] .
+            "', timestart='" . $date["timestart"] . "', timeend='" . $date["timeend"] . "', location='" . $date["location"] .
+            "', description='" . $date["description"] . "' where meetingdate=$date;");
+    } else {
+        echo 'something went wrong';
+    }
+
+    $p = getmeetingdata($id);
+
+    $s = '<form class="form-horizontal">';
+    $s = $s . get_input("id", "number", "id", "id", $id, "");
+    $s = $s . get_input("Meetingdate:", "date", "meetingdate", "meetingdate", $p["meetingdate"], "2018-01-01");
+    $s = $s . get_input("Title:", "text", "title", "title", $p["title"], "Please Insert Title");
+    $s = $s . get_input("Timestart:", "time", "timestart", "timestart", $p["timestart"], "00:00:00");
+    $s = $s . get_input("Timeend:", "time", "timeend", "timeend", $p["timeend"], "00:00:00");
+    $s = $s . get_input("Location:", "text", "location", "location", $p["location"], "Please Insert Location");
+    $s = $s . get_input("Description:", "textbox", "description", "description", $p["description"], "Please Insert Description");
+
+
+    $s = $s . get_button("first", "<<");
+    $s = $s . get_button("previous", "<");
+    $s = $s . get_button("save", "SAVE");
+    $s = $s . get_button("del", "DEL");
+    $s = $s . get_button("next", ">");
+    $s = $s . get_button("last", ">>");
+
+    $s = $s . "<br><br>";
+
+    $s = $s . "<a href=\"index.php\"><button type=\"button\" class=\"btn\" >BACK</button></a>";
+
+    $s = $s . "</form>";
+
+    return $s;
+}
+*/
 
 function get_input ($labeltext, $type, $name, $id, $value, $placeholder)
 {
@@ -376,4 +453,12 @@ function get_id_letzterDatensatz($list)
     $res->free_result();
     $con->close();
     return $count;
+}
+
+function get_meeting_as_array_by_id($id)
+{
+    $con = dbconnect_calendarlist();
+    $sql = "SELECT * FROM calendarlist where meetingdate = $id";
+    $res = dbquery ($con, $sql);
+    return $res->fetch_row();
 }
