@@ -14,7 +14,7 @@ class UserManager {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['admin'], $result['enabled']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['salt'], $result['admin'], $result['enabled']);
         return $user;
     }
     
@@ -34,7 +34,7 @@ class UserManager {
             return null;
         }
 
-        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['admin'], $result['enabled']);
+        $user = new User($result['id'], $result['name'], $result['mail'], $result['password'], $result['salt'], $result['admin'], $result['enabled']);
         return $user;
     }
     
@@ -52,7 +52,7 @@ class UserManager {
         $toReturn = array();
         
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['salt'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -64,7 +64,7 @@ class UserManager {
         $toReturn = array();
         
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['salt'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -77,7 +77,7 @@ class UserManager {
         $toReturn = array();
         
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['salt'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -90,7 +90,7 @@ class UserManager {
         $toReturn = array();
 
         foreach ($result as $r) {
-            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['admin'], $r['enabled']);
+            $user = new User($r['id'], $r['name'], $r['mail'], $r['password'], $r['salt'], $r['admin'], $r['enabled']);
             array_push($toReturn, $user);
         }
         return $toReturn;
@@ -100,9 +100,9 @@ class UserManager {
      * Adds a user to the database.
      * This user needs to be activated/enabled by an admin
      */
-    public static function addUser($username, $mail, $password) {
+    public static function addUser($username, $mail, $password, $salt) {
         if((UserManager::userExists($username)) == false) {
-            $sql = "INSERT INTO users (name, mail, password, enabled) VALUES('$username', '$mail', '$password', 0);";
+            $sql = "INSERT INTO users (name, mail, password, enabled, salt) VALUES('$username', '$mail', '$password', 0, '$salt');";
             SQL::query($sql); // TODO: Error handling
             return true;
         }           

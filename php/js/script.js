@@ -38,7 +38,7 @@ tabButtons(".projectTab", "project");
 tabButtons(".statsTab", "stats");
 tabButtons(".milestoneTab", "milestone");
 tabButtons(".meetingTab", "meeting");
-tabButtons(".statsTab", "stats")
+tabButtons(".statsTab", "stats");
 
 function tabButtons(button, name){
     $(button).click(function () {
@@ -66,7 +66,8 @@ function dynamicButtonsUsers(button, mode){
         var uid = ($(this).val());
         if(button === "#add_user")
         {
-            $("#content").load("content_loader.php?pid=" + pid + "&mode=" + mode);
+            uid = ($("#add_user_select").val());
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }else{
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }

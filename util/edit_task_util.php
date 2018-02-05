@@ -14,7 +14,7 @@ class TaskEditor {
         $taskid = filter_input(INPUT_GET, "taskid");
         $finished = filter_input(INPUT_GET, "finished") == "true";
         TaskManager::setFinished($taskid, $finished);
-        echo BUtil::success("Die Änderungen am Task wurden <strong>gespeichert.</strong>");        
+        echo BUtil::success("Your changes have been <strong>saved.</strong>");        
     }
     
     public static function editTask() {
@@ -77,9 +77,9 @@ class TaskEditor {
         if ($previous_task != null) {
             $previous = $previous_task->name;
             if ($previous_task->finished) {
-                $previous = $previous . " ( completed)";
+                $previous = $previous . " (completed)";
             } else {
-                $previous = $previous . " ( in processing)";
+                $previous = $previous . " (in processing)";
             }
         }
         $out = $out . "<p><b>Previous Task:&emsp;</b>" . $previous . "</p><br>";

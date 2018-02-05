@@ -5,21 +5,6 @@ include_once 'LoginUtility.php';
 
 class ProjectManager {
     
-    public $projects = array();
-    
-    public static function add($project) {
-        array_push($this->projects, $project);
-    }
-    
-    public static function get($name) {
-        foreach ($this->projects as $p) {
-            if ($p->name == $name) {
-                return $p;
-            }
-        }
-        return null;
-    }
-    
     public static function displayProjectList() {
         $user_id = Login::getLoggedInId();
         $projects = ProjectManager::getAllProjects($user_id);
@@ -194,9 +179,41 @@ class ProjectManager {
         echo $out;
     }
     
-    public static function addUserToProject($project_id, $user_id, $role) {
-        $sql = "insert into projects_users (project_id, user_id, permission) VALUES ($project_id, $user_id, '$role');";
-        SQL::query($sql); // TODO: Error handling
+    public static function userPartOfProject($project_id, $user_id) {
+        $sql = "SELECT count(*) AS amount FROM projects_users WHERE project_id = $project_id AND user_id = $user_id;";
+        $result = SQL::query($sql)->fetch_assoc();
+        if ($result != null) {
+            // If the user is already added to this project
+            if (intval($result['amount']) > 0) {                
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    function getMeetings($project_id) {
+        $sql = "SELECT * FROM meetings WHERE project_id = $project_id";
+    }
+    
+    public static function addUser($project_id, $user_id, $role) {
+        if (ProjectManager::userPartOfProject($project_id, $user_id)) {
+            echo BUtil::danger("This user <strong>is already part of</strong> this project.");
+            return;
+        }
+        
+        $sql = "INSERT INTO projects_users (project_id, user_id, permission) VALUES ($project_id, $user_id, '$role');";
+        SQL::query($sql);
+        
+        echo BUtil::success("The user has been added to this project <strong>successfully.</strong>");
+    }
+    
+    public static function removeUser($project_id, $user_id) {
+         if (ProjectManager::userPartOfProject($project_id, $user_id) == false) {
+             // can't remove a user that is not part of this project...
+             echo BUtil::danger("This user <strong>is not part of</strong> this project.");
+             return;
+         }
+         $sql = "DELETE FROM projects_users WHERE project_id = $project_id AND user_id = ";
     }
     
     public static function displayProjectUsers($project_id) {
@@ -273,9 +290,9 @@ class ProjectManager {
 
         $allUsers = UserManager::getAllUsers();
 
-        $builder->add(ElementFactory::createLabel("add_user", "Add User:"));
+        $builder->add(ElementFactory::createLabel("add_user_select", "Add User to this project:"));
         //$builder->add(ElementFactory::createTextInput("add_user_input", "username"));
-        $searchBox = ElementFactory::createHtml("<select class='form-control' id='add_user'>", "</select>");
+        $searchBox = ElementFactory::createHtml("<select class='form-control' id='add_user_select'>", "</select>");
         $builder->add($searchBox->open);
         foreach ($allUsers as $u) {
             $builder->add(ElementFactory::createHtml("<option>$u->name</option>"));

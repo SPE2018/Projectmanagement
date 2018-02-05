@@ -7,22 +7,43 @@ if(session_status() != PHP_SESSION_ACTIVE) {
 }
 
 class Login {
-    public static function checkLogin() {
+    
+    // Password security: https://wblinks.com/notes/storing-passwords-the-wrong-better-and-even-better-way/
+    
+    const ITERATIONS = 100000; // Strings will be hashed 100 000 times, it takes around 1 second to generate the final hash with this many iterations
+    const PEPPER = "MeinSuperTollerPfeffer";
+    
+    const WRONG_INPUT = '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';
+       
+    public static function myHash($string, $salt) {
+        $startTime = microtime(true);
+        for ($i=0; $i<Login::ITERATIONS; $i++) {
+            $string = hash("sha256", $salt . Login::PEPPER . $string);        
+        }
+        echo "<br>TOTAL HASHING TIME IN SECONDS: " . (microtime(true) - $startTime) . "<br>";
+        return $string;
+    }
+    
+    
+    public static function checkLogin() {        
         if((filter_input(INPUT_POST, 'btn_login')) == NULL) {
             return "";
-        }
+        }     
         if((filter_input(INPUT_POST, 'login_username')) != NULL) {
             $name = filter_input(INPUT_POST, 'login_username');
-        }
-        if((filter_input(INPUT_POST, 'login_password')) != NULL) {
-            $pass = filter_input(INPUT_POST, 'login_password');
-        }
+        }        
         $user = UserManager::getUser($name);
         if ($user == null) {
-            return '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';      
-        }        
+            return Login::WRONG_INPUT;      
+        }      
+        if((filter_input(INPUT_POST, 'login_password')) != NULL) {
+            $pass = filter_input(INPUT_POST, 'login_password');
+            $salt = $user->salt;
+            $pass = Login::myHash($pass, $salt);
+        }
+           
         if($pass != $user->password){
-            return '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';             
+            return Login::WRONG_INPUT;             
         } else {
             if (!($user->enabled)) {
                 return '<p style="Color: orange; Font-Size:20px"><b>Your account has to be enabled by an admin before you are able to login</b></p>';     
@@ -34,7 +55,7 @@ class Login {
             } elseif($user->enabled == true) {
                 header("Location: index.php");  
             } else {
-                return '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';   
+                return Login::WRONG_INPUT;   
             }
         }
         return "";
@@ -107,6 +128,20 @@ class Login {
 }
 
 class Registration {
+    
+    const SALT_LENGTH = 15;
+    
+    public static function generateSalt() {
+        $randString="";
+        $charUniverse="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $len = strlen($charUniverse) - 1;
+        for ($i=0; $i<Registration::SALT_LENGTH; $i++) {
+            $randChar = $charUniverse[rand(0,$len)];
+            $randString = $randString.$randChar;
+        }
+        return $randString;
+    }
+    
     public static function checkRegistration() {
         $name = filter_input(INPUT_POST, 'register_username');
         $mail = filter_input(INPUT_POST, 'register_email');
@@ -116,7 +151,9 @@ class Registration {
             if($pass != $rptpw) {
                 return '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
-                if (UserManager::addUser($name, $mail, $pass)) {
+                $salt = Registration::generateSalt();
+                $pass = Login::myHash($pass, $salt);
+                if (UserManager::addUser($name, $mail, $pass, $salt)) {
                     header("Location: index.php?newuser=true");
                 } else {
                     return '<p style="Color: red; Font-Size:20px">User with this name already exists</p>';         

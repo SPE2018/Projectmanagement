@@ -8,12 +8,14 @@ class User {
     public $password;
     public $admin; //boolean
     public $enabled; // boolean
+    public $salt;
     
-    public function __construct($userid, $name, $mail, $password, $admin = 0, $enabled = 0) {
+    public function __construct($userid, $name, $mail, $password, $salt, $admin = 0, $enabled = 0) {
         $this->userid = intval($userid);
         $this->name = $name;
         $this->mail = $mail;
         $this->password = $password;
+        $this->salt = $salt;
         $this->admin = $admin != 0;
         $this->enabled = $enabled != 0;
     }

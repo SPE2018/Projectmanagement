@@ -15,7 +15,7 @@ $enddate = $project->endDate; //get_parameter('enddate', 'GET',false);
 
 echo get_navtop();
 ProjectManager::displayProjectList();    
-echo get_navbottom();
+echo get_navbottom(Login::getLoggedInName());
 echo get_jumbotop();
 ?>
 <h1 class="display-2"><?php echo $name; ?></h1>

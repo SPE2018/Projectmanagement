@@ -46,7 +46,9 @@ else if($mode === "promoteuser")
 }
 else if($mode === "adduser")
 {
-    echo "add_user";
+    $uid = UserManager::getUser($uid)->userid;
+    ProjectManager::addUser($pid, $uid, "user");
+    ProjectManager::displayProjectUsers($pid);
 }
 else if($mode === "projectusers"){
     ProjectManager::displayProjectUsers($pid);
@@ -76,7 +78,7 @@ else if($mode === "milestoneadd")
 }
 else if($mode === "meetingview")
 {
-    echo "view_meetings";
+    echo "view_meetings sjdfishjdfuisdhfihf";
     //ProjectManager::deleteProject($pid);
 }
 else if($mode === "meetingadd")

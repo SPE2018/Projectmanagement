@@ -40,5 +40,11 @@ class BUtil {
               </div>";
     }
     
+    public static function danger($str) {
+        return "<div class='alert alert-danger'>
+                $str
+              </div>";
+    }
+    
 }
 

@@ -1,9 +1,10 @@
 <?php
 include "util/sql_util.php";
+//include "util/LoginUtility.php";
 
 SQL::connect();
 
-$loos = UserManager::getUser("loospete");
+//$loos = UserManager::getUser("loospete");
 //var_dump($loos);
 /*sleep(1);
 sql_addProject("project1");
@@ -20,4 +21,4 @@ MilestoneManager::addMilestone(5, "Milestone5", "Das ist der fünfte Meilenstein
 MilestoneManager::addMilestone(5, "Milestone6", "Das ist der sechste Meilenstein");
 */
 
-var_dump(MilestoneManager::loadMilestones(5));
+Login::myHash("1234456789123445ff", "abcdefgabcdefg");

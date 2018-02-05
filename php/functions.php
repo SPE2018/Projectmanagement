@@ -15,9 +15,10 @@ function get_navtop()
     return file_get_contents("php/html/navtop.html");
 }
 
-function get_navbottom()
+function get_navbottom($user)
 {
-    return file_get_contents("php/html/navbottom.html");
+    $str = file_get_contents("php/html/navbottom.html");    
+    return str_replace("%MYUSERNAME%", $user, $str);
 }
 
 function get_jumbotop()
