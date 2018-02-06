@@ -36,7 +36,9 @@ echo get_jumbotop("Project Overview");
                     </table>
                 </div>
             </main>
-
+        <footer>
+            <div class="row bg-secondary p-3 mt-5 m-0"><div class="ml-2">&#9400; <script>document.write(moment().year());</script> planIT</div> <a href="#" class="ml-auto mr-3">Terms</a><a href="#" class="mr-3">Privacy</a><a href="#" class="mr-4">Security</a></div>
+        </footer>
         <script>
             var pid = <?php echo json_encode($id)?>;
             var name = <?php echo json_encode($name)?>;
