@@ -1,4 +1,13 @@
 <?php
+try {
+    include_once 'util/user_manager.php';
+    if (UserManager::countAdmins() > 0) {
+        header("Location: index.php");
+    }
+} catch (Exception $e) {
+
+}
+
     $installed = false;
     $error = null;
 
@@ -10,6 +19,16 @@
         return $result;
     }
     
+    function register_admin($alert) {
+        include_once 'util/sql_util.php';
+        include_once 'util/LoginUtility.php';
+        
+        if ($alert != null) {
+            echo $alert . "<br>";
+        }
+        echo Registration::createRegisterForm(true);
+    }
+    
     function installAll() {
         global $installed;
         global $error;
@@ -19,7 +38,7 @@
         $address = filter_input(INPUT_POST, "address");
         $db = filter_input(INPUT_POST, "db");
         $name = filter_input(INPUT_POST, "name");
-        $pass = filter_input(INPUT_POST, "password");
+        $pass = filter_input(INPUT_POST, "password");        
 
         if (strlen($address) == 0 || strlen($db) == 0 || strlen($name) == 0) {
             $installed = false;
@@ -27,9 +46,22 @@
             return;
         }
         
-        echo "Before: '$db'<br>";
-        $db = str_replace(";", "", $db);
-        echo "After: '$db'<br>";
+        if (!file_exists('util/')) {
+            if (!mkdir('util/', 0777, true)) {
+                $installed = false;
+                $error = "Fehlerhafte Eingabe";
+                return;
+            } else {
+                echo "Created Directory 'util/'<br>";
+            }
+        }
+        $myfile = fopen("util/db.txt", "w") or die("Unable to open file 'util/db.txt' !");
+        $txt = "host: $address\n"
+                . "db: $db\n"
+                . "name: $name\n"
+                . "pass: $pass";
+        fwrite($myfile, $txt);
+        fclose($myfile);
         
         $con = new mysqli($address, $name, $pass);
         if ($con->connect_errno) {
@@ -58,9 +90,11 @@
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `project_id` int(11) NOT NULL,
                         `name` varchar(45) NOT NULL,
-                        `desc` varchar(300) DEFAULT NULL,
+                        `desc` varchar(300) DEFAULT 'No Description',
+                        `start` datetime DEFAULT NULL,
+                        `stop` datetime DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+                      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
         
         query($con, "CREATE TABLE `users` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -81,8 +115,10 @@
                         `finished` tinyint(1) DEFAULT '0',
                         `desc` varchar(120) NOT NULL DEFAULT 'No Description',
                         `enddate` datetime DEFAULT NULL,
+                        `finisheddate` datetime DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
+                      ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+                      ");
         
         query($con, "CREATE TABLE `projects_users` (
                         `project_id` int(11) NOT NULL,
@@ -115,30 +151,43 @@
 <html>
     <head>
         <title>Install planIT</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
-    <body>
-        <h1>Willkommen bei planIT</h1>
-        <?php
-            global $installed;
-            if ($installed == true) {
-                echo "<p>Erfolgreich installiert.</p>";
-            } else {
-                if ($error != null) {
-                    echo "<p><b>Anmerkung: $error</b></p><br><br>";
+    <div class="container">
+        <body>
+            <h1>Welcome to planIT</h1>
+            <?php               
+                if (filter_input(INPUT_GET, "createadmin") == "true") {
+                    register_admin(filter_input(INPUT_GET, "alert"));
+                    return;
                 }
-                echo "<form method='post'>";                
-                
-                echo "Host Adress:<input type='text' name='address'><br><br>";                                
-                echo "Database:<input type='text' name='db'><br>";
-                                
-                echo "Host Username:<input type='text' name='name'><br>";
-                echo "Host Password:<input type='password' name='password'><br><br>";
-                
-                echo "<button type='submit' name='install' value='all'>Installieren</button>          
-                </form>";
-            }
-        ?>
-        
 
-    </body>
+                global $installed;
+                if ($installed == true) {
+                    echo "<p>Successfully installed!</p>";
+                    echo "<a href='install.php?createadmin=true>Register</a>";
+                } else {
+                    if ($error != null) {
+                        echo "<p><b>Anmerkung: $error</b></p><br><br>";
+                    }
+                    echo "<br><div class='form-group'>";
+                    echo "<form method='post'>";                
+
+                    echo "Host Adress:<input class='form-control' type='text' name='address'><br>";                                
+                    echo "Database:<input class='form-control' type='text' name='db'><br>";
+
+                    echo "Host Username:<input class='form-control' type='text' name='name'><br>";
+                    echo "Host Password:<input class='form-control' type='password' name='password'><br><br>";
+
+                    echo "<button class='btn btn-success' type='submit' name='install' value='all'>Installieren</button>          
+                    </form>";
+                    echo "</div>";
+                }
+            ?>
+
+
+        </body>
+    </div>
 </html>

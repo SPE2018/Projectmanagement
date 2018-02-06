@@ -19,3 +19,4 @@ ProjectManager::addProject($name, $startdate, $enddate);
 $project = ProjectManager::getProjectFromName($name);
 ProjectManager::addUser($project->id, $userid, "leader");
 
+echo "<br><div class='alert alert-success'><strong>Succes!</strong> " . $name . " is now ready to use.</div><br><br><br><br>";

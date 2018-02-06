@@ -29,23 +29,25 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="alert"></div>
-                <div class="form-group">
-                    <label for="name" class="col-form-label">Project Name</label>
-                    <input class="form-control" type="text" id="name" required>
+            <div id="creation-form">
+                <div class="modal-body">
+                    <div id="alert"></div>
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Project Name</label>
+                        <input class="form-control" type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="startdate" class="col-form-label">Start Date</label>
+                        <input class="form-control" type="date" id="startdate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="enddate" class="col-form-label">End Date</label>
+                        <input class="form-control" type="date" id="enddate" required>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="startdate" class="col-form-label">Start Date</label>
-                    <input class="form-control" type="date" id="startdate" required>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" id="save">Save</button>
                 </div>
-                <div class="form-group">
-                    <label for="enddate" class="col-form-label">End Date</label>
-                    <input class="form-control" type="date" id="enddate" required>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success" id="save">Save</button>
             </div>
         </div>
     </div>

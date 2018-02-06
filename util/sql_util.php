@@ -19,7 +19,26 @@ class SQL {
     public static function connect() {
         static $con = null;
         if ($con == null) {
-            $con = new mysqli("localhost", "root", "root", "planit");
+            $data = array();
+            
+            $handle = fopen(dirname(__FILE__) . "/db.txt", "r");
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                    $line = preg_replace("/[\n\r]/", "", $line);  // Remove new line from string
+                    $arr = explode(": ", $line);
+                    if (count($arr) == 1) {
+                        $data[$arr[0]] = "";
+                    } else {
+                        $data[$arr[0]] = $arr[1];
+                    }
+                }
+
+                fclose($handle);
+            } else {
+                die("Error accessing database");
+            }             
+            
+            $con = new mysqli($data['host'], $data['name'], "" . $data['pass'], $data['db']);
             if ($con->connect_errno) {
                 echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
                 die();

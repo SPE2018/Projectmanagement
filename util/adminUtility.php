@@ -31,13 +31,16 @@ class Admin{
         '<tr><th colspan=5>Username</th><th>Demote</th>';
         if(UserManager::getAdmins() != NULL) {
             $users = UserManager::getAdmins();
+            $admins = count($users);
             foreach($users as $u) {
                 if($_SESSION['user'] == $u->name) {
                     echo '<tr><td colspan=5>' . $u->name . '</td>'
-                    . (($_SESSION['user'] == 'admin') ? '<td>Cannot be demoted!</td>' : ('<td><a class="btn btn-warning" href="admin.php?demote=' . $u->name . '">Hand back administrator-permissions</a></td>'));
+                    . (($admins <= 1) ? '<td>Cannot be demoted!</td>' : ('<td><a class="btn btn-warning" href="admin.php?demote=' . $u->name . '">Hand back administrator-permissions</a></td>'));
                 } else {
+                    /*echo '<tr><td colspan=5>' . $u->name . '</td>'
+                    . (($_SESSION['user'] == 'admin') ? ('<td><a href="admin.php?demote=' . $u->name . '">Demote</a></td>') : ('<td>Only "admin" can demote admins</td>'));*/
                     echo '<tr><td colspan=5>' . $u->name . '</td>'
-                    . (($_SESSION['user'] == 'admin') ? ('<td><a href="admin.php?demote=' . $u->name . '">Demote</a></td>') : ('<td>Only "admin" can demote admins</td>'));
+                            . '<td><a class="btn btn-danger" href="admin.php?demote=' . $u->name . '">Demote</a></td>';
                 }
                 echo "</tr>";
             }
