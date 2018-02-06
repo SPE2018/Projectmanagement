@@ -118,15 +118,12 @@ class ProjectManager {
     }
     
     public static function confirmDelete($id) {
-        echo 'Are you sure you want to delete the project <span style="color: aqua;"><strong>' . ProjectManager::getProjectFromId($id)->name . '</strong></span>?<br>';
-        for($i=0; $i<31; $i++) {
-            echo "&nbsp;";
+        echo '<h3 style="margin-top: 20px;">Are you sure you want to delete the project <span style="color: aqua;"><strong>' . ProjectManager::getProjectFromId($id)->name . '</strong></span>?</h3><br><br><br>';
+        echo '<div align=right>' . ButtonFactory::createButton(ButtonType::SUCCESS, "Confirm", FALSE, "Btn_confirmDelete", "deleteProject")->marginget('ml-3 mt-4');
+        for($i=0; $i<21; $i++) {
+            echo '&nbsp;';
         }
-        echo ButtonFactory::createButton(ButtonType::SUCCESS, "confirm delete", FALSE, "Btn_confirmDelete", "deleteProject")->get();
-        for($i=0; $i<25; $i++) {
-            echo "&nbsp;";
-        }
-        echo ButtonFactory::createButton(ButtonType::DANGER, "keep it", FALSE, "Btn_declineDelete", "keepProject")->get();
+        echo ButtonFactory::createButton(ButtonType::DANGER, "Decline", FALSE, "Btn_declineDelete", "keepProject")->marginget('mt-4') . '</div>';
     }
     
     public static function getProjectUsers($id) {

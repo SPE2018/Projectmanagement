@@ -4,6 +4,7 @@ include_once "sql_util.php";
 include_once "edit_task_util.php";
 include_once "elements/bootstrap_util.php";
 include_once "elements/page_builder.php";
+include_once "php/functions.php";
 
 class MilestoneManager {
     
@@ -28,6 +29,15 @@ class MilestoneManager {
     
     public static function loadMilestoneFromId($project_id, $milestone_id) {
         $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
+        $result = SQL::query($sql)->fetch_assoc();        
+
+        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
+        $milestone->tasks = TaskManager::loadTasks($milestone->id);
+        return $milestone;
+    }
+    
+    public static function loadMilestoneFromName($project_id, $milestone_name) {
+        $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND name=$milestone_name;";
         $result = SQL::query($sql)->fetch_assoc();        
 
         $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
@@ -300,5 +310,4 @@ class MilestoneManager {
         
         return $out;
     }
-    
 }

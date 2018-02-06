@@ -86,7 +86,9 @@ else if($mode === "milestonedelete")
 }
 else if($mode === "milestoneadd")
 {
-    echo "add_milestone";
+    MilestoneManager::addMilestone($pid, "tmpMiSt", "desctmp", date("Y-m-d h:m"), date("Y-m-d h:m"));
+    $milestone = MilestoneManager::loadMilestoneFromName($pid, "tmpMiSt");
+    echo MilestoneManager::getMilestoneModal($pid, $milestone);
 }
 else if($mode === "meetingview")
 {

@@ -23,13 +23,19 @@ class Button extends ElementUnique {
         $this->isSubmit = $isSubmit;               
     }
     
+    public function marginget($mclass) {
+        return '<button class="' . $mclass . ' ' . $this->displayType . '" type='
+               . ($this->isSubmit ? "submit" : "button" )
+               . ' class="' . $this->displayType . '" id="' . $this->name . '" name="' . $this->name . '" value="' . $this->val
+               . '">' . $this->text . '</button>';
+    }
+    
     // Overrides parent
     public function get() {
         return "<button type='" 
                 . ($this->isSubmit ? "submit" : "button" )
                 . "' class='$this->displayType' id='$this->name' name='$this->name' value='$this->val'>$this->text</button>";
     }
-    
 }
 
 class ButtonFactory {
