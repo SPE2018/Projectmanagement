@@ -19,6 +19,10 @@ $("#save").click(function(){
     var enddate = $("#enddate").val();
     $("#enddate").val("");
 
+    if (name.length > 20) {
+        name = name.substring(0, 20);
+    }
+
     $.ajax({type: "GET", url: "php/newproject.php",
         data: {name: name, startdate: startdate, enddate: enddate},
         error : function(e) {
@@ -62,16 +66,16 @@ $("#content").on("click", ".task", function () {
 
 dynamicButtonsUsers("#remove_user", "removeuser");
 dynamicButtonsUsers("#promote_user", "promoteuser");
+dynamicButtonsUsers("#demote_user", "demoteuser");
 dynamicButtonsUsers("#add_user", "adduser");
 
 function dynamicButtonsUsers(button, mode){
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
-        if(button === "#add_user")
-        {
+        if(button === "#add_user") {
             uid = ($("#add_user_select").val());
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        }else{
+        } else {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }
     });

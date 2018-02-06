@@ -4,6 +4,7 @@ include_once("php/functions.php");
 include_once("util/LoginUtility.php");
 if (!Login::isLoggedIn()) {
     header("Location: login.php");
+    return;
 }
 echo get_head();
 
@@ -14,9 +15,10 @@ $startdate = $project->createdDate; //get_parameter('startdate', 'GET', false);
 $enddate = $project->endDate; //get_parameter('enddate', 'GET',false);
 
 echo get_navtop();
+$user = UserManager::getUserByID(Login::getLoggedInId());
 ProjectManager::displayProjectList();    
-echo get_navbottom(Login::getLoggedInName());
-echo get_jumbotop();
+echo get_navbottom($user);
+echo get_jumbotop("Project Overview");
 ?>
 <h1 class="display-2"><?php echo $name; ?></h1>
 <?php echo get_jumbobot();?>

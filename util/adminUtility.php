@@ -12,50 +12,50 @@ class Admin{
         if(filter_input(INPUT_GET, 'enable') != NULL) {
             UserManager::enableUser(UserManager::getUser(filter_input(INPUT_GET, 'enable'))->userid);
         }
-        echo '<table class="table">users to enable:' .
-        '<tr><th colspan=5>username</th><th></th><th>enable</th>';
+        echo '<table class="table admin">Users to enable:' .
+        '<tr><th>Username</th><th></th><th>Enable</th>';
         if(UserManager::getEnabledUsers() != NULL) {
             $users = UserManager::getDisabledUsers();
             foreach($users as $u) {
                 if($u->name == 'admin') {
                     continue;
                 }
-                echo '<tr><td colspan=5>' . $u->name . '</td><td></td><td><a href="admin.php?enable=' . $u->name . '">enable</a></td></tr>"';
+                echo '<tr><td>' . $u->name . '</td><td></td><td><a class="btn btn-success" href="admin.php?enable=' . $u->name . '">Enable</a></td></tr>';
             }
         }
         echo '</table>';
     }
 
     public static function display_Admins() {
-        
-        echo '<table class="table">administrative users:' .
-        '<tr><th colspan=5>username</th><th>demote</th>';
+        echo '<table class="table admin">Administrative Users:' .
+        '<tr><th colspan=5>Username</th><th>Demote</th>';
         if(UserManager::getAdmins() != NULL) {
             $users = UserManager::getAdmins();
             foreach($users as $u) {
                 if($_SESSION['user'] == $u->name) {
                     echo '<tr><td colspan=5>' . $u->name . '</td>'
-                    . (($_SESSION['user'] == 'admin') ? '<td>cannot be demoted!</td>' : ('<td><a href="admin.php?demote=' . $u->name . '">hand back administrator-permissions</a></td>'));
+                    . (($_SESSION['user'] == 'admin') ? '<td>Cannot be demoted!</td>' : ('<td><a class="btn btn-warning" href="admin.php?demote=' . $u->name . '">Hand back administrator-permissions</a></td>'));
                 } else {
                     echo '<tr><td colspan=5>' . $u->name . '</td>'
-                    . (($_SESSION['user'] == 'admin') ? ('<td><a href="admin.php?demote=' . $u->name . '">demote</a></td>') : ('<td>only "admin" can demote admins</td>'));
-                }        
+                    . (($_SESSION['user'] == 'admin') ? ('<td><a href="admin.php?demote=' . $u->name . '">Demote</a></td>') : ('<td>Only "admin" can demote admins</td>'));
+                }
+                echo "</tr>";
             }
         }
         echo '</table>';
     }
     
     public static function display_EnabledUserList() {
-        echo '<table class="table">already enabled users:' .
-        '<tr><th colspan=5>username</th><th>promote</th><th>delete</th><th>manage</th>';
+        echo '<table class="table admin">Enabled Users:' .
+        '<tr><th colspan=5>Username</th><th>Promote</th><th>Delete</th>';
         if(UserManager::getEnabledUsers() != NULL) {
             $users = UserManager::getEnabledUsers();
             foreach($users as $u) {
                 if($u->admin == false) {
                     echo '<tr><td colspan=5>' . $u->name
-                            . '</td><td><a href="admin.php?promote=' . $u->name . '">promote to admin</a></td><td>'
-                            . (($u->name == 'admin') ? 'cannot be deleted!</td>' : '<a href="admin.php?delete=' . $u->name . '">delete</a></td>') //if isset($u->permissions['admin'])
-                            . '<td><a href="admin.php?manageprojects=' . $u->name . '">manage projects</a></td></tr>';
+                            . '</td><td><a class="btn btn-success" href="admin.php?promote=' . $u->name . '">Promote to admin</a></td><td>'
+                            . (($u->name == 'admin') ? 'Cannot be deleted!</td>' : '<a class="btn btn-danger" href="admin.php?delete=' . $u->name . '">Delete</a></td>'); //if isset($u->permissions['admin'])
+                            //. '<td><a href="admin.php?manageprojects=' . $u->name . '">manage projects</a></td></tr>';
                 }
             }
         }

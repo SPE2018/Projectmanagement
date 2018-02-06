@@ -16,11 +16,9 @@ class Login {
     const WRONG_INPUT = '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';
        
     public static function myHash($string, $salt) {
-        $startTime = microtime(true);
         for ($i=0; $i<Login::ITERATIONS; $i++) {
             $string = hash("sha256", $salt . Login::PEPPER . $string);        
         }
-        echo "<br>TOTAL HASHING TIME IN SECONDS: " . (microtime(true) - $startTime) . "<br>";
         return $string;
     }
     

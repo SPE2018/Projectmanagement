@@ -18,12 +18,17 @@ function get_navtop()
 function get_navbottom($user)
 {
     $str = file_get_contents("php/html/navbottom.html");    
-    return str_replace("%MYUSERNAME%", $user, $str);
+    if ($user->admin) {
+        $str = str_replace("%ADMINPAGE%", '<a class="navbar-brand" href="admin.php">Admin</a>', $str);
+    } else {
+        $str = str_replace("%ADMINPAGE%", '', $str);
+    }
+    return str_replace("%MYUSERNAME%", $user->name, $str);
 }
 
-function get_jumbotop()
+function get_jumbotop($title)
 {
-    return file_get_contents("php/html/jumbotop.html");
+    return str_replace("%TITLE%", $title, file_get_contents("php/html/jumbotop.html"));
 }
 
 function get_index_jumbotop()
