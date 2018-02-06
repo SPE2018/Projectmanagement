@@ -66,7 +66,6 @@ function tabButtons(button, name){
             $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
         }
         else {
-            alert(mode);
             $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
         }
     });
