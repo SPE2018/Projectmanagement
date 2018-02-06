@@ -14,7 +14,7 @@
         <!--<form class="form-inline" action="/Login/logout.php">
             <button class="btn btn-outline-success" type="submit">Logout</button>
         </form>-->
-        <a class="navbar-brand" href="logout.php">Logout %MYUSERNAME%</a>
+        <button type="button" class="btn btn-success" onclick="window.location.href='logout.php'">Sign out <i class="fas fa-sign-out-alt fa-lg"></i></button>
     </div>
 </nav>
 
@@ -29,6 +29,7 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div id="alert"></div>
                 <div class="form-group">
                     <label for="name" class="col-form-label">Project Name</label>
                     <input class="form-control" type="text" id="name" required>

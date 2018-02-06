@@ -184,15 +184,7 @@ function date_sameDay($dateA, $dateB) {
     return $dateA->format('Y-m-d') == $dateB->format('Y-m-d');
 }
 
-function get_chart($projectname)
-{
-    $s = '<table class="table table-responsive">
-    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-line-chart" class="fa fa-plus"></i>Milestone Trend Analysis</th></tr>
-    <tr class="collapse-line-chart"><td id="line-chart-'.$projectname.'" class="bg-primary"></td></tr>
-    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-pie-chart" class="fa fa-plus"></i>Milestones reached...</th></tr>
-    <tr class="collapse-pie-chart"><td id="pie-chart-'.$projectname.'" class="bg-primary"></td></tr></table>';
-    return $s;
-}
+
 
 
 

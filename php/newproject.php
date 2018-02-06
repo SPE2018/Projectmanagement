@@ -13,5 +13,5 @@ $userid = Login::getLoggedInId();
 ProjectManager::addProject($name, $startdate, $enddate);
 
 $project = ProjectManager::getProjectFromName($name);
-ProjectManager::addUserToProject($project->id, $userid, "leader");
+ProjectManager::addUser($project->id, $userid, "leader");
 

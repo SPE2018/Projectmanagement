@@ -48,4 +48,5 @@ echo "</div>";
 
 
 ?>
+<script src="php/js/script.js"></script>
 <script>$('#quote').fadeIn(5000);</script>
