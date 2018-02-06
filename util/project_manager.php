@@ -231,6 +231,17 @@ class ProjectManager {
         echo BUtil::success("The user has been modified <strong>successfully.</strong>");
     }
     
+    public static function getUserPermission($project_id, $user_id) {
+        if (ProjectManager::userPartOfProject($project_id, $user_id) == false) {
+            // can't get a user that is not part of this project...
+            echo BUtil::danger("This user <strong>is not part of</strong> this project.");
+            return;
+        }
+        $sql = "SELECT * FROM projets_users WHERE project_id=$project_id AND user_id=$user_id;";
+        $result = SQL::query($sql)->fetch_assoc();        
+        return $result['permission'];
+    }
+    
     public static function displayProjectUsers($project_id) {
         $builder = new PageBuilder();
         
@@ -316,6 +327,27 @@ class ProjectManager {
         $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add to project", false, "add_user", " "));
         
         $builder->show();
+    }
+    
+    public static function displayEditProject($project_id) {
+        $user = UserManager::getUserByID(Login::getLoggedInId());
+        $isAdmin = true;
+        if ($user == null) {
+            $isAdmin = false;
+        } else if ($user->admin == false) {
+            $isAdmin = false;
+        }
+        
+        if (ProjectManager::getUserPermission($project_id, $user->id) != 'leader') {
+            $isAdmin = false;
+        }
+        
+        if (!$isAdmin) {
+            BUtil::danger("Only Admins or Project Leaders can modify projects.");
+            return;
+        }
+        
+        
     }
     
 }
