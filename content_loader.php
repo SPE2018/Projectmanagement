@@ -61,7 +61,15 @@ else if($mode === "projectedit")
 }
 else if($mode === "projectdelete")
 {
+    ProjectManager::confirmDelete($pid);
+}
+else if($mode === "confirmdelete")
+{
     ProjectManager::deleteProject($pid);
+}
+else if($mode === "declinedelete")
+{
+    echo "Test";
 }
 else if($mode === "milestoneedit")
 {

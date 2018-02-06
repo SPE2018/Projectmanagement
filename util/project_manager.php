@@ -113,8 +113,13 @@ class ProjectManager {
     }
 
     public static function deleteProject($id) {
-        $sql = "DELETE FROM projects WHERE id=$id";
-        SQL::query($sql); // TODO: Error handling
+        $sql = "DELETE from projects WHERE id = $id";
+        SQL::query($sql);
+    }
+    
+    public static function confirmDelete($id) {
+        echo ButtonFactory::createButton(ButtonType::SUCCESS, "confirm delete", FALSE, "Btn_confirmDelete", "deleteProject")->get();
+        echo ButtonFactory::createButton(ButtonType::DANGER, "keep it", FALSE, "Btn_declineDelete", "keepProject")->get();
     }
     
     public static function getProjectUsers($id) {

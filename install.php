@@ -52,7 +52,7 @@
                         `created` date DEFAULT NULL,
                         `endby` date DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;");
+                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
         query($con, "CREATE TABLE `milestones` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -60,19 +60,17 @@
                         `name` varchar(45) NOT NULL,
                         `desc` varchar(300) DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");
+                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
         query($con, "CREATE TABLE `users` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `name` varchar(45) NOT NULL,
                         `mail` varchar(45) NOT NULL,
                         `password` varchar(90) NOT NULL,
-                        `admin` tinyint(1) DEFAULT '0',
                         `enabled` tinyint(1) DEFAULT '0',
+                        `salt` varchar(45) DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;");
-        
-        query($con, "INSERT INTO `users` VALUES (0, 'admin', 'john.doe@example.com', 'root', 1, 1);");
+                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
         query($con, "CREATE TABLE `tasks` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -80,19 +78,30 @@
                         `name` varchar(45) NOT NULL DEFAULT 'Task',
                         `previous_task` int(11) DEFAULT '-1',
                         `finished` tinyint(1) DEFAULT '0',
+                        `desc` varchar(120) NOT NULL DEFAULT 'No Description',
+                        `enddate` datetime DEFAULT NULL,
                         PRIMARY KEY (`id`)
-                      ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;");       
-        
-        query($con, "CREATE TABLE `notes` (
-                        `id`		INT(11) NOT NULL AUTO_INCREMENT,
-                        `pid`		INT(11) NOT NULL,
-                        `uid`		INT(11) NOT NULL,
-                        `timestamp`	DATETIME,
-                        `header`	VARCHAR(40),
-                        `comment`	VARCHAR(250),
-                        PRIMARY KEY(`id`)
                       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");
         
+        query($con, "CREATE TABLE `projects_users` (
+                        `project_id` int(11) NOT NULL,
+                        `user_id` int(11) NOT NULL,
+                        `permission` varchar(45) NOT NULL DEFAULT 'user'
+                      ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+                      ");
+        
+        query($con, "CREATE TABLE `calendarlist` (
+                        `id` mediumint(8) unsigned NOT NULL auto_increment,
+                        `meetingdate` date default NULL,
+                        `title` varchar(255) default NULL,
+                        `timestart` time default NULL,
+                        `timeend` time default NULL,
+                        `location` varchar(255) default NULL,
+                        `description` varchar(255) default NULL,
+                        `project_id` INT default NULL,
+                        PRIMARY KEY (`id`)
+                      ) AUTO_INCREMENT = 1;");
+
         $installed = true;
     }
 
