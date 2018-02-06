@@ -27,22 +27,10 @@ $("#save").click(function(){
 
     if (startdate < enddate) {
         $("#creation-form").load("php/newproject.php?name=" + name + "&startdate=" + startdate + "&enddate=" + enddate);
-        /*$.ajax({
-            type: "GET", url: "php/newproject.php",
-            data: {name: name, startdate: startdate, enddate: enddate},
-            succes: function (data) {
-                
-            },
-            error: function (e) {
-                console.info(e.statusText);
-            },
-            async: false
-        });*/
-        //$("#alert").html("<div class='alert alert-success'><strong>Succes! </strong>" + name + " is now ready to use.</div>");
         setTimeout(function() {
             window.location = "projects.php?name=" + name;
         }, 2000);
-        
+
     } else if(startdate > enddate) {
         $("#name").val(name);
         $("#alert").html("<div class='alert alert-warning'><strong>Warning! </strong>The start date must be earlier than the end date.</div>");
