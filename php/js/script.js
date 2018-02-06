@@ -34,8 +34,9 @@ $("#save").click(function(){
             }
         });
         $("#alert").html("<div class='alert alert-success'><strong>Succes! </strong>" + name + " is now ready to use.</div>");
-        setTimeout(1200);
-        window.location = "projects.php?name=" + name;
+        setTimeout(function() {
+            window.location = "projects.php?name=" + name;
+        }, 500);
     } else if(startdate > enddate) {
         $("#name").val(name);
         $("#alert").html("<div class='alert alert-warning'><strong>Warning! </strong>The start date must be earlier than the end date.</div>");

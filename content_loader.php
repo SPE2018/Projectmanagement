@@ -74,7 +74,7 @@ else if($mode === "confirmdelete")
 }
 else if($mode === "declinedelete")
 {
-    echo "Test";
+    echo "";
 }
 else if($mode === "milestoneedit")
 {
