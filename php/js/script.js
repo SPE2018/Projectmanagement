@@ -1,3 +1,4 @@
+// Initial Theme for the
 var theme = 'php/css/darkly.css';
 var mid;
 var tid;
@@ -8,10 +9,11 @@ onload = function() {
     progressBar(project, progress);
     adjustmentHeight(project);
     getGeolocation();
-    //createChart(project);
 };
 
 $("#save").click(function(){
+
+    $("#warning").html("");
     var name = $("#name").val();
     $("#name").val("");
     var startdate = $("#startdate").val();
@@ -19,13 +21,28 @@ $("#save").click(function(){
     var enddate = $("#enddate").val();
     $("#enddate").val("");
 
-    $.ajax({type: "GET", url: "php/newproject.php",
-        data: {name: name, startdate: startdate, enddate: enddate},
-        error : function(e) {
-            console.info(e.statusText);
-        }
-    });
-    window.location = "projects.php?name=" + name;
+    if (name.length > 20) {
+        name = name.substring(0, 20);
+    }
+
+    if (startdate < enddate) {
+        $.ajax({
+            type: "GET", url: "php/newproject.php",
+            data: {name: name, startdate: startdate, enddate: enddate},
+            error: function (e) {
+                console.info(e.statusText);
+            }
+        });
+        $("#alert").html("<div class='alert alert-success'><strong>Succes! </strong>" + name + " is now ready to use.</div>");
+        setTimeout(1200);
+        window.location = "projects.php?name=" + name;
+    } else if(startdate > enddate) {
+        $("#name").val(name);
+        $("#alert").html("<div class='alert alert-warning'><strong>Warning! </strong>The start date must be earlier than the end date.</div>");
+    } else if (startdate === enddate) {
+        $("#name").val(name);
+        $("#alert").html("<div class='alert alert-warning'><strong>Warning! </strong>Start date and end date must be different.</div>")
+    }
 });
 
 $(".msBtn").click(function () {
@@ -62,6 +79,7 @@ $("#content").on("click", ".task", function () {
 
 dynamicButtonsUsers("#remove_user", "removeuser");
 dynamicButtonsUsers("#promote_user", "promoteuser");
+dynamicButtonsUsers("#demote_user", "demoteuser");
 dynamicButtonsUsers("#add_user", "adduser");
 
 dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
@@ -141,20 +159,6 @@ function adjustmentHeight(project)
     bar.style.height = tdHeight+"px";
 
 }
-
-// Handle the collapse of the project tables
-$("#pm-btn-line-chart").click(function () {
-    $(".collapse-line-chart").toggleClass('collapse');
-    $("#pm-btn-line-chart").toggleClass('fa-plus');
-    $("#pm-btn-line-chart").toggleClass('fa-minus');
-});
-
-$("#pm-btn-pie-chart").click(function () {
-    $(".collapse-pie-chart").toggleClass('collapse');
-    $("#pm-btn-pie-chart").toggleClass('fa-plus');
-    $("#pm-btn-pie-chart").toggleClass('fa-minus');
-});
-
 
 $('#themeBtn').click(function(){
     if(theme == 'php/css/darkly.css'){

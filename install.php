@@ -68,6 +68,7 @@
                         `mail` varchar(45) NOT NULL,
                         `password` varchar(90) NOT NULL,
                         `enabled` tinyint(1) DEFAULT '0',
+                        `admin` tinyint(1) DEFAULT '0',
                         `salt` varchar(45) DEFAULT NULL,
                         PRIMARY KEY (`id`)
                       ) ENGINE=InnoDB DEFAULT CHARSET=latin1;");

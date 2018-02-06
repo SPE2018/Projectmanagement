@@ -7,9 +7,10 @@ echo get_head();
 
 $loggedIn = Login::isLoggedIn();
 if ($loggedIn) {
+    $user = UserManager::getUserByID(Login::getLoggedInId());
     echo get_navtop();
     ProjectManager::displayProjectList();    
-    echo get_navbottom(Login::getLoggedInName());
+    echo get_navbottom($user);
 } else {
     echo get_simplenav();
 }

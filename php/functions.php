@@ -18,12 +18,17 @@ function get_navtop()
 function get_navbottom($user)
 {
     $str = file_get_contents("php/html/navbottom.html");    
-    return str_replace("%MYUSERNAME%", $user, $str);
+    if ($user->admin) {
+        $str = str_replace("%ADMINPAGE%", '<a class="navbar-brand" href="admin.php">Admin</a>', $str);
+    } else {
+        $str = str_replace("%ADMINPAGE%", '', $str);
+    }
+    return str_replace("%MYUSERNAME%", $user->name, $str);
 }
 
-function get_jumbotop()
+function get_jumbotop($title)
 {
-    return file_get_contents("php/html/jumbotop.html");
+    return str_replace("%TITLE%", $title, file_get_contents("php/html/jumbotop.html"));
 }
 
 function get_index_jumbotop()
@@ -184,15 +189,7 @@ function date_sameDay($dateA, $dateB) {
     return $dateA->format('Y-m-d') == $dateB->format('Y-m-d');
 }
 
-function get_chart($projectname)
-{
-    $s = '<table class="table table-responsive">
-    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-line-chart" class="fa fa-plus"></i>Milestone Trend Analysis</th></tr>
-    <tr class="collapse-line-chart"><td id="line-chart-'.$projectname.'" class="bg-primary"></td></tr>
-    <tr><th class="bg-info" style="width: 100rem"><i id="pm-btn-pie-chart" class="fa fa-plus"></i>Milestones reached...</th></tr>
-    <tr class="collapse-pie-chart"><td id="pie-chart-'.$projectname.'" class="bg-primary"></td></tr></table>';
-    return $s;
-}
+
 
 
 

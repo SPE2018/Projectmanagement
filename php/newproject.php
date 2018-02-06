@@ -10,6 +10,10 @@ if (!Login::isLoggedIn()) {
 }
 $userid = Login::getLoggedInId();
 
+if (strlen($name) > 45) {
+    $name = substr($name, 0, 45);
+}
+
 ProjectManager::addProject($name, $startdate, $enddate);
 
 $project = ProjectManager::getProjectFromName($name);

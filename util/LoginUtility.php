@@ -16,18 +16,16 @@ class Login {
     const WRONG_INPUT = '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';
        
     public static function myHash($string, $salt) {
-        $startTime = microtime(true);
         for ($i=0; $i<Login::ITERATIONS; $i++) {
             $string = hash("sha256", $salt . Login::PEPPER . $string);        
         }
-        echo "<br>TOTAL HASHING TIME IN SECONDS: " . (microtime(true) - $startTime) . "<br>";
         return $string;
     }
     
     
     public static function checkLogin() {        
         if((filter_input(INPUT_POST, 'btn_login')) == NULL) {
-            return "";
+            return "Not Pressed";
         }     
         if((filter_input(INPUT_POST, 'login_username')) != NULL) {
             $name = filter_input(INPUT_POST, 'login_username');
@@ -58,14 +56,14 @@ class Login {
                 return Login::WRONG_INPUT;   
             }
         }
-        return "";
+        return "Hello";
     }
 
     public static function admincheck($name, $pass) {
         $admin = UserManager::getUser($name);
         if($pass == $admin->password) {
             $_SESSION['user'] = $admin->name;
-            header("Location: Admin/admin.php");
+            header("Location: admin.php");
             return true;
         } else {
             echo "Wrong password for " . $name;
@@ -74,10 +72,7 @@ class Login {
     }
     
     public static function createLoginForm() {
-        $out = "";
-        if((filter_input(INPUT_POST, 'btn_login')) != NULL) {
-            $out = $out . Login::checkLogin();
-        }
+        $out = Login::checkLogin();
         $name = "";
         if((filter_input(INPUT_POST, 'login_username')) != NULL) {
             $name = filter_input(INPUT_POST, 'login_username');

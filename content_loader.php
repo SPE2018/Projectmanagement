@@ -40,17 +40,22 @@ else if($mode === "statscharts"){
 }
 else if($mode === "removeuser")
 {
-    echo "remove_user";
-}
-else if($mode === "promoteuser")
-{
-    echo "promote_user";
+    ProjectManager::removeUser($pid, $uid);
+    ProjectManager::displayProjectUsers($pid);
 }
 else if($mode === "adduser")
 {
     $uid = UserManager::getUser($uid)->userid;
     ProjectManager::addUser($pid, $uid, "user");
     ProjectManager::displayProjectUsers($pid);
+}
+else if($mode === "promoteuser")
+{
+    ProjectManager::setUserPermission($pid, $uid, "leader");
+}
+else if($mode === "demoteuser")
+{
+    ProjectManager::setUserPermission($pid, $uid, "user");
 }
 else if($mode === "projectusers"){
     ProjectManager::displayProjectUsers($pid);

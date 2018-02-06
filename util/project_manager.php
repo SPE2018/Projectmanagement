@@ -213,12 +213,27 @@ class ProjectManager {
     }
     
     public static function removeUser($project_id, $user_id) {
-         if (ProjectManager::userPartOfProject($project_id, $user_id) == false) {
-             // can't remove a user that is not part of this project...
-             echo BUtil::danger("This user <strong>is not part of</strong> this project.");
-             return;
-         }
-         $sql = "DELETE FROM projects_users WHERE project_id = $project_id AND user_id = ";
+        if (ProjectManager::userPartOfProject($project_id, $user_id) == false) {
+            // can't remove a user that is not part of this project...
+            echo BUtil::danger("This user <strong>is not part of</strong> this project.");
+            return;
+        }
+        $sql = "DELETE FROM projects_users WHERE project_id = $project_id AND user_id = $user_id;";
+        SQL::query($sql);
+        
+        echo BUtil::success("The user has been removed from this project <strong>successfully.</strong>");
+    }
+    
+    public static function setUserPermission($project_id, $user_id, $permission) {
+        if (ProjectManager::userPartOfProject($project_id, $user_id) == false) {
+            // can't edit a user that is not part of this project...
+            echo BUtil::danger("This user <strong>is not part of</strong> this project.");
+            return;
+        }
+        $sql = "UPDATE projects_users SET permission = '$permission' WHERE project_id = $project_id AND user_id = $user_id;";
+        SQL::query($sql);
+        
+        echo BUtil::success("The user has been modified <strong>successfully.</strong>");
     }
     
     public static function displayProjectUsers($project_id) {
