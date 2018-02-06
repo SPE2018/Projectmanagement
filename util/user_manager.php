@@ -9,7 +9,7 @@ class UserManager {
      */
     public static function getUser($username) {
         $sql = "SELECT * FROM users WHERE name='$username';";
-        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        $result = SQL::query($sql)->fetch_assoc(); 
         if ($result == null) {
             return null;
         }
@@ -20,7 +20,7 @@ class UserManager {
     
     public static function userExists($username) {
         $sql = "SELECT count(*) as amount FROM users WHERE name='$username';";
-        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        $result = SQL::query($sql)->fetch_assoc(); 
         if ($result == null) {
             return null;
         }
@@ -29,7 +29,7 @@ class UserManager {
     
     public static function getUserByID($id) {
         $sql = "SELECT * FROM users WHERE id=$id;";
-        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        $result = SQL::query($sql)->fetch_assoc(); 
         if ($result == null) {
             return null;
         }
@@ -40,7 +40,7 @@ class UserManager {
     
     public static function getUsernameFromId($id) {
          $sql = "SELECT `id`, `name` FROM users WHERE id='$id';";
-        $result = SQL::query($sql)->fetch_assoc(); // TODO: Error handling
+        $result = SQL::query($sql)->fetch_assoc(); 
         if ($result == null) {
             return null;
         }
@@ -96,14 +96,33 @@ class UserManager {
         return $toReturn;
     }
 
+    public static function countUsers() {
+        $sql = "SELECT count(*) as amount FROM users";
+        $result = SQL::query($sql)->fetch_assoc();
+        if ($result == null) {
+            return 0;
+        }
+        return intval($result['amount']);
+    }
+    
+    public static function countAdmins() {
+        $sql = "SELECT count(*) as amount FROM users WHERE admin=1";
+        $result = SQL::query($sql)->fetch_assoc();
+        if ($result == null) {
+            return 0;
+        }
+        return intval($result['amount']);
+    }
+    
     /**
      * Adds a user to the database.
      * This user needs to be activated/enabled by an admin
      */
-    public static function addUser($username, $mail, $password, $salt) {
+    public static function addUser($username, $mail, $password, $salt, $admin = 0) {        
         if((UserManager::userExists($username)) == false) {
-            $sql = "INSERT INTO users (name, mail, password, enabled, salt) VALUES('$username', '$mail', '$password', 0, '$salt');";
-            SQL::query($sql); // TODO: Error handling
+            $enabled = $admin == 1 ? 1 : 0;
+            $sql = "INSERT INTO users (name, mail, password, enabled, salt, admin) VALUES('$username', '$mail', '$password', $enabled, '$salt', $admin);";
+            SQL::query($sql); 
             return true;
         }           
         return false;
@@ -112,28 +131,28 @@ class UserManager {
     public static function promoteUser($username) {
         if(UserManager::getUser($username) != NULL) {
             $sql = "UPDATE users SET `admin` = 1 WHERE `name`='$username';";
-            SQL::query($sql); // TODO: Error handling
+            SQL::query($sql); 
         }
     }
     
     public static function demoteUser($username) {
         if(UserManager::getUser($username) != NULL) {
             $sql = "UPDATE users SET `admin` = 0 WHERE `name`='$username';";
-            SQL::query($sql); // TODO: Error handling
+            SQL::query($sql); 
         }
     }
     
     public static function deleteUser($username) {
         if(UserManager::getUser($username) != NULL) {
             $sql = "DELETE from users WHERE `name`='$username';";
-            SQL::query($sql); // TODO: Error handling
+            SQL::query($sql); 
         }
     }
 
     public static function enableUser($id) {
         if(UserManager::getUserByID($id) != NULL) {
             $sql = "UPDATE users SET `enabled`=1 WHERE `id`=$id;";
-            SQL::query($sql); // TODO: Error handling
+            SQL::query($sql); 
         } else {
             echo '<p style="Color: red; Font-Size:24">user with this name does already exists</p>';            
         }

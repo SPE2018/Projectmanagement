@@ -77,13 +77,6 @@ class Login {
         if((filter_input(INPUT_POST, 'login_username')) != NULL) {
             $name = filter_input(INPUT_POST, 'login_username');
         }
-        /*$out = $out .  '<form action="login.php" method="post">username or e-mail-address:<br><input type="text" '
-        . 'name="login_username" placeholder="username/e-mail" name="login_username" required><br><br>';
-
-        $out = $out .  'password:<br><input type="password" '
-        . 'name="login_password" placeholder="password" required><br><br>';
-
-        $out = $out .  '<button type="submit" name="btn_login" value="yes">sign in</button></form>';*/
         
         $out = $out . '<form action="login.php" method="post">
                         <div class="modal-body">
@@ -142,14 +135,21 @@ class Registration {
         $mail = filter_input(INPUT_POST, 'register_email');
         $pass = filter_input(INPUT_POST, 'register_password');
         $rptpw = filter_input(INPUT_POST, 'register_rptPassword');
+        $first = filter_input(INPUT_POST, 'first') == "true";
+        
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
             if($pass != $rptpw) {
                 return '<p style="Color: red; Font-Size:24">passwords do not match</p>';            
             } else {
                 $salt = Registration::generateSalt();
                 $pass = Login::myHash($pass, $salt);
-                if (UserManager::addUser($name, $mail, $pass, $salt)) {
-                    header("Location: index.php?newuser=true");
+                $admin = $first ? 1 : 0;
+                if (UserManager::addUser($name, $mail, $pass, $salt, $admin)) {
+                    if ($first) {
+                        header("Location: index.php");
+                    } else {
+                        header("Location: index.php?newuser=true");
+                    }
                 } else {
                     return '<p style="Color: red; Font-Size:20px">User with this name already exists</p>';         
                 }
@@ -158,11 +158,16 @@ class Registration {
         return "";
     }
     
-    public static function createRegisterForm() {
+    public static function createRegisterForm($first = false) {
         $out = "";
         if((filter_input(INPUT_POST, 'btn_register')) != NULL) {
+            $first = filter_input(INPUT_POST, 'first') == "true";
             $out = $out . Registration::checkRegistration();
-        }
+            if ($first && strlen($out) > 0) {
+                // Only head back to install when there is an error in checkRegistration and $first == true
+                header("Location: install.php?createadmin=true&alert=$out");
+            }
+        }        
         $out = $out .  "<div class='form-group'>";
         $out = $out .  '<label>Username:</label>';
         $out = $out .  '<form action="register.php" method="post"><input type="text" '
@@ -179,6 +184,11 @@ class Registration {
         $out = $out .  '<label>Repeat Password:</label>';
         $out = $out .  '<input type="password" placeholder="confirm password" '
         . 'name="register_rptPassword" class="form-control" required><br>';
+        
+        if ($first) {
+            $out = $out .  '<input type="hidden" '
+                . 'name="first" value="true"><br>';
+        }
         
         $out = $out .  '<button type="submit" name="btn_register" value="yes">sign up</button></form>';
         $out = $out .  "</div>";

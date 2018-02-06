@@ -10,6 +10,10 @@ echo get_head();
 
 $name = get_parameter('name', 'GET', false);
 $project = ProjectManager::getProjectFromName($name);
+if ($project == null) {
+    header("Location: index.php");
+    return;
+}
 $id = $project->id;
 $startdate = $project->createdDate; //get_parameter('startdate', 'GET', false);
 $enddate = $project->endDate; //get_parameter('enddate', 'GET',false);

@@ -201,15 +201,14 @@ class ProjectManager {
     }
     
     public static function addUser($project_id, $user_id, $role) {
-        if (ProjectManager::userPartOfProject($project_id, $user_id)) {
-            echo BUtil::danger("This user <strong>is already part of</strong> this project.");
-            return;
+        if (ProjectManager::userPartOfProject($project_id, $user_id)) {            
+            return BUtil::danger("This user <strong>is already part of</strong> this project.");
         }
         
         $sql = "INSERT INTO projects_users (project_id, user_id, permission) VALUES ($project_id, $user_id, '$role');";
         SQL::query($sql);
         
-        echo BUtil::success("The user has been added to this project <strong>successfully.</strong>");
+        return BUtil::success("The user has been added to this project <strong>successfully.</strong>");
     }
     
     public static function removeUser($project_id, $user_id) {

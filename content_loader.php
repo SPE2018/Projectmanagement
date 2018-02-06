@@ -46,16 +46,18 @@ else if($mode === "removeuser")
 else if($mode === "adduser")
 {
     $uid = UserManager::getUser($uid)->userid;
-    ProjectManager::addUser($pid, $uid, "user");
+    echo ProjectManager::addUser($pid, $uid, "user");
     ProjectManager::displayProjectUsers($pid);
 }
 else if($mode === "promoteuser")
 {
     ProjectManager::setUserPermission($pid, $uid, "leader");
+    ProjectManager::displayProjectUsers($pid);
 }
 else if($mode === "demoteuser")
 {
     ProjectManager::setUserPermission($pid, $uid, "user");
+    ProjectManager::displayProjectUsers($pid);
 }
 else if($mode === "projectusers"){
     ProjectManager::displayProjectUsers($pid);

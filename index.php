@@ -5,6 +5,11 @@ include_once("util/LoginUtility.php");
 include_once("util/quote_helper.php");
 echo get_head();
 
+if (UserManager::countUsers() == 0) {
+    header("Location: install.php?createadmin=true");
+    return;
+}
+
 $loggedIn = Login::isLoggedIn();
 if ($loggedIn) {
     $user = UserManager::getUserByID(Login::getLoggedInId());
