@@ -1,11 +1,13 @@
 <?php
-try {
-    include_once 'util/user_manager.php';
-    if (UserManager::countAdmins() > 0) {
-        header("Location: index.php");
-    }
-} catch (Exception $e) {
+if (file_exists(dirname(__FILE__) . "/util/db.txt")) {
+    try {
+        include_once 'util/user_manager.php';
+        if (UserManager::countAdmins() > 0) {
+            header("Location: index.php");
+        }
+    } catch (Exception $e) {
 
+    }
 }
 
     $installed = false;

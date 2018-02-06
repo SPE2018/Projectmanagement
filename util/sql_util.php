@@ -19,7 +19,7 @@ class SQL {
     public static function connect() {
         static $con = null;
         if ($con == null) {
-            $data = array();
+            $data = array();            
             
             $handle = fopen(dirname(__FILE__) . "/db.txt", "r");
             if ($handle) {
