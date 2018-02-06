@@ -70,7 +70,7 @@ function get_progress($start, $end)
 {
     $diff_start_now = get_diffStartNow($start);
     $diff_start_end = get_diffStartEnd($start, $end);
-    $progress = (intval($diff_start_now)/intval($diff_start_end))*100;
+    $progress = (intval($diff_start_now)/((intval($diff_start_end) == 0) ? 1 : intval($diff_start_end))*100);
     return $progress;
 }
 

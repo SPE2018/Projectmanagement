@@ -60,13 +60,13 @@ tabButtons(".statsTab", "stats");
 function tabButtons(button, name){
     $(button).click(function () {
         var mode = ($(this).val());
-        if (name === "milestone" && mode !== "add") {
+        if (name === "milestone" && mode !== "add") {            
             $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=" + name + mode);
         } else if (name === "project" && mode === "delete") {
-            $.ajax({type: "GET", url: "content_loader.php",data: {pid: pid, mode: name + mode}});
-                window.location = "index.php";
+            $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
         }
         else {
+            alert(mode);
             $("#content").load("content_loader.php?pid=" + pid + "&mode=" + name + mode);
         }
     });
@@ -82,13 +82,20 @@ dynamicButtonsUsers("#promote_user", "promoteuser");
 dynamicButtonsUsers("#demote_user", "demoteuser");
 dynamicButtonsUsers("#add_user", "adduser");
 
+dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
+dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
+
 function dynamicButtonsUsers(button, mode){
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
-        if(button === "#add_user") {
+        if(button === "#add_user")
+        {
             uid = ($("#add_user_select").val());
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        } else {
+        } else if(button === "#Btn_confirmDelete") {
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
+            window.location = "index.php";
+        } else{
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }
     });
