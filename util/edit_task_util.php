@@ -83,7 +83,7 @@ class TaskEditor {
         $builder->add(ElementFactory::createLabel("", "Task Name:"));
         $builder->add(ElementFactory::createTextInput("param_name", $task->name));
         $builder->add(ElementFactory::createLabel("", "Task Description:"));
-        $builder->add(ElementFactory::createTextInput("param_desc", "My Awesome Task Description"));
+        $builder->add(ElementFactory::createTextInput("param_desc", $task->desc));
         
         $builder->add(ElementFactory::createLabel("", "Previous Task:"));
         $selectionBox = ElementFactory::createHtml("<select class='form-control' id='param_selectprevious'>", "</select>");
@@ -93,12 +93,18 @@ class TaskEditor {
             if ($t->id == $task->id) {
                 continue;
             }
-            $builder->add(ElementFactory::createHtml("<option>$t->id: $t->name</option>"));
+            $selected = "";
+            if ($task->previous_task != null) {
+                if ($task->previous_task->id == $t->id) {
+                    $selected = "selected";
+                }
+            }
+            $builder->add(ElementFactory::createHtml("<option $selected>$t->id: $t->name</option>"));
         }
         $builder->add($selectionBox->close);
         
         $builder->add(ElementFactory::createLabel("", "Deadline:"));
-        $builder->add(ElementFactory::createDatepicker("param_end", "end_picker", new DateTime()));
+        $builder->add(ElementFactory::createDatepicker("param_end", "end_picker", $t->enddate));
         
         $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Save", false, "updatetask", "custom_params"));
         $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Decline", false, "cancel", ""));

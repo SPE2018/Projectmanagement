@@ -87,8 +87,6 @@ class MilestoneManager {
                 && filter_input(INPUT_GET, "edit") == "true";
     }
     
-    
-    
     public static function save($milestone_id) {
         $name = filter_input(INPUT_GET, "name");
         $desc = filter_input(INPUT_GET, "desc");
@@ -145,13 +143,13 @@ class MilestoneManager {
         $builder->add($table->open);
        
         foreach ($tasks as $t) {
-            $trClass = "class='bg-primary'";
+            $bClass = "btn-primary";
             $name = "$t->name";
             if ($t->finished) {
-                $trClass = "class='bg-success'";
+                $bClass = "btn-success";
                 $name = $name . " &#10004;";
             } else if ($today > $t->enddate) {
-                $trClass = "class='bg-danger'";
+                $bClass = "btn-danger";
                 $name = "<b>" . $name . "</b>";
             }
 
@@ -161,7 +159,7 @@ class MilestoneManager {
             $td = ElementFactory::createHtml("<td style='border: none'>", "</td>");
             $builder->add($td->open);
 
-            $builder->add(ElementFactory::createHtml("<button type='button' class='btn btn-info task' value='$t->id'>$name</button>"));
+            $builder->add(ElementFactory::createHtml("<button type='button' class='btn $bClass task' value='$t->id'>$name</button>"));
 
             $builder->add($td->close);
             $builder->add($tr->close);
@@ -332,7 +330,6 @@ class MilestoneManager {
     
     public static function saveNewMiSt($pid) {
         MilestoneManager::addMilestone($pid, filter_input(INPUT_GET, 'MiStName'), filter_input(INPUT_GET, 'MiStDesc'), filter_input(INPUT_GET, 'MiStStart'), filter_input(INPUT_GET, 'MiStEnd'));
-        echo $pid . "<br>" . filter_input(INPUT_GET, 'MiStName') . "<br>" . filter_input(INPUT_GET, 'MiStDesc') . "<br>" . filter_input(INPUT_GET, 'MiStStart') . "<br>" . filter_input(INPUT_GET, 'MiStEnd');
     }
 
     public static function deleteMilestone($id) {

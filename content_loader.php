@@ -9,8 +9,6 @@ $pid = get_parameter('pid', 'GET', false);
 $tid = get_parameter('tid', 'GET', false);
 $uid = get_parameter('uid', 'GET', false);
 
-echo "MODE: $mode<br>";
-
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
 }
@@ -102,7 +100,6 @@ else if($mode === "mileDeclinedelete")
 else if($mode === "milestoneadd")
 {
     echo MilestoneManager::addMiSt();
-    echo 'drin';
 }
 else if($mode === "saveNewMiSt")
 {
