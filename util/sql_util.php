@@ -38,7 +38,7 @@ class SQL {
                 die("Error accessing database");
             }             
             
-            $con = new mysqli($data['host'], $data['name'], "" . $data['pass'], $data['db']);
+            $con = new mysqli($data['host'], $data['name'], $data['pass'], $data['db']);
             if ($con->connect_errno) {
                 echo "Failed to connect to MySQL: (" . $con->connect_errno . ") " . $con->connect_error;
                 die();

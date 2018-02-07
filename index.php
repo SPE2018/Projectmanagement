@@ -35,26 +35,27 @@ echo get_jumbobot();
 <main>
     <div class="container">
         <div class="row mb-5">
-            <div class="col-12">
-    <?php
-    if ($loggedIn) {
-        echo "<h1 class='display-10 mb-2'>Welcome back  <b>" . Login::getLoggedInName() . "</b></h1>";
-        echo "<h3 class='display-10 mb-2'>Let's planIT...</b></h3>";
-        echo "<script>$('#user').fadeIn(3000);</script>";
-    } else {
-        if (filter_input(INPUT_GET, "newuser") != null) {
-            echo "<h1 class='display-10 mb-2'>Welcome to planIT,  <b>" . Login::getLoggedInName() . "</b></h1>";
-        }
-        else {
-            echo "<h1 class='display-10 mb-2'>Manage your project</h1>";
-        }
-    }
-    ?>
+            <div class="col-6">
+                <?php
+                if ($loggedIn) {
+                    echo "<h1 class='display-10 mb-2'>Welcome back  <b>" . Login::getLoggedInName() . "!</b></h1>";
+                    echo "<h3 class='display-10 mb-2'>Let's planIT...</b></h3>";
+                    echo "<script>$('#user').fadeIn(3000);</script>";
+                } else {
+                    if (filter_input(INPUT_GET, "newuser") != null) {
+                        echo "<h1 class='display-10 mb-2'>Welcome to planIT</h1>";
+                    }
+                    else {
+                        echo "<h1 class='display-10 mb-2'>Manage your project</h1>";
+                    }
+                }
+                ?>
                 <p class="text-justify" style="font-size: 15pt;">You may use this onlinetool for managing your projects: Add milestones, built of tasks, with a date to start working on it and a date
-when it's planned to be finished latest.<br>See statistics about the project's progress and your timemanagement on diagrams and add
-Users as participants to have a great overview over your employees, responsible for each project.<br><br>Whether software development or feeding
-the animals on a big farm, there's always a way you can improve your works efficiency, using <span style="font-size: 22pt; color: #00bc8c">PlanIT</span</p>
+                when it's planned to be finished latest.<br>See statistics about the project's progress and your timemanagement on diagrams and add
+                Users as participants to have a great overview over your employees, responsible for each project.<br><br>Whether software development or feeding
+                the animals on a big farm, there's always a way you can improve your works efficiency, using <span style="font-size: 22pt; color: #00bc8c">PlanIT</span</p>
             </div>
+            <div class="col-6 p-5"><img src="php/images/planIT_logo_dark.png" style="width: 25rem" id="logo"></div>
         </div>
         <div class="row mb-5">
             <div class="card m-4" style="width: 18rem;">
@@ -88,8 +89,6 @@ the animals on a big farm, there's always a way you can improve your works effic
     </div>
 </main>
 
-<footer>
-    <div class="row bg-secondary p-3 mt-5 m-0"><div class="ml-2">&#9400; <script>document.write(moment().year());</script> planIT</div> <a href="#" class="ml-auto mr-3">Terms</a><a href="#" class="mr-3">Privacy</a><a href="#" class="mr-4">Security</a></div>
-</footer>
-<script src="php/js/script.js"></script>
+<script src="php/js/buttons.js"></script>
 <script>$('#quote').fadeIn(5000);</script>
+<?php echo get_footer(); ?>

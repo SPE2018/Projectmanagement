@@ -31,20 +31,20 @@ echo get_jumbotop("Project Overview");
                     <table class="table">
                         <tr><td style="width: 25rem"></td><td style="width: 50rem"><?php echo get_tabs(); ?></td></tr>
 
-                        <tr><td><?php echo get_projecttable($id, $name, $startdate, $enddate); ?></td><td id="content">
+                        <tr><td><?php echo get_projectprogress($id, $name, $startdate, $enddate); ?></td><td id="content">
                             </td></tr>
                     </table>
                 </div>
             </main>
-        <footer>
-            <div class="row bg-secondary p-3 mt-5 m-0"><div class="ml-2">&#9400; <script>document.write(moment().year());</script> planIT</div> <a href="#" class="ml-auto mr-3">Terms</a><a href="#" class="mr-3">Privacy</a><a href="#" class="mr-4">Security</a></div>
-        </footer>
         <script>
             var pid = <?php echo json_encode($id)?>;
             var name = <?php echo json_encode($name)?>;
             var startdate = <?php echo json_encode($startdate)?>;
             var enddate = <?php echo json_encode($enddate)?>;
         </script>
-        <script src="php/js/script.js"></script>
-    </body>
-</html>
+        <script src="php/js/progress.js"></script>
+        <script src="php/js/buttons.js"></script>
+        <script src="php/js/clock.js"></script>
+        <script src="php/js/weather.js"></script>
+        <script src="php/js/charts.js"></script>
+<?php echo get_footer(); ?>

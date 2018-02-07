@@ -13,7 +13,7 @@ class Login {
     const ITERATIONS = 100000; // Strings will be hashed 100 000 times, it takes around 1 second to generate the final hash with this many iterations
     const PEPPER = "MeinSuperTollerPfeffer";
     
-    const WRONG_INPUT = '<p style="Color: red; Font-Size:20px"><b>Wrong credentials entered</b></p>';
+    const WRONG_INPUT = "Wrong credentials entered.";
        
     public static function myHash($string, $salt) {
         for ($i=0; $i<Login::ITERATIONS; $i++) {
@@ -32,7 +32,7 @@ class Login {
         }        
         $user = UserManager::getUser($name);
         if ($user == null) {
-            return Login::WRONG_INPUT;      
+            return BUtil::danger(Login::WRONG_INPUT);
         }      
         if((filter_input(INPUT_POST, 'login_password')) != NULL) {
             $pass = filter_input(INPUT_POST, 'login_password');
@@ -41,10 +41,11 @@ class Login {
         }
            
         if($pass != $user->password){
-            return Login::WRONG_INPUT;             
+            return BUtil::danger(Login::WRONG_INPUT);
         } else {
             if (!($user->enabled)) {
-                return '<p style="Color: orange; Font-Size:20px"><b>Your account has to be enabled by an admin before you are able to login</b></p>';     
+                return BUtil::danger("Your account has to be enabled by an admin before you are able to login.");
+                //return '<p style="Color: orange; Font-Size:20px"><b>Your account has to be enabled by an admin before you are able to login</b></p>';
             }
             $_SESSION['user'] = $user->name;
             $_SESSION['userid'] = $user->userid;
@@ -53,7 +54,7 @@ class Login {
             } elseif($user->enabled == true) {
                 header("Location: index.php");  
             } else {
-                return Login::WRONG_INPUT;   
+                return BUtil::danger(Login::WRONG_INPUT);
             }
         }
         return "Hello";

@@ -20,7 +20,7 @@ else if($mode === "taskmodal"){
     echo '<script>$("#' . $tid . '_task").modal("show");</script>';
 }
 else if($mode === "statscharts"){
-    echo '<script>createLineChart(); createPieChart()</script>
+    echo '<script>var deviation = {value: [-1,0,2,-3], date: ["07-02-2018", "08-02-2018", "09-02-2018", "10-02-2018"]}; createLineChart(deviation); createPieChart(deviation)</script>
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
