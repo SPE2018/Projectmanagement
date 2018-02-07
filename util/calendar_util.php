@@ -19,10 +19,10 @@ class CalendarUtil {
         return $s;
     }
 
-    public static function get_button($name, $buttontext)
+    public static function get_button($name, $buttontext, $value = null)
     {
         $s='<button type="button" id ="' . $name . '" name="' .$name .
-            '" class="btn btn-outline-primary">' . $buttontext . '</button> ' ;
+            '" class="btn btn-outline-primary" value="' . $value . '">' . $buttontext . '</button> ' ;
 
         return $s;
     }
@@ -203,10 +203,31 @@ class CalendarUtil {
         return $default;
     }
     
+    public static function loesche_aktuellerDatensatz($id)
+    {
+        $sql = "DELETE FROM calendarlist WHERE id = $id";
+        SQL::query($sql);
+    }
+    
+    public static function update_aktuellerDatensatz($id)
+    {
+        $meetingdate = CalendarUtil::get_parameter("meetingdate", false);
+        $title = CalendarUtil::get_parameter("title", false);
+        $timestart = CalendarUtil::get_parameter("timestart", false);
+        $timeend = CalendarUtil::get_parameter("timeend", false);
+        $location = CalendarUtil::get_parameter("location", false);
+        $description = CalendarUtil::get_parameter("description", false);
+
+
+        $sql = "UPDATE calendarlist SET meetingdate = '$meetingdate', title = '$title', timestart = '$timestart', timeend = '$timeend', location = '$location', description = '$description' WHERE id = $id";
+        SQL::query($sql);
+
+        $sql="delete from calendarlist where meetingdate < CURRENT_TIMESTAMP";
+        SQL::query($sql);
+    }
+    
     public static function edit_meeting($id)
     {
-        //$con = dbconnect_calendarlist();
-
         
         if(isset($_GET["first"]))
         {
@@ -238,19 +259,19 @@ class CalendarUtil {
         $p = CalendarUtil::getmeetingdata($id);
 
         $s='<form class="form-horizontal">';
-        $s = $s . CalendarUtil::get_input("id", "number", "id", "id", $id, "");
-        $s = $s . CalendarUtil::get_input("Meetingdate:", "date", "meetingdate", "meetingdate", $p["meetingdate"], "2018-01-01");
-        $s = $s . CalendarUtil::get_input("Title:", "text", "title", "title", $p["title"], "Please Insert Title");
-        $s = $s . CalendarUtil::get_input("Timestart:", "time", "timestart", "timestart", $p["timestart"], "00:00:00");
-        $s = $s . CalendarUtil::get_input("Timeend:", "time", "timeend", "timeend", $p["timeend"], "00:00:00");
-        $s = $s . CalendarUtil::get_input("Location:", "text", "location", "location", $p["location"], "Please Insert Location");
-        $s = $s . CalendarUtil::get_input("Description:", "textbox", "description", "description", $p["description"], "Please Insert Description");
+        $s = $s . CalendarUtil::get_input("id", "number", "id", "param_id", $id, "");
+        $s = $s . CalendarUtil::get_input("Meetingdate:", "date", "meetingdate", "param_meetingdate", $p["meetingdate"], "2018-01-01");
+        $s = $s . CalendarUtil::get_input("Title:", "text", "title", "param_title", $p["title"], "Please Insert Title");
+        $s = $s . CalendarUtil::get_input("Timestart:", "time", "timestart", "param_timestart", $p["timestart"], "00:00:00");
+        $s = $s . CalendarUtil::get_input("Timeend:", "time", "timeend", "param_timeend", $p["timeend"], "00:00:00");
+        $s = $s . CalendarUtil::get_input("Location:", "text", "location", "param_location", $p["location"], "Please Insert Location");
+        $s = $s . CalendarUtil::get_input("Description:", "textbox", "description", "param_description", $p["description"], "Please Insert Description");
 
 
         //$s = $s . get_button("first", "<<");
         //$s = $s . get_button("prev", "<");
-        $s = $s . CalendarUtil::get_button("savemeeting", "SAVE");
-        $s = $s . CalendarUtil::get_button("delmeeting", "DELETE");
+        $s = $s . CalendarUtil::get_button("savemeeting", "SAVE", "custom_params");
+        $s = $s . CalendarUtil::get_button("delmeeting", "DELETE", "$id");
         //$s = $s . get_button("next", ">");
         //$s = $s . get_button("last", ">>");
 

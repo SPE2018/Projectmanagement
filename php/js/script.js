@@ -3,7 +3,7 @@ var theme = 'php/css/darkly.css';
 var mid;
 var tid;
 
-function dynamicButtonsUsers(button, mode){
+function dynamicButtonsUsers(button, mode) {
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
         if (uid === "custom_params") {
@@ -15,6 +15,7 @@ function dynamicButtonsUsers(button, mode){
                 var val = value.value.replace(/ /g, "%20"); // Replace spaces with '%20'
                 params += key + "=" + val + "&";                
             });
+            alert(params);
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
             return;
         }
@@ -51,6 +52,8 @@ function createAllDynamicButtons() {
     // Milestones
     dynamicButtonsUsers("#Btn_SaveNewMiSt", "saveNewMiSt");
     dynamicButtonsUsers("#Btn_CancelNewMiSt", "cancelAddMiSt");
+    dynamicButtonsUsers("#editmilestone", "milestoneedit");
+    dynamicButtonsUsers("#deletemilestone", "milestonedelete");
 }
 
 onload = function() {

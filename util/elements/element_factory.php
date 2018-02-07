@@ -139,7 +139,7 @@ class Datepicker extends ElementUnique {
         <div class="col-sm-6">
             <div class="form-group">
                 <div class="input-group date" id="datetimepicker' . $this->id . '" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker' . $this->id . '" value="'.$this->val.'">
+                    <input type="text" id="' . $this->name . '" class="form-control datetimepicker-input" data-target="#datetimepicker' . $this->id . '" value="'.$this->val.'">
                     <div class="input-group-append" data-target="#datetimepicker' . $this->id . '" data-toggle="datetimepicker">
                         <div class="input-group-text" style="height: 36.4px"><i class="far fa-calendar-alt fa-1x" style="color: white"></i></div>
                     </div>

@@ -162,6 +162,9 @@ class MilestoneManager {
         $builder->add($table->close);
         $builder->add($divTable->close);
         
+        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Edit", false, "editmilestone", "$milestone_id"));        
+        $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Delete", false, "deletemilestone", "$milestone_id"));
+        
         ////////////////
         ////////////////
         ////////////////
@@ -175,19 +178,8 @@ class MilestoneManager {
             echo BUtil::success("Die Änderungen am Meilenstein wurden <strong>gespeichert.</strong>");
         }
         // If the user pressed the finish button, change the finish state of the task
-        if (TaskEditor::toggledFinished()) {
+        /*if (TaskEditor::toggledFinished()) {
             TaskEditor::handleFinished();
-        }
-        // If the user pressed the edit task button, send them
-        // to the edit task page
-        /*if (MilestoneManager::shouldEditTask()) {
-            $project_id = filter_input(INPUT_GET, "projectid");
-            $milestone_id = filter_input(INPUT_GET, "milestoneid");
-            $task_id = filter_input(INPUT_GET, "taskid");
-            header("Location: edit_task.php?projectid=$project_id&"
-                    . "milestoneid=$milestone_id&"
-                    . "taskid=$task_id");
-            return;
         }*/
         
         // Load milestone including tasks
@@ -317,9 +309,9 @@ class MilestoneManager {
         $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStDesc', 'Description:')->get();
         $toReturn = $toReturn . '<br>' . ElementFactory::createTextInput('param_MiStDesc', '')->get();
         $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStStart', 'Start work latest by:')->get();
-        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('newMiStStart', 'param_MiStStart', new DateTime('now'))->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('param_MiStStart', 'param_MiStStart', new DateTime('now'))->get();
         $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStEnd', 'Finish latest by:')->get();
-        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('newMiStEnd', 'param_MiStEnd', new DateTime('9999-12-31'))->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('param_MiStEnd', 'MiStEnd', new DateTime('now'))->get();
         
         $toReturn = $toReturn . '<div align=right>' . ButtonFactory::createButton(ButtonType::BASIC, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('ml-3 mt-4');
         for($i=0; $i<21; $i++) {

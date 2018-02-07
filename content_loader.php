@@ -115,14 +115,15 @@ else if($mode === "addmeetingbutton")
 }
 else if($mode === "meetingdelete")
 {
-    echo "delete_meetings";
+    CalendarUtil::loesche_aktuellerDatensatz($uid); // $uid is the meeting id here
+    echo BUtil::success("The meeting has been <strong>removed.</strong>");
 }
 else if($mode === "meetingsave")
 {
-    echo "save_meetings";
+    CalendarUtil::update_aktuellerDatensatz(filter_input(INPUT_GET, "id"));
+    echo BUtil::success("Your changes have been <strong>saved.</strong>");
 }
 else if($mode === "meetingedit")
 {
-    //$meeting_id = filter_input(INPUT_GET, "meetingid");
     echo CalendarUtil::edit_meeting($uid); // $uid is the meeting id here
 }
