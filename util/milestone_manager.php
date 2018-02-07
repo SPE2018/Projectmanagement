@@ -4,7 +4,7 @@ include_once "sql_util.php";
 include_once "edit_task_util.php";
 include_once "elements/bootstrap_util.php";
 include_once "elements/page_builder.php";
-include_once "php/functions.php";
+include_once dirname(__FILE__) . "/../php/functions.php";
 
 class MilestoneManager {
     

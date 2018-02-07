@@ -1,5 +1,5 @@
 <?php
-include_once('util/milestone_manager.php');
+include_once(dirname(__FILE__) . '/../util/milestone_manager.php');
 
 function get_head()
 {

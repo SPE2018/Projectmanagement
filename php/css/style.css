@@ -116,22 +116,6 @@ th{
     margin-left: 40%;
 }
 
-.fa-minus{
-    float: right;
-}
-
-.fa-plus{
-    float: right;
-}
-
-.fa-minus:hover{
-    cursor: pointer;
-}
-
-.fa-plus:hover{
-    cursor: pointer;
-}
-
 .themes:hover{
     cursor: pointer;
 }

@@ -38,11 +38,21 @@
                     </div>
                     <div class="form-group">
                         <label for="startdate" class="col-form-label">Start Date</label>
-                        <input class="form-control" type="date" id="startdate" required>
+                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                            <input type="text" id="startdate" class="form-control datetimepicker-input" data-target="#datetimepicker1" required/>
+                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                <div class="input-group-text" style="height: 36.4px"><i class="far fa-calendar-alt fa-1x text-white"></i></div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label for="enddate" class="col-form-label">End Date</label>
-                        <input class="form-control" type="date" id="enddate" required>
+                        <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
+                            <input type="text" id="enddate" class="form-control datetimepicker-input" data-target="#datetimepicker2" required/>
+                            <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
+                                <div class="input-group-text" style="height: 36.4px"><i class="far fa-calendar-alt fa-1x text-white"></i></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -53,4 +63,15 @@
     </div>
 </div>
 
-
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+    $(function () {
+        $('#datetimepicker2').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+    });
+</script>
