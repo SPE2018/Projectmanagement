@@ -1,13 +1,15 @@
 <?php
 include_once("util/sql_util.php");
 include_once("php/functions.php");
-//include_once("Kalenderliste/calendar_util.php");
+//include_once("util/calendar_util.php");
 
 $mode = get_parameter('mode', 'GET', false);
 $mid = get_parameter('mid', 'GET', false);
 $pid = get_parameter('pid', 'GET', false);
 $tid = get_parameter('tid', 'GET', false);
 $uid = get_parameter('uid', 'GET', false);
+
+echo "MODE: $mode<br>";
 
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
@@ -88,9 +90,15 @@ else if($mode === "milestonedelete")
 }
 else if($mode === "milestoneadd")
 {
-    MilestoneManager::addMilestone($pid, "tmpMiSt", "desctmp", date("Y-m-d h:m"), date("Y-m-d h:m"));
-    $milestone = MilestoneManager::loadMilestoneFromName($pid, "tmpMiSt");
-    echo MilestoneManager::getMilestoneModal($pid, $milestone);
+    echo MilestoneManager::addMiSt();
+}
+else if($mode === "saveNewMiSt")
+{
+    echo MilestoneManager::saveNewMiSt($pid);
+}
+else if($mode === "cancelAddMiSt")
+{
+    echo "";
 }
 else if($mode === "meetingview")
 {
@@ -98,13 +106,24 @@ else if($mode === "meetingview")
 }
 else if($mode === "meetingadd")
 {
-    echo "add_meetings";
+    echo CalendarUtil::new_meeting();
+}
+else if($mode === "addmeetingbutton")
+{
+    echo CalendarUtil::neuer_Datensatz($pid);
+    CalendarUtil::get_meetinglist($pid);
 }
 else if($mode === "meetingdelete")
 {
-    echo "delete_meetings";
+    CalendarUtil::loesche_aktuellerDatensatz($uid); // $uid is the meeting id here
+    echo BUtil::success("The meeting has been <strong>removed.</strong>");
+}
+else if($mode === "meetingsave")
+{
+    CalendarUtil::update_aktuellerDatensatz(filter_input(INPUT_GET, "id"));
+    echo BUtil::success("Your changes have been <strong>saved.</strong>");
 }
 else if($mode === "meetingedit")
 {
-    echo "edit_meetings";
+    echo CalendarUtil::edit_meeting($uid); // $uid is the meeting id here
 }

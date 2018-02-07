@@ -32,7 +32,7 @@ class Button extends ElementUnique {
     
     // Overrides parent
     public function get() {
-        return "<button type='" 
+        return "<button style='margin-right: 4px' type='" 
                 . ($this->isSubmit ? "submit" : "button" )
                 . "' class='$this->displayType' id='$this->name' name='$this->name' value='$this->val'>$this->text</button>";
     }

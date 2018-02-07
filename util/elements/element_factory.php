@@ -138,9 +138,9 @@ class Datepicker extends ElementUnique {
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
-                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                    <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" value="'.$this->val.'">
-                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                <div class="input-group date" id="datetimepicker' . $this->id . '" data-target-input="nearest">
+                    <input type="text" id="' . $this->name . '" class="form-control datetimepicker-input" data-target="#datetimepicker' . $this->id . '" value="'.$this->val.'">
+                    <div class="input-group-append" data-target="#datetimepicker' . $this->id . '" data-toggle="datetimepicker">
                         <div class="input-group-text" style="height: 36.4px"><i class="far fa-calendar-alt fa-1x" style="color: white"></i></div>
                     </div>
                 </div>
@@ -148,7 +148,7 @@ class Datepicker extends ElementUnique {
         </div>
         <script type="text/javascript">
             $(function () {
-                $("#datetimepicker1").datetimepicker({
+                $("#datetimepicker' . $this->id . '").datetimepicker({
                     icons: {
                         time: "far fa-clock",
                         date: "far fa-calendar-alt",
@@ -161,7 +161,6 @@ class Datepicker extends ElementUnique {
         </script>
     </div>';
     }
-
 }
 
 class Image extends Element {

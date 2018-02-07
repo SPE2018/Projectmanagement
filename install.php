@@ -1,4 +1,6 @@
 <?php
+
+// Check if planIT is already installed
 if (file_exists(dirname(__FILE__) . "/util/db.txt")) {
     try {
         include_once 'util/user_manager.php';
@@ -169,7 +171,7 @@ if (file_exists(dirname(__FILE__) . "/util/db.txt")) {
                 global $installed;
                 if ($installed == true) {
                     echo "<p>Successfully installed!</p>";
-                    echo "<a href='install.php?createadmin=true>Register</a>";
+                    echo "<a href='install.php?createadmin=true'>Register</a>";
                 } else {
                     if ($error != null) {
                         echo "<p><b>Anmerkung: $error</b></p><br><br>";
