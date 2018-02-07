@@ -148,6 +148,15 @@ else if($mode === "taskcreate")
     TaskEditor::addTaskToDb();
     echo BUtil::success("The Task has been created!");
 }
+else if($mode === "taskedit")
+{
+    TaskEditor::editTask($uid);
+}
+else if($mode === "taskupdate")
+{
+    // send update to db
+    echo BUtil::success("The Task has been updated!");
+}
 else {
     echo "Cancelled<br>";
 }

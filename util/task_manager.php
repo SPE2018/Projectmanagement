@@ -1,5 +1,4 @@
 <?php
-
 class TaskManager {
     
     public static function getExistingTask($array, $id) {
@@ -9,6 +8,13 @@ class TaskManager {
             }
         }
         return null;
+    }
+    
+    public static function updateTask($task_id, $name, $desc, $prev, $end, $finish) {   
+        $sql = "UPDATE tasks SET "
+                . "`name`='$name', `desc`='$desc', `previous_task`='$prev', `enddate`='$end', `finisheddate`='$finish' "
+                . "WHERE id=$task_id;";
+        SQL::query($sql); 
     }
     
     public static function loadTasks($milestone_id) {
