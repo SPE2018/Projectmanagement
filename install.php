@@ -1,4 +1,6 @@
 <?php
+
+// Check if planIT is already installed
 if (file_exists(dirname(__FILE__) . "/util/db.txt")) {
     try {
         include_once 'util/user_manager.php';

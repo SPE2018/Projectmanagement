@@ -81,6 +81,8 @@ dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
 
 dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
 dynamicButtonsUsers("#editmeeting", "meetingedit");
+dynamicButtonsUsers("#savemeeting", "meetingsave");
+dynamicButtonsUsers("#delmeeting", "meetingdelete");
 
 function dynamicButtonsUsers(button, mode){
     $("#content").on("click", button, function () {

@@ -21,7 +21,7 @@ class CalendarUtil {
 
     public static function get_button($name, $buttontext)
     {
-        $s='<button type="button" name="' .$name .
+        $s='<button type="button" id ="' . $name . '" name="' .$name .
             '" class="btn btn-outline-primary">' . $buttontext . '</button> ' ;
 
         return $s;
@@ -250,7 +250,7 @@ class CalendarUtil {
         //$s = $s . get_button("first", "<<");
         //$s = $s . get_button("prev", "<");
         $s = $s . CalendarUtil::get_button("savemeeting", "SAVE");
-        $s = $s . CalendarUtil::get_button("delmeeting", "DEL");
+        $s = $s . CalendarUtil::get_button("delmeeting", "DELETE");
         //$s = $s . get_button("next", ">");
         //$s = $s . get_button("last", ">>");
 

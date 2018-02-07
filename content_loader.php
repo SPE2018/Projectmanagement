@@ -109,6 +109,10 @@ else if($mode === "meetingdelete")
 {
     echo "delete_meetings";
 }
+else if($mode === "meetingsave")
+{
+    echo "save_meetings";
+}
 else if($mode === "meetingedit")
 {
     //$meeting_id = filter_input(INPUT_GET, "meetingid");
