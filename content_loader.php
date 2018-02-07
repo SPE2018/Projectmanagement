@@ -82,7 +82,7 @@ else if($mode === "declinedelete")
 }
 else if($mode === "milestoneedit")
 {
-    echo "edit_milestone";
+    echo save($mid);
 }
 else if($mode === "milestonedelete")
 {

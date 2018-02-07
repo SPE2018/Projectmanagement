@@ -79,10 +79,10 @@ class MilestoneManager {
     
     
     public static function save($milestone_id) {
-        $name = filter_input(INPUT_POST, "name");
-        $desc = filter_input(INPUT_POST, "desc");
-        $start = filter_input(INPUT_POST, "start");
-        $stop = filter_input(INPUT_POST, "stop");
+        $name = filter_input(INPUT_GET, "name");
+        $desc = filter_input(INPUT_GET, "desc");
+        $start = filter_input(INPUT_GET, "start");
+        $stop = filter_input(INPUT_GET, "stop");
         
         MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
         
@@ -239,9 +239,6 @@ class MilestoneManager {
             $builder->add($li->close);
         }
         $builder->add($ol->close);
-        
-          
-        
         
         $builder->show();
     }
