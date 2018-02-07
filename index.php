@@ -36,20 +36,21 @@ echo get_jumbobot();
     <div class="container">
         <div class="row mb-5">
             <div class="col-6">
-                <?php
-                if ($loggedIn) {
-                    echo "<h1 class='display-10 mb-2'>Welcome back  <b>" . Login::getLoggedInName() . "!</b></h1>";
-                    echo "<h3 class='display-10 mb-2'>Let's planIT...</b></h3>";
-                    echo "<script>$('#user').fadeIn(3000);</script>";
-                } else {
-                    if (filter_input(INPUT_GET, "newuser") != null) {
-                        echo "<h1 class='display-10 mb-2'>Welcome to planIT</h1>";
-                    }
-                    else {
-                        echo "<h1 class='display-10 mb-2'>Manage your project</h1>";
-                    }
-                }
-                ?>
+    <?php
+    if ($loggedIn) {
+        echo "<h1 class='display-10 mb-2'>Welcome back  <b>" . Login::getLoggedInName() . "!</b></h1>";
+        echo "<h3 class='display-10 mb-2'>Let's planIT...</b></h3>";
+        echo "<script>$('#user').fadeIn(3000);</script>";
+    } else {
+        if (filter_input(INPUT_GET, "newuser") != null) {
+            echo "<h1 class='display-10 mb-2'>Welcome to planIT</h1>";
+        }
+        else {
+            echo "<h1 class='display-10 mb-2'>Manage your project</h1>";
+        }
+    }
+    ?>
+
                 <p class="text-justify" style="font-size: 15pt;">You may use this onlinetool for managing your projects: Add milestones, built of tasks, with a date to start working on it and a date
                 when it's planned to be finished latest.<br>See statistics about the project's progress and your timemanagement on diagrams and add
                 Users as participants to have a great overview over your employees, responsible for each project.<br><br>Whether software development or feeding
@@ -91,4 +92,4 @@ echo get_jumbobot();
 
 <script src="php/js/buttons.js"></script>
 <script>$('#quote').fadeIn(5000);</script>
-<?php echo get_footer(); ?>
+<?php echo get_footer();
