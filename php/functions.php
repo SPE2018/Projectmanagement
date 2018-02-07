@@ -6,6 +6,11 @@ function get_head()
     return file_get_contents("php/html/head.html");
 }
 
+function get_footer()
+{
+    return file_get_contents("php/html/footer.html");
+}
+
 function get_simplenav() {
     return file_get_contents("php/html/simplenav.html");   
 }
@@ -105,8 +110,13 @@ function get_d_m_Y($date)
     return date_format($date, 'd-m-Y');
 }
 
+// Check if dateA is the same as dateB
+function date_sameDay($dateA, $dateB) {
+    return $dateA->format('Y-m-d') == $dateB->format('Y-m-d');
+}
+
 // Create a new project table
-function get_projecttable($id, $projectname, $startdate, $enddate)
+function get_projectprogress($id, $projectname, $startdate, $enddate)
 {
     $progress = get_progress($startdate, $enddate);
     $rowspan = get_diffStartEnd($startdate, $enddate) + 1;
@@ -185,9 +195,7 @@ function get_projecttable($id, $projectname, $startdate, $enddate)
     return $s;
 }
 
-function date_sameDay($dateA, $dateB) {
-    return $dateA->format('Y-m-d') == $dateB->format('Y-m-d');
-}
+
 
 
 
