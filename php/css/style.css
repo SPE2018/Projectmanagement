@@ -95,6 +95,10 @@ i {
     z-index: 2;
 }
 
+.modal-open {
+    overflow: scroll;
+}
+
 .custom-td{
     text-align: center;
     font-size: 12px;

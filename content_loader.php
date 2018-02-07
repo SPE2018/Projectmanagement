@@ -8,6 +8,9 @@ $mid = get_parameter('mid', 'GET', false);
 $pid = get_parameter('pid', 'GET', false);
 $tid = get_parameter('tid', 'GET', false);
 $uid = get_parameter('uid', 'GET', false);
+$name = get_parameter('name', 'GET', false);
+$startdate = get_parameter('startdate', 'GET', false);
+$enddate = get_parameter('enddate', 'GET', false);
 
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
@@ -78,6 +81,10 @@ else if($mode === "projDeclinedelete")
 {
     echo "";
 }
+else if($mode === "milestoneview")
+{
+    echo MilestoneManager::displayMilestone($pid, $uid); // uid is the milestone id here
+}
 else if($mode === "milestoneedit")
 {
     echo MilestoneManager::displayEditMilestone($pid, $uid); // uid is the milestone id here
@@ -104,6 +111,10 @@ else if($mode === "milestoneadd")
 else if($mode === "saveNewMiSt")
 {
     echo MilestoneManager::saveNewMiSt($pid);
+}
+else if($mode === "reloadprogress"){
+    echo "test";
+    //echo get_projectprogress($pid, $name, $startdate, $enddate);
 }
 else if($mode === "cancelAddMiSt")
 {

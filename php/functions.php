@@ -156,7 +156,7 @@ function get_projectprogress($id, $projectname, $startdate, $enddate)
                 }
                 $milestoneCount++;
                 $milestoneStr = $milestoneStr . '<div class="btn-group">         
-                        <button type="button" class="btn dropdown-item text-success msBtn" data-toggle="tooltip" '
+                        <button type="button" class="btn dropdown-item text-success viewmilestone" data-toggle="tooltip" '
                         . 'title="' . $milestone->name . '" value="'. $milestone->id .'">'. $ms_name .'</button>'
                         . '</form></div><br>';
             }
