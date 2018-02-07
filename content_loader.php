@@ -161,6 +161,7 @@ else if($mode === "taskcreate")
 {
     $milestone_id = TaskEditor::addTaskToDb();
     echo BUtil::success("The Task has been created!");
+
     MilestoneManager::displayMilestone($pid, $milestone_id);
 }
 else if($mode === "taskedit")
@@ -183,6 +184,7 @@ else if($mode === "taskupdate")
     $milestone_id = filter_input(INPUT_GET, "milestone_id");
     $task_id = filter_input(INPUT_GET, "task_id");
     TaskManager::updateTask($task_id, $name, $desc, $previous_id, $enddate);
+
     echo BUtil::success("The Task has been updated!");
     
     MilestoneManager::displayMilestone($pid, $milestone_id);
