@@ -2,11 +2,15 @@
 var theme = 'php/css/darkly.css';
 var mid;
 var tid;
-var progress = calcProgress(startdate, enddate);
-var project = name;
-progressBar(project, progress);
-adjustmentHeight(project);
 
+$("#progressContent").ready(progressInit);
+
+function progressInit() {
+    var progress = calcProgress(startdate, enddate);
+    var project = name;
+    progressBar(project, progress);
+    adjustmentHeight(project);
+}
 
 // Calculate the actual project progress
 function calcProgress(startDate, endDate){

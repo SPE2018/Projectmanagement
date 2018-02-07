@@ -3,29 +3,40 @@
 ////////////////////////////////////////////////////////////////////
 createAllDynamicButtons();
 
-function dynamicButtonsUsers(button, mode) {
+function dynamicButtons(button, mode) {
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
         if (uid === "custom_params") {
             var params = "";
             // Gets all elements with an id that starts with 'param_'
-            $("[id^=param_]").each(function(index, value){
+            $("[id^=param_]").each(function (index, value) {
                 // Add this parameter with key and value to the parameter string
                 var key = value.id.replace("param_", "");
                 var val = value.value.replace(/ /g, "%20"); // Replace spaces with '%20'
                 params += key + "=" + val + "&";
             });
+
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
+            if (button === "#Btn_SaveNewMiSt" || button === "#deletemilestone") {
+                $.get(location.href).then(function(page) {
+                    $("#progressContent").html($(page).find("#progressContent").html())
+                    $("#progressContent").ready(progressInit);
+                })
+                $.getScript("php/js/progress.js");
+            }
             return;
         }
-        if(button === "#add_user")
-        {
+
+        if (button === "#add_user") {
             uid = ($("#add_user_select").val());
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        } else if(button === "#Btn_PconfirmDelete") {
+        } else if (button === "#Btn_PconfirmDelete") {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
             window.location = "index.php";
-        } else{
+        } else if (button === ".viewmilestone") {
+
+        }
+        else {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }
     });
@@ -33,41 +44,48 @@ function dynamicButtonsUsers(button, mode) {
 
 function createAllDynamicButtons() {
     // User Manager
-    dynamicButtonsUsers("#remove_user", "removeuser");
-    dynamicButtonsUsers("#promote_user", "promoteuser");
-    dynamicButtonsUsers("#demote_user", "demoteuser");
-    dynamicButtonsUsers("#add_user", "adduser");
+    dynamicButtons("#remove_user", "removeuser");
+    dynamicButtons("#promote_user", "promoteuser");
+    dynamicButtons("#demote_user", "demoteuser");
+    dynamicButtons("#add_user", "adduser");
 
     // Project confirm delete
-    dynamicButtonsUsers("#Btn_PconfirmDelete", "projConfirmdelete");
-    dynamicButtonsUsers("#Btn_PdeclineDelete", "projDeclinedelete");      
+    dynamicButtons("#Btn_PconfirmDelete", "projConfirmdelete");
+    dynamicButtons("#Btn_PdeclineDelete", "projDeclinedelete");      
 
     // Meetings
-    dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
-    dynamicButtonsUsers("#editmeeting", "meetingedit");
-    dynamicButtonsUsers("#savemeeting", "meetingsave");
-    dynamicButtonsUsers("#delmeeting", "milestonedelete");
-    dynamicButtonsUsers("#delmeeting", "meetingdelete");
+    dynamicButtons("#addmeeting", "addmeetingbutton");
+    dynamicButtons("#editmeeting", "meetingedit");
+    dynamicButtons("#savemeeting", "meetingsave");
+    dynamicButtons("#delmeeting", "meetingdelete");
 
     // Milestones
-    dynamicButtonsUsers("#Btn_SaveNewMiSt", "saveNewMiSt");
-    dynamicButtonsUsers("#Btn_CancelNewMiSt", "cancelAddMiSt");
-    dynamicButtonsUsers("#save_milestone", "save_milestone");
-    dynamicButtonsUsers("#editmilestone", "milestoneedit");
-    dynamicButtonsUsers("#deletemilestone", "milestonedelete");
+    dynamicButtons("#Btn_SaveNewMiSt", "saveNewMiSt");
+    dynamicButtons("#Btn_CancelNewMiSt", "cancelAddMiSt");
+    dynamicButtons("#save_milestone", "save_milestone");
+    dynamicButtons("#editmilestone", "milestoneedit");
+    dynamicButtons("#deletemilestone", "milestonedelete");
     // Milestone confirm delete
-    dynamicButtonsUsers("#Btn_MconfirmDelete", "mileConfirmdelete");
-    dynamicButtonsUsers("#Btn_MdeclineDelete", "mileDeclinedelete");
+    dynamicButtons("#Btn_MconfirmDelete", "mileConfirmdelete");
+    dynamicButtons("#Btn_MdeclineDelete", "mileDeclinedelete");
     
     // Tasks
-    dynamicButtonsUsers("#addtask", "taskadd");
-    dynamicButtonsUsers("#createnewtask", "taskcreate");
+    dynamicButtons("#addtask", "taskadd");
+    dynamicButtons("#createnewtask", "taskcreate");
     
     
     // Cancel
-    dynamicButtonsUsers("#cancel", "cancel");
+    dynamicButtons("#cancel", "cancel");
 }
 
+// View clicked milestone
+$("#progressContent").on("click", ".viewmilestone", function () {
+    mid = $(this).val();
+    $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=milestoneview");
+    $('html, body').animate({scrollTop : 110},600);
+});
+
+// Save Project
 $("#save").click(function(){
 
     $("#warning").html("");
@@ -95,12 +113,6 @@ $("#save").click(function(){
         $("#name").val(name);
         $("#alert").html("<div class='alert alert-warning'><strong>Warning! </strong>Start date and end date must be different.</div>")
     }
-});
-
-$(".msBtn").click(function () {
-    mid = ($(this).val());
-    $('html, body').animate({scrollTop : 110},600);
-    $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&mode=milestoneview");
 });
 
 tabButtons(".projectTab", "project");
