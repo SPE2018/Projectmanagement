@@ -6,7 +6,6 @@ if (!Login::isLoggedIn()) {
     header("Location: login.php");
     return;
 }
-echo get_head();
 
 $name = get_parameter('name', 'GET', false);
 $project = ProjectManager::getProjectFromName($name);
@@ -14,13 +13,17 @@ if ($project == null) {
     header("Location: index.php");
     return;
 }
-$id = $project->id;
-$startdate = $project->createdDate; //get_parameter('startdate', 'GET', false);
-$enddate = $project->endDate; //get_parameter('enddate', 'GET',false);
 
+echo get_head();
 echo get_navtop();
+
+$id = $project->id;
+$startdate = $project->createdDate;
+$enddate = $project->endDate;
 $user = UserManager::getUserByID(Login::getLoggedInId());
+
 ProjectManager::displayProjectList();    
+
 echo get_navbottom($user);
 echo get_jumbotop("Project Overview");
 ?>

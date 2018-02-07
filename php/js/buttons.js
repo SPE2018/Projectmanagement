@@ -19,15 +19,18 @@ function dynamicButtons(button, mode) {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
             if (button === "#Btn_SaveNewMiSt" || button === "#deletemilestone") {
                 $.get(location.href).then(function(page) {
-                    $("#progressContent").html($(page).find("#progressContent").html())
+                    $("#progressContent").html($(page).find("#progressContent").html());
                     $("#progressContent").ready(progressInit);
-                })
+                });
                 $.getScript("php/js/progress.js");
+            }
+            if (button === "#saveproject") {
+                setTimeout(function() {window.location.href = "index.php";}, 2000);
             }
             return;
         }
 
-        if (button === "#edittask") {
+        if (button === "#edittask" || button === "#finishedtask" || button === "#unfinishedtask") {
             // Close the currently open modals
             $('.modal').modal('hide');
             $('.modal-backdrop').remove();
@@ -55,6 +58,9 @@ function createAllDynamicButtons() {
     dynamicButtons("#demote_user", "demoteuser");
     dynamicButtons("#add_user", "adduser");
 
+    // Project
+    dynamicButtons("#saveproject", "projectupdate");
+
     // Project confirm delete
     dynamicButtons("#Btn_PconfirmDelete", "projConfirmdelete");
     dynamicButtons("#Btn_PdeclineDelete", "projDeclinedelete");
@@ -80,6 +86,8 @@ function createAllDynamicButtons() {
     dynamicButtons("#createnewtask", "taskcreate");
     dynamicButtons("#updatetask", "taskupdate");
     dynamicButtons("#edittask", "taskedit");
+    dynamicButtons("#finishedtask", "taskfinished");
+    dynamicButtons("#unfinishedtask", "taskunfinished");
     
     
     // Cancel

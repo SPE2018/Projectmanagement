@@ -2,6 +2,23 @@
 
 include_once 'milestone_manager.php';
 
+class Deviation implements JsonSerializable {
+    public $value;
+    public $date;
+
+    public function __construct($value, $date) {
+        $this->value = $value;
+        $this->date = $date;
+    }
+    
+    public function jsonSerialize () {
+        return array(
+            'value'=>$this->value,
+            'date'=>$this->date
+        );
+    }
+}
+
 function get_Charts($project_id) {    
     // db projectid -> milestoneid -> planned enddate -> actual enddate
     $milestones = MilestoneManager::loadMilestones($project_id);
@@ -14,10 +31,26 @@ function get_Charts($project_id) {
         }
     }
     
+    $value = array();    
+    $date = array();
     
+    foreach ($finished_milestones as $m) {        
+        $toAddValue = date_diff($m->enddate, $m->finisheddate)->format("%a");
+        if ($m->enddate > $m->finisheddate) {
+            $toAddValue *= -1;
+        }
+        $toAddDate = $m->finisheddate->format("Y-m-d");
+        
+        array_push($value, $toAddValue);
+        array_push($date, $toAddDate);
+    }
+
+    
+    $deviation = new Deviation($value, $date);
+
     
     //$deviation = { value: [{planned enddate - actual enddate}], date: [{actual enddate}];
-    $s = '<script>var deviation = '. json_encode($deviation) .'; createLineChart(deviation); createPieChart(deviation)</script>
+    $s = '<script>var deviation = '. json_encode($deviation) . '; createLineChart(deviation); createPieChart(deviation)</script>
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">

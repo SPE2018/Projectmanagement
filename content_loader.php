@@ -1,6 +1,7 @@
 <?php
 include_once("util/sql_util.php");
 include_once("php/functions.php");
+include_once 'util/charts.php';
 //include_once("util/calendar_util.php");
 
 $mode = get_parameter('mode', 'GET', false);
@@ -12,7 +13,6 @@ $name = get_parameter('name', 'GET', false);
 $startdate = get_parameter('startdate', 'GET', false);
 $enddate = get_parameter('enddate', 'GET', false);
 
-echo "MODE: $mode<br>";
 
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
@@ -23,7 +23,8 @@ else if($mode === "taskmodal"){
     echo '<script>$("#' . $tid . '_task").modal("show");</script>';
 }
 else if($mode === "statscharts"){
-    echo '<script>var deviation = {value: [-1,0,2,-3], date: ["07-02-2018", "08-02-2018", "09-02-2018", "10-02-2018"]}; createLineChart(deviation); createPieChart(deviation)</script>
+    echo get_Charts($pid);
+    /*echo '<script>var deviation = {value: [-1,0,2,-3], date: ["07-02-2018", "08-02-2018", "09-02-2018", "10-02-2018"]}; createLineChart(deviation); createPieChart(deviation)</script>
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
           <div class="carousel-inner">
             <div class="carousel-item active">
@@ -41,7 +42,7 @@ else if($mode === "statscharts"){
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
-        </div>';
+        </div>';*/
 }
 else if($mode === "removeuser")
 {
@@ -69,7 +70,11 @@ else if($mode === "projectusers"){
 }
 else if($mode === "projectedit")
 {
-    echo "edit_project";
+    echo ProjectManager::displayEditProject($pid);
+}
+else if($mode === "projectupdate")
+{
+    echo ProjectManager::saveEditedProject();
 }
 else if($mode === "projectdelete")
 {
@@ -155,8 +160,9 @@ else if($mode === "taskadd")
 }
 else if($mode === "taskcreate")
 {
-    TaskEditor::addTaskToDb();
+    $milestone_id = TaskEditor::addTaskToDb();
     echo BUtil::success("The Task has been created!");
+    MilestoneManager::displayMilestone($pid, $milestone_id);
 }
 else if($mode === "taskedit")
 {
@@ -179,6 +185,20 @@ else if($mode === "taskupdate")
     $task_id = filter_input(INPUT_GET, "task_id");
     TaskManager::updateTask($task_id, $name, $desc, $previous_id, $enddate);
     echo BUtil::success("The Task has been updated!");
+    
+    MilestoneManager::displayMilestone($pid, $milestone_id);
+}
+else if($mode === "taskfinished")
+{
+    TaskManager::setFinished($uid, true);
+    $milestone_id = TaskManager::getTask($uid)->milestone_id;
+    MilestoneManager::displayMilestone($pid, $milestone_id);
+}
+else if($mode === "taskunfinished")
+{
+    TaskManager::setFinished($uid, false);
+    $milestone_id = TaskManager::getTask($uid)->milestone_id;
+    MilestoneManager::displayMilestone($pid, $milestone_id);
 }
 else {
     echo "Cancelled<br>";

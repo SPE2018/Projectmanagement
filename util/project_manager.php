@@ -247,7 +247,7 @@ class ProjectManager {
             echo BUtil::danger("This user <strong>is not part of</strong> this project.");
             return;
         }
-        $sql = "SELECT * FROM projets_users WHERE project_id=$project_id AND user_id=$user_id;";
+        $sql = "SELECT * FROM projects_users WHERE project_id=$project_id AND user_id=$user_id;";
         $result = SQL::query($sql)->fetch_assoc();        
         return $result['permission'];
     }
@@ -339,6 +339,17 @@ class ProjectManager {
         $builder->show();
     }
     
+    public static function saveEditedProject() {
+        $name = filter_input(INPUT_GET, "name");
+        $start = explode(" ", filter_input(INPUT_GET, "start"))[0];
+        $end = explode(" ", filter_input(INPUT_GET, "end"))[0];
+        $id = filter_input(INPUT_GET, "id");
+        
+        $sql = "UPDATE projects SET `name`='$name', `created`='$start', `endby`='$end' WHERE id='$id';";
+        SQL::query($sql);
+        echo BUtil::success("Your changes have been saved.");
+    }
+    
     public static function displayEditProject($project_id) {
         $user = UserManager::getUserByID(Login::getLoggedInId());
         $isAdmin = true;
@@ -348,15 +359,33 @@ class ProjectManager {
             $isAdmin = false;
         }
         
-        if (ProjectManager::getUserPermission($project_id, $user->id) != 'leader') {
+        if (ProjectManager::getUserPermission($project_id, $user->userid) != 'leader') {
             $isAdmin = false;
         }
         
-        if (!$isAdmin) {
-            BUtil::danger("Only Admins or Project Leaders can modify projects.");
+        if ($isAdmin == false) {
+            echo BUtil::danger("Only Admins or Project Leaders can modify projects.");
             return;
         }
         
+        $project = ProjectManager::getProjectFromId($project_id);
+        
+        $builder = new PageBuilder();
+        
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_id' name='id' value='$project_id'>"));
+        
+        $builder->add(ElementFactory::createLabel("", "Project Name:"));
+        $builder->add(ElementFactory::createTextInput("param_name", $project->name));        
+        $builder->add(ElementFactory::createLabel("", "Start Date:"));
+        //$builder->add(ElementFactory::createTextInput("param_start", $project->createdDate));
+        $builder->add(ElementFactory::createDatepicker("param_start", "picker_start", date_create($project->createdDate)));
+        $builder->add(ElementFactory::createLabel("", "End Date:"));
+        //$builder->add(ElementFactory::createTextInput("param_end", $project->endDate));
+        $builder->add(ElementFactory::createDatepicker("param_end", "picker_end", date_create($project->endDate)));
+        
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Save", false, "saveproject", "custom_params"));
+        
+        $builder->show();
         
     }
     

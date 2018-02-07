@@ -35,6 +35,8 @@ class TaskEditor {
         $milestone_id = filter_input(INPUT_GET, "milestone_id");
         
         TaskManager::addTask($milestone_id, $name, $desc, $previous_id, $enddate);
+        
+        return $milestone_id;
     }
     
     public static function createTask($milestone_id) {
@@ -126,7 +128,7 @@ class TaskEditor {
         
         // Modal Header
         $out = $out . "<div class='modal-header'>";
-        $out = $out . '<h4 class="modal-title">' . $modalname . ", " . $task->name . '</h4><button type="button" class="close" data-dismiss="modal">&times;</button>';
+        $out = $out . '<h4 class="modal-title">' . $task->name . '</h4><button type="button" class="close" data-dismiss="modal">&times;</button>';
         $out = $out . "</div>";
         // End Modal Header        
         
@@ -164,7 +166,7 @@ class TaskEditor {
         $out = $out . "<input type='hidden' name='milestoneid' value='$milestone_id'>";
         $out = $out . "<input type='hidden' name='taskid' value='$task_id'>";
         if ($task->finished) {
-            $out = $out . '<button type="submit" class="btn btn-danger mr-2" name="finished" value="false">Set Task Incompleted</button>';
+            $out = $out . '<button type="button" class="btn btn-danger mr-2" id="unfinishedtask" name="finished" value="' . $task_id . '">Set Task Incompleted</button>';
         } else {
             if ($previous_task != null && !$previous_task->finished) {
                 $out = $out . '<button type="button" class="btn btn-disabled disabled"'
@@ -176,7 +178,7 @@ class TaskEditor {
                                 </script>
                                 ";
             } else {
-                $out = $out . '<button type="button" class="btn btn-success mr-2" id="finishedtask" name="finished" value="true">Finish Task</button>';
+                $out = $out . '<button type="button" class="btn btn-success mr-2" id="finishedtask" name="finished" value="' . $task_id. '">Finish Task</button>';
             }
         }
         
