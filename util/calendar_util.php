@@ -136,11 +136,11 @@ class CalendarUtil {
         //$v++;
         //$s = $s . "<div>I WANT TO INSERT AN APPEND BUTTON RIGHT HERE</div>";
 
-        $s = $s . "<a href='newmeeting.php'>";
+       /* $s = $s . "<a href='newmeeting.php'>";
         $s = $s . "<br>";
         $s = $s . "<button type=\"button\" class=\"btn btn-default btn-block\">ADD MEETING</button>";
         $s = $s . "<br>";
-        $s = $s . "</a>";
+        $s = $s . "</a>";*/
 
 
 

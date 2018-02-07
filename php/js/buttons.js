@@ -58,6 +58,14 @@ function createAllDynamicButtons() {
     // Milestone confirm delete
     dynamicButtonsUsers("#Btn_MconfirmDelete", "mileConfirmdelete");
     dynamicButtonsUsers("#Btn_MdeclineDelete", "mileDeclinedelete");
+    
+    // Tasks
+    dynamicButtonsUsers("#addtask", "taskadd");
+    dynamicButtonsUsers("#createnewtask", "taskcreate");
+    
+    
+    // Cancel
+    dynamicButtonsUsers("#cancel", "cancel");
 }
 
 $("#save").click(function(){

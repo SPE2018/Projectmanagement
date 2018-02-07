@@ -13,8 +13,59 @@ class TaskEditor {
     public static function handleFinished() {
         $taskid = filter_input(INPUT_GET, "taskid");
         $finished = filter_input(INPUT_GET, "finished") == "true";
-        TaskManager::setFinished($taskid, $finished);
-        echo BUtil::success("Your changes have been <strong>saved.</strong>");        
+        $milestone_finished = TaskManager::setFinished($taskid, $finished);
+        echo BUtil::success("Your changes have been <strong>saved.</strong>");
+        if ($milestone_finished) {
+            echo BUtil::success("<strong>Hooray!</strong> The milestone has been completed!");
+        }
+    }
+    
+    public static function addTaskToDb() {
+        $name = filter_input(INPUT_GET, "name");
+        $desc = filter_input(INPUT_GET, "desc");
+        
+        $previous = filter_input(INPUT_GET, "selectprevious");        
+        $previous_id = -1;
+        if ($previous != "No Previous Task") {
+            $previous_id = intval(
+                             explode(": ", $previous)[0]
+                           );
+        }
+        $enddate = filter_input(INPUT_GET, "end");
+        $milestone_id = filter_input(INPUT_GET, "milestone_id");
+        
+        TaskManager::addTask($milestone_id, $name, $desc, $previous_id, $enddate);
+    }
+    
+    public static function createTask($milestone_id) {
+        $milestone = MilestoneManager::loadMilestoneFromId(null, $milestone_id);        
+        $tasks = $milestone->tasks;
+        
+        $builder = new PageBuilder();
+        
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_milestone_id' value='$milestone_id'>"));
+        
+        $builder->add(ElementFactory::createLabel("", "Task Name:"));
+        $builder->add(ElementFactory::createTextInput("param_name", "My Awesome Task"));
+        $builder->add(ElementFactory::createLabel("", "Task Description:"));
+        $builder->add(ElementFactory::createTextInput("param_desc", "My Awesome Task Description"));
+        
+        $builder->add(ElementFactory::createLabel("", "Previous Task:"));
+        $selectionBox = ElementFactory::createHtml("<select class='form-control' id='param_selectprevious'>", "</select>");
+        $builder->add($selectionBox->open);
+        $builder->add(ElementFactory::createHtml("<option>No Previous Task</option>"));
+        foreach ($tasks as $task) {
+            $builder->add(ElementFactory::createHtml("<option>$task->id: $task->name</option>"));
+        }
+        $builder->add($selectionBox->close);
+        
+        $builder->add(ElementFactory::createLabel("", "Deadline:"));
+        $builder->add(ElementFactory::createDatepicker("param_end", "end_picker", new DateTime()));
+        
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Create Task", false, "createnewtask", "custom_params"));
+        $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Cancel", false, "cancel", ""));
+        
+        $builder->show();
     }
     
     public static function editTask() {
@@ -24,9 +75,7 @@ class TaskEditor {
         }
         $project_id = filter_input(INPUT_GET, "projectid");
         $milestone_id = filter_input(INPUT_GET, "milestoneid");
-        $task_id = filter_input(INPUT_GET, "taskid");
-        
-        echo "<h1>EDITING</h1>";
+        $task_id = filter_input(INPUT_GET, "taskid");        
         
         $task = TaskManager::getTask($task_id);                       
         
@@ -112,7 +161,7 @@ class TaskEditor {
                                 </script>
                                 ";
             } else {
-                $out = $out . '<button type="submit" class="btn btn-success mr-2" name="finished" value="true">Finish Task</button>';
+                $out = $out . '<button type="button" class="btn btn-success mr-2" name="finished" value="true">Finish Task</button>';
             }
         }
         
