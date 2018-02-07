@@ -148,24 +148,6 @@ $("#content").on("click", ".task", function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
 });
 
-/*$("#content").on("click", "#save_milestone", function(){
-    var name = $("#name").val();
-    var desc = $("#desc").val();
-    var start = $("[name='start']").val();
-    var stop = $("[name='stop']").val();
-
-    $.ajax({type: "GET", url: "php/editmilestone.php",
-        data: {name: name, id: milestoneid, desc: desc, start: start, stop: stop},
-        success : function() {
-            alert("Milestone was changed successfully!");
-        },
-        error : function(e) {
-            alert(e.statusText);
-        }
-    });
-    window.location.reload();
-});*/
-
 $('#themeBtn').click(function(){
     if(theme === '../css/darkly.css'){
         $('#theme').attr('href', '../css/flatly.css');
