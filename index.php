@@ -51,12 +51,12 @@ echo get_jumbobot();
     }
     ?>
 
-                <p class="text-justify" style="font-size: 15pt;">You may use this onlinetool for managing your projects: Add milestones, built of tasks, with a date to start working on it and a date
-                when it's planned to be finished latest.<br>See statistics about the project's progress and your timemanagement on diagrams and add
+                <p><br>You may use this onlinetool for managing your projects: Add milestones, built of tasks, with a date to start working on it and a date
+                when it's planned to be finished latest.<br><br>See statistics about the project's progress and your time management on diagrams and add
                 Users as participants to have a great overview over your employees, responsible for each project.<br><br>Whether software development or feeding
-                the animals on a big farm, there's always a way you can improve your works efficiency, using <span style="font-size: 22pt; color: #00bc8c">PlanIT</span</p>
+                the animals on a big farm, there's always a way you can improve your works efficiency, using <span class="text-success">planIT</span>.</p>
             </div>
-            <div class="col-6 p-5"><img src="php/images/planIT_logo_dark.png" style="width: 25rem" id="logo"></div>
+            <div class="col-6 p-5 mt-5"><img src="php/images/planIT_logo_dark.png" style="width: 25rem" id="logo"></div>
         </div>
         <div class="row mb-5">
             <div class="card m-4" style="width: 18rem;">
