@@ -1,9 +1,10 @@
 <?php
+
 include_once "sql_util.php";
 include_once "edit_task_util.php";
 include_once "elements/bootstrap_util.php";
 include_once "elements/page_builder.php";
-include_once "php/functions.php";
+include_once dirname(__FILE__) . "/../php/functions.php";
 
 class MilestoneManager {
     
@@ -50,22 +51,22 @@ class MilestoneManager {
     
     public static function addMilestone($project_id, $name, $desc, $start, $stop) {
         $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`, `start`, `stop`) VALUES('$project_id', '$name', '$desc', '$start', '$stop');";
-        SQL::query($sql);    
+        SQL::query($sql);
     }
     
     public static function updateMilestone($milestone_id, $name, $desc, $start, $stop) {
         $sql = "UPDATE milestones SET "
                 . "`name`='$name', `desc`='$desc', `start`='$start', `stop`='$stop' "
                 . "WHERE id=$milestone_id;";
-        SQL::query($sql);     
+        SQL::query($sql);
     }
-        
+
     public static function finishMilestone($milestone_id) {
         $finisheddate = date("Y-m-d h:m");
         $sql = "UPDATE milestones SET "
                 . "`finisheddate`='$finisheddate' "
                 . "WHERE id=$milestone_id;";
-        SQL::query($sql);    
+        SQL::query($sql);
     }
     
     public static function getMilestoneId() {
@@ -92,9 +93,9 @@ class MilestoneManager {
         $name = filter_input(INPUT_GET, "name");
         $desc = filter_input(INPUT_GET, "desc");
         $start = filter_input(INPUT_GET, "start");
-        $stop = filter_input(INPUT_GET, "stop");     
+        $stop = filter_input(INPUT_GET, "stop");
         
-        MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);          
+        MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
     }
     
     public static function displayMilestone($project_id, $milestone_id) {
@@ -173,7 +174,7 @@ class MilestoneManager {
         $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Delete", false, "deletemilestone", "$milestone_id"));
         
         $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add new Task", false, "addtask", "$milestone_id"));
-        
+
         ////////////////
         ////////////////
         ////////////////
@@ -183,7 +184,7 @@ class MilestoneManager {
     
     public static function displayEditMilestone($project_id, $milestone_id) {
         if (MilestoneManager::pressedSave()) {
-            MilestoneManager::save($milestone_id);
+            //MilestoneManager::save($milestone_id);
             echo BUtil::success("Die Änderungen am Meilenstein wurden <strong>gespeichert.</strong>");
         }
         // If the user pressed the finish button, change the finish state of the task
@@ -196,11 +197,12 @@ class MilestoneManager {
         if ($milestone == null) {
             die("Milestone not found");
         }        
+        
         $builder = new PageBuilder();
 
         $builder->add(ElementFactory::createHtml(
                 "<h1>Milestone " . $milestone->name . "</h1><br>")->open);
-        $builder->show();
+
         $form = ElementFactory::createHtml(
                 "<form method='post'>", "</form>");
         $form_group = ElementFactory::createHtml(
@@ -210,7 +212,7 @@ class MilestoneManager {
         $builder->add($form_group->open); 
         
         $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_id' value='$milestone_id'>"));
-        
+
         $builder->add(ElementFactory::createLabel("name", "Name:"));
         $builder->add(ElementFactory::createTextInput("param_name", $milestone->name));
         $builder->add(ElementFactory::createLabel("desc", "Beschreibung:"));
@@ -241,7 +243,7 @@ class MilestoneManager {
             $builder->add($li->close);
         }
         $builder->add($ol->close);
-        
+
         $builder->show();
     }
     
@@ -332,12 +334,12 @@ class MilestoneManager {
         MilestoneManager::addMilestone($pid, filter_input(INPUT_GET, 'MiStName'), filter_input(INPUT_GET, 'MiStDesc'), filter_input(INPUT_GET, 'MiStStart'), filter_input(INPUT_GET, 'MiStEnd'));
         echo $pid . "<br>" . filter_input(INPUT_GET, 'MiStName') . "<br>" . filter_input(INPUT_GET, 'MiStDesc') . "<br>" . filter_input(INPUT_GET, 'MiStStart') . "<br>" . filter_input(INPUT_GET, 'MiStEnd');
     }
-    
+
     public static function deleteMilestone($id) {
         $sql = "DELETE from milestones WHERE id = $id;";
         SQL::query($sql);
     }
-    
+
     public static function confirmDelete($pid, $id) {
         //echo ElementFactory::createHtml("<input type='hidden' id='param_id' value='$id'>");
         echo '<h3 style="margin-top: 20px;">Are you sure you want to delete the milestone <span style="color: aqua;"><strong>' . MilestoneManager::loadMilestoneFromId($pid, $id)->name . '</strong></span>?</h3><br><br><br>';

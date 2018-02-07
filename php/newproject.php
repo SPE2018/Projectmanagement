@@ -1,4 +1,5 @@
 <?php
+include_once ("functions.php");
 include_once("../util/sql_util.php");
 include_once("../util/LoginUtility.php");
 $name = $_GET['name'];
