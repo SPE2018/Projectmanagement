@@ -9,6 +9,8 @@ $pid = get_parameter('pid', 'GET', false);
 $tid = get_parameter('tid', 'GET', false);
 $uid = get_parameter('uid', 'GET', false);
 
+echo "MODE: $mode<br>";
+
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
 }
@@ -88,9 +90,15 @@ else if($mode === "milestonedelete")
 }
 else if($mode === "milestoneadd")
 {
-    MilestoneManager::addMilestone($pid, "tmpMiSt", "desctmp", date("Y-m-d h:m"), date("Y-m-d h:m"));
-    $milestone = MilestoneManager::loadMilestoneFromName($pid, "tmpMiSt");
-    echo MilestoneManager::getMilestoneModal($pid, $milestone);
+    echo MilestoneManager::addMiSt();
+}
+else if($mode === "saveNewMiSt")
+{
+    echo MilestoneManager::saveNewMiSt($pid);
+}
+else if($mode === "cancelAddMiSt")
+{
+    echo "";
 }
 else if($mode === "meetingview")
 {

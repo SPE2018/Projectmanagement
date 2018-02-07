@@ -79,6 +79,9 @@ dynamicButtonsUsers("#add_user", "adduser");
 dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
 dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
 
+dynamicButtonsUsers("#Btn_SaveNewMiSt", "saveNewMiSt");
+dynamicButtonsUsers("#Btn_CancelNewMiSt", "cancelAddMiSt");
+
 function dynamicButtonsUsers(button, mode){
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
