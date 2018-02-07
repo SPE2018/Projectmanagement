@@ -10,9 +10,9 @@ class TaskManager {
         return null;
     }
     
-    public static function updateTask($task_id, $name, $desc, $prev, $end, $finish) {   
+    public static function updateTask($task_id, $name, $desc, $prev, $end) {   
         $sql = "UPDATE tasks SET "
-                . "`name`='$name', `desc`='$desc', `previous_task`='$prev', `enddate`='$end', `finisheddate`='$finish' "
+                . "`name`='$name', `desc`='$desc', `previous_task`='$prev', `enddate`='$end' "
                 . "WHERE id=$task_id;";
         SQL::query($sql); 
     }

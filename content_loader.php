@@ -154,7 +154,20 @@ else if($mode === "taskedit")
 }
 else if($mode === "taskupdate")
 {
-    // send update to db
+    $name = filter_input(INPUT_GET, "name");
+    $desc = filter_input(INPUT_GET, "desc");
+
+    $previous = filter_input(INPUT_GET, "selectprevious");        
+    $previous_id = -1;
+    if ($previous != "No Previous Task") {
+        $previous_id = intval(
+                         explode(": ", $previous)[0]
+                       );
+    }
+    $enddate = filter_input(INPUT_GET, "end");
+    $milestone_id = filter_input(INPUT_GET, "milestone_id");
+    $task_id = filter_input(INPUT_GET, "task_id");
+    TaskManager::updateTask($task_id, $name, $desc, $previous_id, $enddate);
     echo BUtil::success("The Task has been updated!");
 }
 else {

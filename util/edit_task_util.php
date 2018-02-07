@@ -78,6 +78,7 @@ class TaskEditor {
         $builder = new PageBuilder();
         
         $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_milestone_id' value='$milestone_id'>"));
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_task_id' value='$task_id'>"));
         
         $builder->add(ElementFactory::createLabel("", "Task Name:"));
         $builder->add(ElementFactory::createTextInput("param_name", $task->name));
