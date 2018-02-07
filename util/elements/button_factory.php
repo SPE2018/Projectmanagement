@@ -9,6 +9,7 @@ abstract class ButtonType {
     const SUCCESS = "btn btn-success";
     const BASIC = "btn btn-default";
     const PRIMARY = "btn btn-primary";
+    const PRIMARYSMALL = "btn btn-primary btn-sm ml-3";
     
 }
 

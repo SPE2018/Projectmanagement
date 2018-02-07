@@ -22,7 +22,7 @@ function loadWeather(location, woeid) {
         woeid: woeid,
         unit: 'C',
         success: function(weather) {
-            html = '<i class="icon-'+weather.code+'"></i>'+ weather.temp+'&deg;'+weather.units.temp+', '+weather.currently+', '+weather.city+', '+weather.region;
+            html = '<i class="icon-'+weather.code+' weathericons"></i>'+ weather.temp+'&deg;'+weather.units.temp+', '+weather.currently+', '+weather.city+', '+weather.region;
 
             $("#weather").html(html);
         },

@@ -17,7 +17,7 @@ function dynamicButtons(button, mode) {
             });
 
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
-            if (button === "#Btn_SaveNewMiSt" || button === "#deletemilestone") {
+            if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete") {
                 $.get(location.href).then(function(page) {
                     $("#progressContent").html($(page).find("#progressContent").html())
                     $("#progressContent").ready(progressInit);
@@ -167,11 +167,11 @@ $("#content").on("click", ".task", function () {
 });*/
 
 $('#themeBtn').click(function(){
-    if(theme == 'php/css/darkly.css'){
+    if(theme === 'php/css/darkly.css'){
         $('#theme').attr('href', 'php/css/flatly.css');
         $('#logo').attr('src', 'php/images/planIT_logo_bright.png');
         theme = 'php/css/flatly.css';
-    } else if(theme == 'php/css/flatly.css'){
+    } else if(theme === 'php/css/flatly.css'){
         $('#theme').attr('href', 'php/css/darkly.css');
         $('#logo').attr('src', 'php/images/planIT_logo_dark.png');
         theme = 'php/css/darkly.css';
