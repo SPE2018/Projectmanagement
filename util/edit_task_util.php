@@ -68,24 +68,42 @@ class TaskEditor {
         $builder->show();
     }
     
-    public static function editTask() {
-         // If the user pressed the finish button, change the finish state of the task
-        if (TaskEditor::toggledFinished()) {
-            TaskEditor::handleFinished();
+    public static function editTask($task_id) {
+        $task = TaskManager::getTask($task_id);
+        $milestone_id = $task->milestone_id;        
+        
+        $milestone = MilestoneManager::loadMilestoneFromId(null, $milestone_id);        
+        $tasks = $milestone->tasks;
+        
+        $builder = new PageBuilder();
+        
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_milestone_id' value='$milestone_id'>"));
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_task_id' value='$task_id'>"));
+        
+        $builder->add(ElementFactory::createLabel("", "Task Name:"));
+        $builder->add(ElementFactory::createTextInput("param_name", $task->name));
+        $builder->add(ElementFactory::createLabel("", "Task Description:"));
+        $builder->add(ElementFactory::createTextInput("param_desc", "My Awesome Task Description"));
+        
+        $builder->add(ElementFactory::createLabel("", "Previous Task:"));
+        $selectionBox = ElementFactory::createHtml("<select class='form-control' id='param_selectprevious'>", "</select>");
+        $builder->add($selectionBox->open);
+        $builder->add(ElementFactory::createHtml("<option>No Previous Task</option>"));
+        foreach ($tasks as $t) {
+            if ($t->id == $task->id) {
+                continue;
+            }
+            $builder->add(ElementFactory::createHtml("<option>$t->id: $t->name</option>"));
         }
-        $project_id = filter_input(INPUT_GET, "projectid");
-        $milestone_id = filter_input(INPUT_GET, "milestoneid");
-        $task_id = filter_input(INPUT_GET, "taskid");        
+        $builder->add($selectionBox->close);
         
-        $task = TaskManager::getTask($task_id);                       
+        $builder->add(ElementFactory::createLabel("", "Deadline:"));
+        $builder->add(ElementFactory::createDatepicker("param_end", "end_picker", new DateTime()));
         
-        $out = "";
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Save", false, "updatetask", "custom_params"));
+        $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Decline", false, "cancel", ""));
         
-        $out = $out . ButtonFactory::createButton(ButtonType::DANGER, "Test Button", false, "btn", "test")->get();
-        $out = $out . ButtonFactory::createButton(ButtonType::DARK, "Test Button", false, "btn", "test")->get();
-        $out = $out . ButtonFactory::createButton(ButtonType::SUCCESS, "Test Button", false, "btn", "test")->get();
-        
-        echo $out;
+        $builder->show();
     }
     
     public static function displayTask($project_id, $milestone_id, $task_id) {   
@@ -93,7 +111,6 @@ class TaskEditor {
 
         //$table = new HtmlBuilder();
         echo ($task_id);
-        
     }
     
     public static function displayTaskModal($project_id, $milestone_id, $task_id) {                
@@ -111,7 +128,7 @@ class TaskEditor {
         
         // Modal Header
         $out = $out . "<div class='modal-header'>";
-        $out = $out . '<h4 class="modal-title">' . $task->name . '</h4><button type="button" class="close" data-dismiss="modal">&times;</button>';
+        $out = $out . '<h4 class="modal-title">' . $modalname . ", " . $task->name . '</h4><button type="button" class="close" data-dismiss="modal">&times;</button>';
         $out = $out . "</div>";
         // End Modal Header        
         
@@ -161,11 +178,11 @@ class TaskEditor {
                                 </script>
                                 ";
             } else {
-                $out = $out . '<button type="button" class="btn btn-success mr-2" name="finished" value="true">Finish Task</button>';
+                $out = $out . '<button type="button" class="btn btn-success mr-2" id="finishedtask" name="finished" value="true">Finish Task</button>';
             }
         }
         
-        $out = $out . '<button type="submit" class="btn btn-default" name="edit" value="true">Edit</button>';
+        $out = $out . '<button type="button" class="btn btn-default" data-dismiss="modal" id="edittask" name="edittask" value="' . $task_id . '">Edit</button>';
         
         // Close form container
         $out = $out . '</div>'; 

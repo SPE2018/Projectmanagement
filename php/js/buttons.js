@@ -27,7 +27,13 @@ function dynamicButtons(button, mode) {
             return;
         }
 
-        if (button === "#add_user") {
+        if (button === "#edittask") {
+            // Close the currently open modals
+            $('.modal').modal('hide');
+            $('.modal-backdrop').remove();
+        }
+        if(button === "#add_user")
+        {
             uid = ($("#add_user_select").val());
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         } else if (button === "#Btn_PconfirmDelete") {
@@ -51,7 +57,7 @@ function createAllDynamicButtons() {
 
     // Project confirm delete
     dynamicButtons("#Btn_PconfirmDelete", "projConfirmdelete");
-    dynamicButtons("#Btn_PdeclineDelete", "projDeclinedelete");      
+    dynamicButtons("#Btn_PdeclineDelete", "projDeclinedelete");
 
     // Meetings
     dynamicButtons("#addmeeting", "addmeetingbutton");
@@ -72,6 +78,8 @@ function createAllDynamicButtons() {
     // Tasks
     dynamicButtons("#addtask", "taskadd");
     dynamicButtons("#createnewtask", "taskcreate");
+    dynamicButtons("#updatetask", "taskupdate");
+    dynamicButtons("#edittask", "taskedit");
     
     
     // Cancel
