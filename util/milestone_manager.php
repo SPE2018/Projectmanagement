@@ -320,11 +320,8 @@ class MilestoneManager {
         $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStEnd', 'Finish latest by:')->get();
         $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('param_MiStEnd', 'MiStEnd', new DateTime('now'))->get();
         
-        $toReturn = $toReturn . '<div align=right>' . ButtonFactory::createButton(ButtonType::BASIC, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('ml-3 mt-4');
-        for($i=0; $i<21; $i++) {
-            $toReturn = $toReturn . '&nbsp;';
-        }
-        $toReturn = $toReturn . ButtonFactory::createButton(ButtonType::BASIC, 'Cancel', FALSE, 'Btn_CancelNewMiSt', 'cancelAddMiSt')->marginget('mt-4') . '</div>';
+        $toReturn = $toReturn . '<div>' . ButtonFactory::createButton(ButtonType::SUCCESS, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('mr-3 mt-3 ');
+        $toReturn = $toReturn . ButtonFactory::createButton(ButtonType::DANGER, 'Cancel', FALSE, 'Btn_CancelNewMiSt', 'cancelAddMiSt')->marginget('mt-3') . '</div>';
         return $toReturn;
     }
     
