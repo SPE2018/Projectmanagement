@@ -18,7 +18,7 @@ class MilestoneManager {
         }
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
         foreach ($result as $i) {
-            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc'], $i['finisheddate']);
            
             array_push($toReturn, $milestone);
             
@@ -27,11 +27,15 @@ class MilestoneManager {
         return $toReturn;
     }
     
-    public static function loadMilestoneFromId($project_id, $milestone_id) {
-        $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
+    public static function loadMilestoneFromId($project_id = null, $milestone_id) {
+        if ($project_id == null) {
+            $sql = "SELECT * FROM milestones WHERE id=$milestone_id;";
+        } else {
+            $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
+        }
         $result = SQL::query($sql)->fetch_assoc();        
 
-        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
+        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc'], $result['finisheddate']);
         $milestone->tasks = TaskManager::loadTasks($milestone->id);
         return $milestone;
     }
@@ -40,23 +44,30 @@ class MilestoneManager {
         $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND name='$milestone_name';";
         $result = SQL::query($sql)->fetch_assoc();        
 
-        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
+        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc'], $result['finisheddate']);
         $milestone->tasks = TaskManager::loadTasks($milestone->id);
         return $milestone;
     }
     
     public static function addMilestone($project_id, $name, $desc, $start, $stop) {
         $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`, `start`, `stop`) VALUES('$project_id', '$name', '$desc', '$start', '$stop');";
-        $result = SQL::query($sql); // TODO: Error handling        
+        SQL::query($sql);    
     }
     
     public static function updateMilestone($milestone_id, $name, $desc, $start, $stop) {
         $sql = "UPDATE milestones SET "
                 . "`name`='$name', `desc`='$desc', `start`='$start', `stop`='$stop' "
                 . "WHERE id=$milestone_id;";
-        $result = SQL::query($sql); // TODO: Error handling        
+        SQL::query($sql);     
     }
-    
+        
+    public static function finishMilestone($milestone_id) {
+        $finisheddate = date("Y-m-d h:m");
+        $sql = "UPDATE milestones SET "
+                . "`finisheddate`='$finisheddate' "
+                . "WHERE id=$milestone_id;";
+        SQL::query($sql);    
+    }
     
     public static function getMilestoneId() {
         $milestone_id = filter_input(INPUT_GET, "milestoneid");
@@ -82,7 +93,7 @@ class MilestoneManager {
         $name = filter_input(INPUT_POST, "name");
         $desc = filter_input(INPUT_POST, "desc");
         $start = filter_input(INPUT_POST, "start");
-        $stop = filter_input(INPUT_POST, "stop");
+        $stop = filter_input(INPUT_POST, "stop");        
         
         MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
         
@@ -164,6 +175,8 @@ class MilestoneManager {
         
         $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Edit", false, "editmilestone", "$milestone_id"));        
         $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Delete", false, "deletemilestone", "$milestone_id"));
+        
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add new Task", false, "addtask", "$milestone_id"));
         
         ////////////////
         ////////////////

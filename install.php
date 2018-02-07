@@ -97,6 +97,7 @@ if (file_exists(dirname(__FILE__) . "/util/db.txt")) {
                         `desc` varchar(300) DEFAULT 'No Description',
                         `start` datetime DEFAULT NULL,
                         `stop` datetime DEFAULT NULL,
+                        `finisheddate` datetime DEFAULT NULL,
                         PRIMARY KEY (`id`)
                       ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;");
         

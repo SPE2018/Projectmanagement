@@ -1,7 +1,14 @@
 <?php
 
-function get_Charts(){
+include_once 'milestone_manager.php';
+
+function get_Charts($project_id) {    
     // db projectid -> milestoneid -> planned enddate -> actual enddate
+    $milestones = MilestoneManager::loadMilestones($project_id);
+    
+    
+    
+    
     //$deviation = { value: [{planned enddate - actual enddate}], date: [{actual enddate}];
     $s = '<script>var deviation = '. json_encode($deviation) .'; createLineChart(deviation); createPieChart(deviation)</script>
         <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">

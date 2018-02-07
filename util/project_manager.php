@@ -43,7 +43,7 @@ class ProjectManager {
                 $sql = "SELECT * FROM milestones WHERE project_id=" . $r['id'] . ";";
                 $result_milestone = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
                 foreach ($result_milestone as $i) {
-                    $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+                    $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc'], $i['finisheddate']);
                     array_push($project->milestones, $milestone);
                     if ($loadTasks) {
                     $milestone->tasks = TaskManager::loadTasks($milestone->id);
@@ -65,7 +65,7 @@ class ProjectManager {
             $sql = "SELECT * FROM milestones WHERE project_id=$id;";
             $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
             foreach ($result as $i) {
-                $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+                $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc'], $i['finisheddate']);
                 array_push($project->milestones, $milestone);
                 if ($loadTasks) {
                     $milestone->tasks = TaskManager::loadTasks($milestone->id);
@@ -84,7 +84,7 @@ class ProjectManager {
         $sql = "SELECT * FROM milestones WHERE project_id=$id;";
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
         foreach ($result as $i) {
-            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc'], $i['finisheddate']);
             array_push($project->milestones, $milestone);
             $milestone->tasks = TaskManager::loadTasks($milestone->id);
         }

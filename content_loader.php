@@ -127,3 +127,15 @@ else if($mode === "meetingedit")
 {
     echo CalendarUtil::edit_meeting($uid); // $uid is the meeting id here
 }
+else if($mode === "taskadd")
+{
+    TaskEditor::createTask($uid); // $uid is the milestone id here
+}
+else if($mode === "taskcreate")
+{
+    TaskEditor::addTaskToDb();
+    echo BUtil::success("The Task has been created!");
+}
+else {
+    echo "Cancelled<br>";
+}
