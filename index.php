@@ -51,7 +51,10 @@ echo get_jumbobot();
     }
     ?>
 
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                <p class="text-justify" style="font-size: 15pt;">You may use this onlinetool for managing your projects: Add milestones, built of tasks, with a date to start working on it and a date
+                when it's planned to be finished latest.<br>See statistics about the project's progress and your timemanagement on diagrams and add
+                Users as participants to have a great overview over your employees, responsible for each project.<br><br>Whether software development or feeding
+                the animals on a big farm, there's always a way you can improve your works efficiency, using <span style="font-size: 22pt; color: #00bc8c">PlanIT</span</p>
             </div>
             <div class="col-6 p-5"><img src="php/images/planIT_logo_dark.png" style="width: 25rem" id="logo"></div>
         </div>
@@ -89,4 +92,4 @@ echo get_jumbobot();
 
 <script src="php/js/buttons.js"></script>
 <script>$('#quote').fadeIn(5000);</script>
-<?php echo get_footer(); ?>
+<?php echo get_footer();

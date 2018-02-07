@@ -1,4 +1,4 @@
 host: localhost
-db: planit
+db: juhu
 name: root
-pass: root
+pass: 

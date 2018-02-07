@@ -18,7 +18,7 @@ class MilestoneManager {
         }
         $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);        
         foreach ($result as $i) {
-            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc']);
+            $milestone = new Milestone($i['id'], $i['name'], $i['start'], $i['stop'], $i['desc'], $i['finisheddate']);
            
             array_push($toReturn, $milestone);
             
@@ -27,11 +27,15 @@ class MilestoneManager {
         return $toReturn;
     }
     
-    public static function loadMilestoneFromId($project_id, $milestone_id) {
-        $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
+    public static function loadMilestoneFromId($project_id = null, $milestone_id) {
+        if ($project_id == null) {
+            $sql = "SELECT * FROM milestones WHERE id=$milestone_id;";
+        } else {
+            $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND id=$milestone_id;";
+        }
         $result = SQL::query($sql)->fetch_assoc();        
 
-        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
+        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc'], $result['finisheddate']);
         $milestone->tasks = TaskManager::loadTasks($milestone->id);
         return $milestone;
     }
@@ -40,23 +44,30 @@ class MilestoneManager {
         $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND name='$milestone_name';";
         $result = SQL::query($sql)->fetch_assoc();        
 
-        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
+        $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc'], $result['finisheddate']);
         $milestone->tasks = TaskManager::loadTasks($milestone->id);
         return $milestone;
     }
     
     public static function addMilestone($project_id, $name, $desc, $start, $stop) {
         $sql = "INSERT INTO milestones (`project_id`, `name`, `desc`, `start`, `stop`) VALUES('$project_id', '$name', '$desc', '$start', '$stop');";
-        $result = SQL::query($sql); // TODO: Error handling        
+        SQL::query($sql);
     }
     
     public static function updateMilestone($milestone_id, $name, $desc, $start, $stop) {
         $sql = "UPDATE milestones SET "
                 . "`name`='$name', `desc`='$desc', `start`='$start', `stop`='$stop' "
                 . "WHERE id=$milestone_id;";
-        $result = SQL::query($sql); // TODO: Error handling        
+        SQL::query($sql);
     }
-    
+
+    public static function finishMilestone($milestone_id) {
+        $finisheddate = date("Y-m-d h:m");
+        $sql = "UPDATE milestones SET "
+                . "`finisheddate`='$finisheddate' "
+                . "WHERE id=$milestone_id;";
+        SQL::query($sql);
+    }
     
     public static function getMilestoneId() {
         $milestone_id = filter_input(INPUT_GET, "milestoneid");
@@ -79,15 +90,12 @@ class MilestoneManager {
     
     
     public static function save($milestone_id) {
-        $name = filter_input(INPUT_POST, "name");
-        $desc = filter_input(INPUT_POST, "desc");
-        $start = filter_input(INPUT_POST, "start");
-        $stop = filter_input(INPUT_POST, "stop");
+        $name = filter_input(INPUT_GET, "name");
+        $desc = filter_input(INPUT_GET, "desc");
+        $start = filter_input(INPUT_GET, "start");
+        $stop = filter_input(INPUT_GET, "stop");
         
         MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
-        
-        //MilestoneManager::updateMilestone($milestone_id, $name, $desc, $start, $stop);
-          
     }
     
     public static function displayMilestone($project_id, $milestone_id) {
@@ -165,6 +173,8 @@ class MilestoneManager {
         $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Edit", false, "editmilestone", "$milestone_id"));        
         $builder->add(ButtonFactory::createButton(ButtonType::DANGER, "Delete", false, "deletemilestone", "$milestone_id"));
         
+        $builder->add(ButtonFactory::createButton(ButtonType::SUCCESS, "Add new Task", false, "addtask", "$milestone_id"));
+
         ////////////////
         ////////////////
         ////////////////
@@ -192,7 +202,7 @@ class MilestoneManager {
 
         $builder->add(ElementFactory::createHtml(
                 "<h1>Milestone " . $milestone->name . "</h1><br>")->open);
-        
+
         $form = ElementFactory::createHtml(
                 "<form method='post'>", "</form>");
         $form_group = ElementFactory::createHtml(
@@ -201,17 +211,19 @@ class MilestoneManager {
         $builder->add($form->open);        
         $builder->add($form_group->open); 
         
+        $builder->add(ElementFactory::createHtml("<input type='hidden' id='param_id' value='$milestone_id'>"));
+
         $builder->add(ElementFactory::createLabel("name", "Name:"));
-        $builder->add(ElementFactory::createTextInput("name", $milestone->name));
+        $builder->add(ElementFactory::createTextInput("param_name", $milestone->name));
         $builder->add(ElementFactory::createLabel("desc", "Beschreibung:"));
-        $builder->add(ElementFactory::createTextInput("desc", $milestone->desc));
+        $builder->add(ElementFactory::createTextInput("param_desc", $milestone->desc));
         
         $builder->add(ElementFactory::createLabel("start", "Startzeit:"));
-        $builder->add(ElementFactory::createDatepicker("start", "start_picker", $milestone->startdate));
+        $builder->add(ElementFactory::createDatepicker("param_start", "start_picker", $milestone->startdate));
         $builder->add(ElementFactory::createLabel("stop", "Endzeit:"));
-        $builder->add(ElementFactory::createDatepicker("stop", "stop_picker", $milestone->enddate));
+        $builder->add(ElementFactory::createDatepicker("param_stop", "stop_picker", $milestone->enddate));
         
-        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Speichern", false, "save_milestone", "true"));
+        $builder->add(ButtonFactory::createButton(ButtonType::PRIMARY, "Save", false, "save_milestone", "custom_params"));
         
         $builder->add($form->close);        
         $builder->add($form_group->close);
@@ -222,7 +234,7 @@ class MilestoneManager {
         
         $tasks_array = $milestone->tasks;
         foreach ($tasks_array as $task) {
-            $finished = $task->finished ? "Fertig" : "Nicht fertig";
+            $finished = $task->finished ? "Success" : "Failed";
             
             $li = ElementFactory::createHtml("<li>", "</li>");
             $builder->add($li->open);
@@ -231,10 +243,7 @@ class MilestoneManager {
             $builder->add($li->close);
         }
         $builder->add($ol->close);
-        
-          
-        
-        
+
         $builder->show();
     }
     
@@ -324,5 +333,20 @@ class MilestoneManager {
     public static function saveNewMiSt($pid) {
         MilestoneManager::addMilestone($pid, filter_input(INPUT_GET, 'MiStName'), filter_input(INPUT_GET, 'MiStDesc'), filter_input(INPUT_GET, 'MiStStart'), filter_input(INPUT_GET, 'MiStEnd'));
         echo $pid . "<br>" . filter_input(INPUT_GET, 'MiStName') . "<br>" . filter_input(INPUT_GET, 'MiStDesc') . "<br>" . filter_input(INPUT_GET, 'MiStStart') . "<br>" . filter_input(INPUT_GET, 'MiStEnd');
+    }
+
+    public static function deleteMilestone($id) {
+        $sql = "DELETE from milestones WHERE id = $id;";
+        SQL::query($sql);
+    }
+
+    public static function confirmDelete($pid, $id) {
+        //echo ElementFactory::createHtml("<input type='hidden' id='param_id' value='$id'>");
+        echo '<h3 style="margin-top: 20px;">Are you sure you want to delete the milestone <span style="color: aqua;"><strong>' . MilestoneManager::loadMilestoneFromId($pid, $id)->name . '</strong></span>?</h3><br><br><br>';
+        echo '<div align=right>' . ButtonFactory::createButton(ButtonType::SUCCESS, "Confirm", FALSE, "Btn_MconfirmDelete", "$id")->marginget('ml-3 mt-4');
+        for($i=0; $i<21; $i++) {
+            echo '&nbsp;';
+        }
+        echo ButtonFactory::createButton(ButtonType::DANGER, "Decline", FALSE, "Btn_MdeclineDelete", "keepMilestone")->marginget('mt-4') . '</div>';
     }
 }

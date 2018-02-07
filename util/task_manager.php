@@ -26,8 +26,8 @@ class TaskManager {
         return $toReturn;
     }
 
-    public static function addTask($milestone_id, $name, $previous_id, $enddate) {
-        $sql = "INSERT INTO tasks (milestone_id, name, previous_id, enddate) VALUES('$milestone_id', '$name', '$previous_id', '$enddate');";
+    public static function addTask($milestone_id, $name, $desc, $previous_id, $enddate) {
+        $sql = "INSERT INTO tasks (`milestone_id`, `name`, `desc`, `previous_task`, `enddate`) VALUES('$milestone_id', '$name', '$desc', '$previous_id', '$enddate');";
         SQL::query($sql);
     }
     
@@ -48,5 +48,22 @@ class TaskManager {
         $finished = $finished ? 1 : 0;
         $sql = "UPDATE tasks SET `finished`='$finished' WHERE id='$taskid';";
         SQL::query($sql);
+        
+        // Get the milestone that belongs to this task        
+        $sql = "SELECT id, milestone_id FROM tasks WHERE id='$taskid'";
+        $result = SQL::query($sql)->fetch_assoc();
+        $milestone_id = $result['milestone_id'];
+        $milestone = MilestoneManager::loadMilestoneFromId(null, $milestone_id);
+        
+        foreach ($milestone->tasks as $task) {
+            if ($task->finished == false) {
+                return false;
+            }
+        }
+        
+        // If we reach this point, all tasks are finished
+        // -> The milestone is finished aswell
+        MilestoneManager::finishMilestone($milestone_id);
+        return true;
     }
 }

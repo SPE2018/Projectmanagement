@@ -72,25 +72,37 @@ else if($mode === "projectdelete")
 {
     ProjectManager::confirmDelete($pid);
 }
-else if($mode === "confirmdelete")
+else if($mode === "projConfirmdelete")
 {
     ProjectManager::deleteProject($pid);
 }
-else if($mode === "declinedelete")
+else if($mode === "projDeclinedelete")
 {
     echo "";
 }
 else if($mode === "milestoneedit")
 {
-    echo "edit_milestone";
+    echo MilestoneManager::displayEditMilestone($pid, $uid); // uid is the milestone id here
+}
+elseif($mode === "save_milestone") {
+    echo MilestoneManager::save(filter_input(INPUT_GET, "id"));
 }
 else if($mode === "milestonedelete")
 {
-    echo "delete_milestone";
+    MilestoneManager::confirmDelete($pid, $uid);
+}
+else if($mode === "mileConfirmdelete")
+{
+    MilestoneManager::deleteMilestone($uid);
+}
+else if($mode === "mileDeclinedelete")
+{
+    echo "";
 }
 else if($mode === "milestoneadd")
 {
     echo MilestoneManager::addMiSt();
+    echo 'drin';
 }
 else if($mode === "saveNewMiSt")
 {
@@ -126,4 +138,16 @@ else if($mode === "meetingsave")
 else if($mode === "meetingedit")
 {
     echo CalendarUtil::edit_meeting($uid); // $uid is the meeting id here
+}
+else if($mode === "taskadd")
+{
+    TaskEditor::createTask($uid); // $uid is the milestone id here
+}
+else if($mode === "taskcreate")
+{
+    TaskEditor::addTaskToDb();
+    echo BUtil::success("The Task has been created!");
+}
+else {
+    echo "Cancelled<br>";
 }
