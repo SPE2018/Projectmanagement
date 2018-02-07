@@ -15,7 +15,6 @@ function dynamicButtonsUsers(button, mode) {
                 var val = value.value.replace(/ /g, "%20"); // Replace spaces with '%20'
                 params += key + "=" + val + "&";
             });
-            alert(params);
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
             return;
         }
@@ -23,7 +22,7 @@ function dynamicButtonsUsers(button, mode) {
         {
             uid = ($("#add_user_select").val());
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        } else if(button === "#Btn_confirmDelete") {
+        } else if(button === "#Btn_PconfirmDelete") {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
             window.location = "index.php";
         } else{
@@ -40,20 +39,25 @@ function createAllDynamicButtons() {
     dynamicButtonsUsers("#add_user", "adduser");
 
     // Project confirm delete
-    dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
-    dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
+    dynamicButtonsUsers("#Btn_PconfirmDelete", "projConfirmdelete");
+    dynamicButtonsUsers("#Btn_PdeclineDelete", "projDeclinedelete");      
 
     // Meetings
     dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
     dynamicButtonsUsers("#editmeeting", "meetingedit");
     dynamicButtonsUsers("#savemeeting", "meetingsave");
+    dynamicButtonsUsers("#delmeeting", "milestonedelete");
     dynamicButtonsUsers("#delmeeting", "meetingdelete");
 
     // Milestones
     dynamicButtonsUsers("#Btn_SaveNewMiSt", "saveNewMiSt");
     dynamicButtonsUsers("#Btn_CancelNewMiSt", "cancelAddMiSt");
+    dynamicButtonsUsers("#save_milestone", "save_milestone");
     dynamicButtonsUsers("#editmilestone", "milestoneedit");
     dynamicButtonsUsers("#deletemilestone", "milestonedelete");
+    // Milestone confirm delete
+    dynamicButtonsUsers("#Btn_MconfirmDelete", "mileConfirmdelete");
+    dynamicButtonsUsers("#Btn_MdeclineDelete", "mileDeclinedelete");
     
     // Tasks
     dynamicButtonsUsers("#addtask", "taskadd");
@@ -124,7 +128,7 @@ $("#content").on("click", ".task", function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
 });
 
-$("#content").on("click", "#save_milestone", function(){
+/*$("#content").on("click", "#save_milestone", function(){
     var name = $("#name").val();
     var desc = $("#desc").val();
     var start = $("[name='start']").val();
@@ -140,7 +144,7 @@ $("#content").on("click", "#save_milestone", function(){
         }
     });
     window.location.reload();
-});
+});*/
 
 $('#themeBtn').click(function(){
     if(theme == 'php/css/darkly.css'){

@@ -42,18 +42,12 @@ echo get_jumbobot();
             <?php
                 $sql = "SELECT * FROM users;";
                 $result = SQL::query($sql)->fetch_all(MYSQLI_ASSOC);
-                echo '<p style="Color: darkgreen; Font-Size:26px">Welcome, ' . $_SESSION['user'] . '</p><br>';       
+                echo '<p style="font-size: 22pt; color: #00bc8c;" Font-Size:26px">Welcome, ' . $_SESSION['user'] . '</p><br>';       
                 Admin::updateLists();
                 Admin::display_DisabledUserList();
                 Admin::display_Admins();
                 Admin::display_EnabledUserList();
-                /*if(isset($_SESSION['user'])) {
-                    NoteManager::createNoteModal($_SESSION['user'], 1, '[usertext]');
-                    echo '<a href=../LogIn/note.php>note</a><br>';
-                }*/
             ?>
-            <!--<a href=../LogIn/Logout.php>sign out</a><br>
-            <a href=../index.php>home</a><br>-->
         </div>
     </div>
 
