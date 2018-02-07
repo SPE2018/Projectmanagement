@@ -6,6 +6,13 @@ function get_Charts($project_id) {
     // db projectid -> milestoneid -> planned enddate -> actual enddate
     $milestones = MilestoneManager::loadMilestones($project_id);
     
+    $finished_milestones = array();
+    
+    foreach ($milestones as $milestone) {
+        if ($milestone->isFinished()) {
+            array_push($finished_milestones, $milestone);
+        }
+    }
     
     
     

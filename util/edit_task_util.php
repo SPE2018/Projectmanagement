@@ -88,12 +88,8 @@ class TaskEditor {
         echo $out;
     }
     
-    public static function displayTask($project_id, $milestone_id, $task_id) {   
-        //$builder = new PageBuilder();
-
-        //$table = new HtmlBuilder();
-        echo ($task_id);
-        
+    public static function displayTask($project_id, $milestone_id, $task_id) {
+        echo ($task_id);       
     }
     
     public static function displayTaskModal($project_id, $milestone_id, $task_id) {                
