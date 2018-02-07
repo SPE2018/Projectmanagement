@@ -225,22 +225,6 @@ class MilestoneManager {
         
         $builder->add($form->close);        
         $builder->add($form_group->close);
-        
-        $ol = ElementFactory::createHtml("<ol>", "</ol>");
-        
-        $builder->add($ol->open);
-        
-        $tasks_array = $milestone->tasks;
-        foreach ($tasks_array as $task) {
-            $finished = $task->finished ? "Success" : "Failed";
-            
-            $li = ElementFactory::createHtml("<li>", "</li>");
-            $builder->add($li->open);
-            $builder->add(ElementFactory::createHtml("<h4>" . $task->name . " ($finished)</h4>")->open);
-            $builder->add(ElementFactory::createHtml(TaskEditor::displayTask($project_id, $milestone_id, $task->id))->open);
-            $builder->add($li->close);
-        }
-        $builder->add($ol->close);
 
         $builder->show();
     }

@@ -143,9 +143,9 @@ class TaskEditor {
         if ($previous_task != null) {
             $previous = $previous_task->name;
             if ($previous_task->finished) {
-                $previous = $previous . " (completed)";
+                $previous = $previous . " (Completed)";
             } else {
-                $previous = $previous . " (in processing)";
+                $previous = $previous . " (Incompleted)";
             }
         }
         $out = $out . "<p><b>Previous Task:&emsp;</b>" . $previous . "</p><br>";
@@ -182,7 +182,8 @@ class TaskEditor {
             }
         }
         
-        $out = $out . '<button type="button" class="btn btn-default" data-dismiss="modal" id="edittask" name="edittask" value="' . $task_id . '">Edit</button>';
+        $out = $out . '<button type="button" class="btn btn-default mr-2" data-dismiss="modal" id="edittask" name="edittask" value="' . $task_id . '">Edit</button>';
+        $out = $out . '<button type="button" class="btn btn-warning" data-dismiss="modal" id="deletetask" name="deletetask" value="' . $task_id . '">Delete</button>';
         
         // Close form container
         $out = $out . '</div>'; 

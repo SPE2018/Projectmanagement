@@ -16,6 +16,11 @@ class TaskManager {
                 . "WHERE id=$task_id;";
         SQL::query($sql); 
     }
+
+    public static function removeTask($task_id) {
+        $sql = "DELETE FROM tasks WHERE id=$task_id;";
+        SQL::query($sql);
+    }
     
     public static function loadTasks($milestone_id) {
         $toReturn = array();

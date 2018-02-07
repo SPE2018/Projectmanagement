@@ -7,7 +7,10 @@ var theme = "php/css/darkly.css";
 
 
 function reloadProgress(button) {
-    if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete") {
+    if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete"
+        || button === "#save_milestone" || button === "#deletemilestone"
+        || button === "#finishedtask" || button === "#unfinishedtask"
+        || button === "#createnewtask" || button === "#deletetask") {
         $.get(location.href).then(function(page) {
             $("#progressContent").html($(page).find("#progressContent").html());
             $("#progressContent").ready(progressInit);
@@ -35,12 +38,13 @@ function dynamicButtons(button, mode) {
                 setTimeout(function() {window.location.href = "index.php";}, 2000);
             }
 
-            setTimeout(function() {reloadProgress(button);}, 1000);
+            setTimeout(function() {reloadProgress(button);}, 500);
 
             return;
         }
 
-        if (button === "#edittask" || button === "#finishedtask" || button === "#unfinishedtask") {
+        if (button === "#edittask" || button === "#finishedtask"
+                || button === "#unfinishedtask" || button === "#deletetask") {
             // Close the currently open modals
             $('.modal').modal('hide');
             $('.modal-backdrop').remove();
@@ -93,6 +97,7 @@ function createAllDynamicButtons() {
     // Tasks
     dynamicButtons("#addtask", "taskadd");
     dynamicButtons("#createnewtask", "taskcreate");
+    dynamicButtons("#deletetask", "taskdelete");
     dynamicButtons("#updatetask", "taskupdate");
     dynamicButtons("#edittask", "taskedit");
     dynamicButtons("#finishedtask", "taskfinished");

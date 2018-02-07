@@ -96,7 +96,9 @@ else if($mode === "milestoneedit")
     echo MilestoneManager::displayEditMilestone($pid, $uid); // uid is the milestone id here
 }
 elseif($mode === "save_milestone") {
-    echo MilestoneManager::save(filter_input(INPUT_GET, "id"));
+    MilestoneManager::save(filter_input(INPUT_GET, "id"));
+    echo BUtil::success("Your changes have been <strong>saved.</strong>");
+    echo MilestoneManager::displayMilestone($pid, filter_input(INPUT_GET, "id")); // uid is the milestone id here
 }
 else if($mode === "milestonedelete")
 {
@@ -105,6 +107,7 @@ else if($mode === "milestonedelete")
 else if($mode === "mileConfirmdelete")
 {
     MilestoneManager::deleteMilestone($uid);
+    echo BUtil::success("The milestone has been <strong>deleted.</strong>");
 }
 else if($mode === "mileDeclinedelete")
 {
@@ -162,6 +165,12 @@ else if($mode === "taskcreate")
     $milestone_id = TaskEditor::addTaskToDb();
     echo BUtil::success("The Task has been created!");
 
+    MilestoneManager::displayMilestone($pid, $milestone_id);
+}
+else if($mode === "taskdelete")
+{
+    $milestone_id = TaskManager::getTask($uid)->milestone_id;
+    TaskManager::removeTask($uid); // $uid is the task id here
     MilestoneManager::displayMilestone($pid, $milestone_id);
 }
 else if($mode === "taskedit")
