@@ -37,7 +37,7 @@ class MilestoneManager {
     }
     
     public static function loadMilestoneFromName($project_id, $milestone_name) {
-        $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND name=$milestone_name;";
+        $sql = "SELECT * FROM milestones WHERE project_id=$project_id AND name='$milestone_name';";
         $result = SQL::query($sql)->fetch_assoc();        
 
         $milestone = new Milestone($result['id'], $result['name'], $result['start'], $result['stop'], $result['desc']);
@@ -309,5 +309,28 @@ class MilestoneManager {
         $out = $out . "</div>";              
         
         return $out;
+    }
+    
+    public static function addMiSt() {
+        $toReturn = ElementFactory::createLabel('MiStName', 'Name:')->get();
+        $toReturn = $toReturn . '<br>' .  ElementFactory::createTextInput('param_MiStName', '')->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStDesc', 'Description:')->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createTextInput('param_MiStDesc', '')->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStStart', 'Start work latest by:')->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('newMiStStart', 'param_MiStStart', new DateTime('now'))->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStEnd', 'Finish latest by:')->get();
+        $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('newMiStEnd', 'param_MiStEnd', new DateTime('9999-12-31'))->get();
+        
+        $toReturn = $toReturn . '<div align=right>' . ButtonFactory::createButton(ButtonType::BASIC, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('ml-3 mt-4');
+        for($i=0; $i<21; $i++) {
+            $toReturn = $toReturn . '&nbsp;';
+        }
+        $toReturn = $toReturn . ButtonFactory::createButton(ButtonType::BASIC, 'Cancel', FALSE, 'Btn_CancelNewMiSt', 'cancelAddMiSt')->marginget('mt-4') . '</div>';
+        return $toReturn;
+    }
+    
+    public static function saveNewMiSt($pid) {
+        MilestoneManager::addMilestone($pid, filter_input(INPUT_GET, 'MiStName'), filter_input(INPUT_GET, 'MiStDesc'), filter_input(INPUT_GET, 'MiStStart'), filter_input(INPUT_GET, 'MiStEnd'));
+        echo $pid . "<br>" . filter_input(INPUT_GET, 'MiStName') . "<br>" . filter_input(INPUT_GET, 'MiStDesc') . "<br>" . filter_input(INPUT_GET, 'MiStStart') . "<br>" . filter_input(INPUT_GET, 'MiStEnd');
     }
 }

@@ -3,6 +3,56 @@ var theme = 'php/css/darkly.css';
 var mid;
 var tid;
 
+function dynamicButtonsUsers(button, mode){
+    $("#content").on("click", button, function () {
+        var uid = ($(this).val());
+        if (uid === "custom_params") {
+            var params = "";
+            // Gets all elements with an id that starts with 'param_'
+            $("[id^=param_]").each(function(index, value){
+                // Add this parameter with key and value to the parameter string
+                var key = value.id.replace("param_", "");
+                var val = value.value.replace(/ /g, "%20"); // Replace spaces with '%20'
+                params += key + "=" + val + "&";                
+            });
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
+            return;
+        }
+        if(button === "#add_user")
+        {
+            uid = ($("#add_user_select").val());
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
+        } else if(button === "#Btn_confirmDelete") {
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
+            window.location = "index.php";
+        } else{
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
+        }
+    });
+}
+
+function createAllDynamicButtons() {
+    // User Manager
+    dynamicButtonsUsers("#remove_user", "removeuser");
+    dynamicButtonsUsers("#promote_user", "promoteuser");
+    dynamicButtonsUsers("#demote_user", "demoteuser");
+    dynamicButtonsUsers("#add_user", "adduser");
+
+    // Project confirm delete
+    dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
+    dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
+
+    // Meetings
+    dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
+    dynamicButtonsUsers("#editmeeting", "meetingedit");
+    dynamicButtonsUsers("#savemeeting", "meetingsave");
+    dynamicButtonsUsers("#delmeeting", "meetingdelete");
+
+    // Milestones
+    dynamicButtonsUsers("#Btn_SaveNewMiSt", "saveNewMiSt");
+    dynamicButtonsUsers("#Btn_CancelNewMiSt", "cancelAddMiSt");
+}
+
 onload = function() {
     var progress = calcProgress(startdate, enddate);
     var project = name;
@@ -71,46 +121,11 @@ $("#content").on("click", ".task", function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
 });
 
-dynamicButtonsUsers("#remove_user", "removeuser");
-dynamicButtonsUsers("#promote_user", "promoteuser");
-dynamicButtonsUsers("#demote_user", "demoteuser");
-dynamicButtonsUsers("#add_user", "adduser");
+////////////////////////////////////////////////////////////////////
+//// Creates all dynamic buttons for the pages loaded with ajax ////
+////////////////////////////////////////////////////////////////////
+createAllDynamicButtons();
 
-dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
-dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
-
-dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
-dynamicButtonsUsers("#editmeeting", "meetingedit");
-dynamicButtonsUsers("#savemeeting", "meetingsave");
-dynamicButtonsUsers("#delmeeting", "meetingdelete");
-
-function dynamicButtonsUsers(button, mode){
-    $("#content").on("click", button, function () {
-        var uid = ($(this).val());
-        alert(button + ", " + uid);
-        if (uid === "custom_params") {
-            var params = "";
-            $("[id^=param_]").each(function(index, value){
-                var key = value.id.replace("param_", "");
-                var val = value.value.replace(/ /g, "%20");
-                params += key + "=" + val + "&";                
-            });
-            alert(params);
-            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
-            return;
-        }
-        if(button === "#add_user")
-        {
-            uid = ($("#add_user_select").val());
-            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        } else if(button === "#Btn_confirmDelete") {
-            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-            window.location = "index.php";
-        } else{
-            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-        }
-    });
-}
 
 $("#content").on("click", "#save_milestone", function(){
     var name = $("#name").val();
