@@ -12,8 +12,6 @@ $name = get_parameter('name', 'GET', false);
 $startdate = get_parameter('startdate', 'GET', false);
 $enddate = get_parameter('enddate', 'GET', false);
 
-echo "MODE: $mode<br>";
-
 if($mode === "milestoneview"){
     MilestoneManager::displayMilestone($pid, $mid);
 }

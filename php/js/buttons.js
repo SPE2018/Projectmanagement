@@ -167,13 +167,13 @@ $("#content").on("click", ".task", function () {
 });*/
 
 $('#themeBtn').click(function(){
-    if(theme === 'php/css/darkly.css'){
-        $('#theme').attr('href', 'php/css/flatly.css');
-        $('#logo').attr('src', 'php/images/planIT_logo_bright.png');
-        theme = 'php/css/flatly.css';
-    } else if(theme === 'php/css/flatly.css'){
-        $('#theme').attr('href', 'php/css/darkly.css');
-        $('#logo').attr('src', 'php/images/planIT_logo_dark.png');
-        theme = 'php/css/darkly.css';
+    if(theme === '../css/darkly.css'){
+        $('#theme').attr('href', '../css/flatly.css');
+        $('#logo').attr('src', '../images/planIT_logo_bright.png');
+        theme = '../css/flatly.css';
+    } else if(theme === '../css/flatly.css'){
+        $('#theme').attr('href', '../css/darkly.css');
+        $('#logo').attr('src', '../images/planIT_logo_dark.png');
+        theme = '../css/darkly.css';
     }
 });
