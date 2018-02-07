@@ -1,7 +1,7 @@
 <?php
 include_once("util/sql_util.php");
 include_once("php/functions.php");
-//include_once("Kalenderliste/calendar_util.php");
+//include_once("util/calendar_util.php");
 
 $mode = get_parameter('mode', 'GET', false);
 $mid = get_parameter('mid', 'GET', false);
@@ -98,7 +98,12 @@ else if($mode === "meetingview")
 }
 else if($mode === "meetingadd")
 {
-    echo "add_meetings";
+    echo CalendarUtil::new_meeting();
+}
+else if($mode === "addmeetingbutton")
+{
+    echo CalendarUtil::neuer_Datensatz($pid);
+    CalendarUtil::get_meetinglist($pid);
 }
 else if($mode === "meetingdelete")
 {
@@ -106,5 +111,6 @@ else if($mode === "meetingdelete")
 }
 else if($mode === "meetingedit")
 {
-    echo "edit_meetings";
+    //$meeting_id = filter_input(INPUT_GET, "meetingid");
+    echo CalendarUtil::edit_meeting($uid); // $uid is the meeting id here
 }

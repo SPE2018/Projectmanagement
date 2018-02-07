@@ -79,9 +79,24 @@ dynamicButtonsUsers("#add_user", "adduser");
 dynamicButtonsUsers("#Btn_confirmDelete", "confirmdelete");
 dynamicButtonsUsers("#Btn_declineDelete", "declinedelete");
 
+dynamicButtonsUsers("#addmeeting", "addmeetingbutton");
+dynamicButtonsUsers("#editmeeting", "meetingedit");
+
 function dynamicButtonsUsers(button, mode){
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
+        alert(button + ", " + uid);
+        if (uid === "custom_params") {
+            var params = "";
+            $("[id^=param_]").each(function(index, value){
+                var key = value.id.replace("param_", "");
+                var val = value.value.replace(/ /g, "%20");
+                params += key + "=" + val + "&";                
+            });
+            alert(params);
+            $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
+            return;
+        }
         if(button === "#add_user")
         {
             uid = ($("#add_user_select").val());
