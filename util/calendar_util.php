@@ -22,7 +22,7 @@ class CalendarUtil {
     public static function get_button($name, $buttontext, $value = null)
     {
         $s='<button type="button" id ="' . $name . '" name="' .$name .
-            '" class="btn btn-outline-primary" value="' . $value . '">' . $buttontext . '</button> ' ;
+            '" class="btn btn-primary" value="' . $value . '">' . $buttontext . '</button> ' ;
 
         return $s;
     }
@@ -85,46 +85,44 @@ class CalendarUtil {
 
                     $s = $s . "<br>";
                     $s = $s . "</div>";
-
                 } else if ($k == "title") {
                     $s = $s . "<div class=\"col-10\">";
                     $s = $s . "<h3 class=\"text-uppercase\"><strong>";
                     $s = $s . $v;
-                    $s = $s . "</strong></h3>";
-
+                    $s = $s . "</strong><span>";
+                    $s = $s . "%EDITID%";
+                    $s = $s . "</span></h3>";
                 } else if ($k == "timestart") {
 
                     $s = $s . "<ul class=\"list-inline\">";
                     $s = $s . "<li class=\"list-inline-item\"><i class=\"fa fa-calendar-o\" aria-hidden=\"true\">";
                     //Uhrzeit prep
 
-
                     $s = $s . "</i>";
                     //$s = $s . $v;
                     $s = $s . date_format(date_create($v), 'h:i A');
                     $s = $s . " - ";
-
                 } else if ($k == "timeend") {
 
                     //$s = $s . $v;
                     $s = $s . date_format(date_create($v), 'h:i A');
                     $s = $s . "</li>";
-
                 } else if ($k == "location") {
-                    $s = $s . "<li class=\"list-inline-item\">"; //<i class=\"fa fa-location-arrow\" aria-hidden=\"true\"></i>";
+                    $s = $s . "<li class=\"list-inline-item\">";
                     $s = $s . $v;
                     $s = $s . "</li>";
                     $s = $s . "</ul>";
-
                 } else if ($k == "description") {
-                    $s = $s . "<i>";
-                    $s = $s . "<pre>" . $v . "</pre>";
-                    $s = $s . "</i>";
-                } else if($k == "editid") {
-                    $s = $s . "<p>";
-                    //$s = $s ."<a href='$editpage?id=$v'><button type=\"button\" class=\"btn\">EDIT</button></a>";
-                    $s = $s . ButtonFactory::createButton(ButtonType::PRIMARY, "EDIT", false, "editmeeting", "$v")->get();
-                    $s = $s . "</p>";
+                    if ($v !== "") {
+                        $s = $s . "<li class='list-inline-item bg-secondary p-2 mb-3'>";
+                        $s = $s . $v;
+                        $s = $s . "</li>";
+                    } else {
+                        $s = $s . "<li class='list-inline-item bg-secondary p-2 mb-3'>No description.</li>";
+                    }
+                } else if ($k == "editid") {
+                    $string = ButtonFactory::createButton(ButtonType::PRIMARYSMALL, 'EDIT', false, 'editmeeting',"$v")->get();
+                    $s = str_replace("%EDITID%", $string, $s);
                 }
             }
             $s = $s . "</div>";
@@ -132,27 +130,6 @@ class CalendarUtil {
 
         $s = $s . "</div>";
         $s = $s . "</div>";
-
-        //$v++;
-        //$s = $s . "<div>I WANT TO INSERT AN APPEND BUTTON RIGHT HERE</div>";
-
-       /* $s = $s . "<a href='newmeeting.php'>";
-        $s = $s . "<br>";
-        $s = $s . "<button type=\"button\" class=\"btn btn-default btn-block\">ADD MEETING</button>";
-        $s = $s . "<br>";
-        $s = $s . "</a>";*/
-
-
-
-        //$s = $s . "<div class=\"panel-group\>";
-        //$s = $s . "<br>";
-        //$s = $s . "<div class=\"panel-body\">";
-        //$s = $s . "<a href='newmeeting.php'>";
-        //$s = $s . "NEW MEETING</a>";
-        //$s = $s . "</div>";
-        //$s = $s . "<br>";
-        //$s = $s . "</div>";
-
 
         //REMOVE OLD ENTRIES
         $sql="delete from calendarlist where meetingdate < CURRENT_TIMESTAMP";
@@ -164,17 +141,14 @@ class CalendarUtil {
     public static function new_meeting()
     {
         $s = '<form class="form-horizontal">';
-        $s = $s . CalendarUtil::get_input("Meetingdate:", "date", "meetingdate", "param_meetingdate", null, "Please Insert Meetingdate");
+        $s = $s . CalendarUtil::get_input("Date:", "date", "meetingdate", "param_meetingdate", null, "Please Insert Meetingdate");
         $s = $s . CalendarUtil::get_input("Title:", "text", "title", "param_title", "", "Please Insert Title");
-        $s = $s . CalendarUtil::get_input("Timestart:", "time", "time", "param_time", null, "00:00:00");
-        $s = $s . CalendarUtil::get_input("Timeend:", "time", "timeend", "param_timeend", null, "00:00:00");
+        $s = $s . CalendarUtil::get_input("Start:", "time", "time", "param_time", null, "00:00:00");
+        $s = $s . CalendarUtil::get_input("End:", "time", "timeend", "param_timeend", null, "00:00:00");
         $s = $s . CalendarUtil::get_input("Location:", "text", "location", "param_location", null, "Please Insert Location");
         $s = $s . CalendarUtil::get_input("Description:", "text", "description", "param_description", null, "Please Insert Description");
 
-        //$s = $s . CalendarUtil::get_button("save", "SAVE");
         $s = $s . ButtonFactory::createButton(ButtonType::SUCCESS, "Save", false, "addmeeting", "custom_params")->get();
-
-        //$s = $s . "<a href=\"index.php\"><button type=\"button\" class=\"btn\">Back</button></a>";
 
         $s = $s . "</form>";
 
@@ -260,20 +234,15 @@ class CalendarUtil {
 
         $s='<form class="form-horizontal">';
         $s = $s . CalendarUtil::get_input("id", "number", "id", "param_id", $id, "");
-        $s = $s . CalendarUtil::get_input("Meetingdate:", "date", "meetingdate", "param_meetingdate", $p["meetingdate"], "2018-01-01");
+        $s = $s . CalendarUtil::get_input("Date:", "date", "meetingdate", "param_meetingdate", $p["meetingdate"], "2018-01-01");
         $s = $s . CalendarUtil::get_input("Title:", "text", "title", "param_title", $p["title"], "Please Insert Title");
-        $s = $s . CalendarUtil::get_input("Timestart:", "time", "timestart", "param_timestart", $p["timestart"], "00:00:00");
-        $s = $s . CalendarUtil::get_input("Timeend:", "time", "timeend", "param_timeend", $p["timeend"], "00:00:00");
+        $s = $s . CalendarUtil::get_input("Start:", "time", "timestart", "param_timestart", $p["timestart"], "00:00:00");
+        $s = $s . CalendarUtil::get_input("End:", "time", "timeend", "param_timeend", $p["timeend"], "00:00:00");
         $s = $s . CalendarUtil::get_input("Location:", "text", "location", "param_location", $p["location"], "Please Insert Location");
         $s = $s . CalendarUtil::get_input("Description:", "textbox", "description", "param_description", $p["description"], "Please Insert Description");
 
-
-        //$s = $s . get_button("first", "<<");
-        //$s = $s . get_button("prev", "<");
         $s = $s . CalendarUtil::get_button("savemeeting", "SAVE", "custom_params");
         $s = $s . CalendarUtil::get_button("delmeeting", "DELETE", "$id");
-        //$s = $s . get_button("next", ">");
-        //$s = $s . get_button("last", ">>");
 
         $s = $s . "</form>";
 

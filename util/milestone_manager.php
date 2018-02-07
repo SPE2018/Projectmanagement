@@ -87,8 +87,6 @@ class MilestoneManager {
                 && filter_input(INPUT_GET, "edit") == "true";
     }
     
-    
-    
     public static function save($milestone_id) {
         $name = filter_input(INPUT_GET, "name");
         $desc = filter_input(INPUT_GET, "desc");
@@ -145,13 +143,13 @@ class MilestoneManager {
         $builder->add($table->open);
        
         foreach ($tasks as $t) {
-            $trClass = "class='bg-primary'";
+            $bClass = "btn-primary";
             $name = "$t->name";
             if ($t->finished) {
-                $trClass = "class='bg-success'";
+                $bClass = "btn-success";
                 $name = $name . " &#10004;";
             } else if ($today > $t->enddate) {
-                $trClass = "class='bg-danger'";
+                $bClass = "btn-danger";
                 $name = "<b>" . $name . "</b>";
             }
 
@@ -161,7 +159,7 @@ class MilestoneManager {
             $td = ElementFactory::createHtml("<td style='border: none'>", "</td>");
             $builder->add($td->open);
 
-            $builder->add(ElementFactory::createHtml("<button type='button' class='btn btn-info task' value='$t->id'>$name</button>"));
+            $builder->add(ElementFactory::createHtml("<button type='button' class='btn $bClass task' value='$t->id'>$name</button>"));
 
             $builder->add($td->close);
             $builder->add($tr->close);
@@ -322,17 +320,13 @@ class MilestoneManager {
         $toReturn = $toReturn . '<br>' . ElementFactory::createLabel('MiStEnd', 'Finish latest by:')->get();
         $toReturn = $toReturn . '<br>' . ElementFactory::createDatepicker('param_MiStEnd', 'MiStEnd', new DateTime('now'))->get();
         
-        $toReturn = $toReturn . '<div align=right>' . ButtonFactory::createButton(ButtonType::BASIC, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('ml-3 mt-4');
-        for($i=0; $i<21; $i++) {
-            $toReturn = $toReturn . '&nbsp;';
-        }
-        $toReturn = $toReturn . ButtonFactory::createButton(ButtonType::BASIC, 'Cancel', FALSE, 'Btn_CancelNewMiSt', 'cancelAddMiSt')->marginget('mt-4') . '</div>';
+        $toReturn = $toReturn . '<div>' . ButtonFactory::createButton(ButtonType::SUCCESS, 'Save', FALSE, 'Btn_SaveNewMiSt', 'custom_params')->marginget('mr-3 mt-3 ');
+        $toReturn = $toReturn . ButtonFactory::createButton(ButtonType::DANGER, 'Cancel', FALSE, 'Btn_CancelNewMiSt', 'cancelAddMiSt')->marginget('mt-3') . '</div>';
         return $toReturn;
     }
     
     public static function saveNewMiSt($pid) {
         MilestoneManager::addMilestone($pid, filter_input(INPUT_GET, 'MiStName'), filter_input(INPUT_GET, 'MiStDesc'), filter_input(INPUT_GET, 'MiStStart'), filter_input(INPUT_GET, 'MiStEnd'));
-        echo $pid . "<br>" . filter_input(INPUT_GET, 'MiStName') . "<br>" . filter_input(INPUT_GET, 'MiStDesc') . "<br>" . filter_input(INPUT_GET, 'MiStStart') . "<br>" . filter_input(INPUT_GET, 'MiStEnd');
     }
 
     public static function deleteMilestone($id) {

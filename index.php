@@ -79,9 +79,9 @@ echo get_jumbobot();
             </div>
             <div class="card m-4" style="width: 18rem;">
                 <div class="card-header">
-                    Featured
+                    Manage your milestones
                 </div>
-                <img class="card-img-top" src="php/images/progress.PNG" alt="Card image cap">
+                <img class="card-img-top" src="php/images/milestonecard.PNG" alt="Card image cap">
                 <div class="card-body">
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>

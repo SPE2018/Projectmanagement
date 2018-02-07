@@ -17,7 +17,7 @@ function dynamicButtons(button, mode) {
             });
 
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
-            if (button === "#Btn_SaveNewMiSt" || button === "#deletemilestone") {
+            if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete") {
                 $.get(location.href).then(function(page) {
                     $("#progressContent").html($(page).find("#progressContent").html());
                     $("#progressContent").ready(progressInit);
@@ -156,32 +156,14 @@ $("#content").on("click", ".task", function () {
     $("#content").load("content_loader.php?pid=" + pid + "&mid=" + mid + "&tid=" + tid + "&mode=taskmodal");
 });
 
-/*$("#content").on("click", "#save_milestone", function(){
-    var name = $("#name").val();
-    var desc = $("#desc").val();
-    var start = $("[name='start']").val();
-    var stop = $("[name='stop']").val();
-
-    $.ajax({type: "GET", url: "php/editmilestone.php",
-        data: {name: name, id: milestoneid, desc: desc, start: start, stop: stop},
-        success : function() {
-            alert("Milestone was changed successfully!");
-        },
-        error : function(e) {
-            alert(e.statusText);
-        }
-    });
-    window.location.reload();
-});*/
-
 $('#themeBtn').click(function(){
-    if(theme == 'php/css/darkly.css'){
-        $('#theme').attr('href', 'php/css/flatly.css');
-        $('#logo').attr('src', 'php/images/planIT_logo_bright.png');
-        theme = 'php/css/flatly.css';
-    } else if(theme == 'php/css/flatly.css'){
-        $('#theme').attr('href', 'php/css/darkly.css');
-        $('#logo').attr('src', 'php/images/planIT_logo_dark.png');
-        theme = 'php/css/darkly.css';
+    if(theme === '../css/darkly.css'){
+        $('#theme').attr('href', '../css/flatly.css');
+        $('#logo').attr('src', '../images/planIT_logo_bright.png');
+        theme = '../css/flatly.css';
+    } else if(theme === '../css/flatly.css'){
+        $('#theme').attr('href', '../css/darkly.css');
+        $('#logo').attr('src', '../images/planIT_logo_dark.png');
+        theme = '../css/darkly.css';
     }
 });
