@@ -3,6 +3,9 @@
 ////////////////////////////////////////////////////////////////////
 createAllDynamicButtons();
 
+var theme = "php/css/darkly.css";
+
+
 function reloadProgress(button) {
     if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete") {
         $.get(location.href).then(function(page) {
@@ -123,6 +126,7 @@ $("#save").click(function(){
     }
 
     if (startdate < enddate) {
+        name = name.replace(/ /g, "%20"); // Replace spaces with '%20'
         $("#creation-form").load("php/newproject.php?name=" + name + "&startdate=" + startdate + "&enddate=" + enddate);
         setTimeout(function() {
             window.location = "projects.php?name=" + name;
@@ -163,13 +167,13 @@ $("#content").on("click", ".task", function () {
 });
 
 $('#themeBtn').click(function(){
-    if(theme === '../css/darkly.css'){
-        $('#theme').attr('href', '../css/flatly.css');
-        $('#logo').attr('src', '../images/planIT_logo_bright.png');
-        theme = '../css/flatly.css';
-    } else if(theme === '../css/flatly.css'){
-        $('#theme').attr('href', '../css/darkly.css');
-        $('#logo').attr('src', '../images/planIT_logo_dark.png');
-        theme = '../css/darkly.css';
+    if(theme === 'php/css/darkly.css'){
+        $('#theme').attr('href', 'php/css/flatly.css');
+        $('#logo').attr('src', 'php/images/planIT_logo_bright.png');
+        theme = 'php/css/flatly.css';
+    } else if(theme === 'php/css/flatly.css'){
+        $('#theme').attr('href', 'php/css/darkly.css');
+        $('#logo').attr('src', 'php/images/planIT_logo_dark.png');
+        theme = 'php/css/darkly.css';
     }
 });
