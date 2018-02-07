@@ -338,12 +338,12 @@ class MilestoneManager {
     }
 
     public static function confirmDelete($pid, $id) {
-        //echo ElementFactory::createHtml("<input type='hidden' id='param_id' value='$id'>");
-        echo '<h3 style="margin-top: 20px;">Are you sure you want to delete the milestone <span style="color: aqua;"><strong>' . MilestoneManager::loadMilestoneFromId($pid, $id)->name . '</strong></span>?</h3><br><br><br>';
-        echo '<div align=right>' . ButtonFactory::createButton(ButtonType::SUCCESS, "Confirm", FALSE, "Btn_MconfirmDelete", "$id")->marginget('ml-3 mt-4');
-        for($i=0; $i<21; $i++) {
-            echo '&nbsp;';
-        }
-        echo ButtonFactory::createButton(ButtonType::DANGER, "Decline", FALSE, "Btn_MdeclineDelete", "keepMilestone")->marginget('mt-4') . '</div>';
+        echo '<div class="card">
+                <div class="card-header font-weight-bold ">Delete Milestone</div>
+                <div class="card-body">
+                    <p class="card-text">Are you sure you want to delete the milestone <span class="text-success"><strong>' . MilestoneManager::loadMilestoneFromId($pid, $id)->name . '</strong></span>?</p>
+                </div>
+                <div class="card-footer"><div style="float: right"><button id="Btn_MconfirmDelete" class="btn bg-transparent ml-auto" value="' . $id . '"><i class="fas fa-check fa-lg text-success"></i></button><button id="Btn_MdeclineDelete" class="btn bg-transparent ml-3" value="keepMilestone"><i class="fas fa-times fa-lg text-danger"></i></button></div></div>
+            </div>';
     }
 }

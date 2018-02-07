@@ -3,6 +3,16 @@
 ////////////////////////////////////////////////////////////////////
 createAllDynamicButtons();
 
+function reloadProgress(button) {
+    if (button === "#Btn_SaveNewMiSt" || button === "#Btn_MconfirmDelete") {
+        $.get(location.href).then(function(page) {
+            $("#progressContent").html($(page).find("#progressContent").html());
+            $("#progressContent").ready(progressInit);
+        });
+        $.getScript("php/js/progress.js");
+    }
+}
+
 function dynamicButtons(button, mode) {
     $("#content").on("click", button, function () {
         var uid = ($(this).val());
@@ -17,13 +27,8 @@ function dynamicButtons(button, mode) {
             });
 
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
-            if (button === "#Btn_SaveNewMiSt" || button === "#deletemilestone") {
-                $.get(location.href).then(function(page) {
-                    $("#progressContent").html($(page).find("#progressContent").html())
-                    $("#progressContent").ready(progressInit);
-                })
-                $.getScript("php/js/progress.js");
-            }
+            setTimeout(function() {reloadProgress(button);}, 1000);
+            
             return;
         }
 
@@ -38,13 +43,12 @@ function dynamicButtons(button, mode) {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         } else if (button === "#Btn_PconfirmDelete") {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
-            window.location = "index.php";
-        } else if (button === ".viewmilestone") {
-
+            setTimeout(function() {window.location = "index.php";}, 1000);
         }
         else {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode);
         }
+        setTimeout(function() {reloadProgress(button);}, 1000);
     });
 }
 

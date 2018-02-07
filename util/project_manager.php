@@ -118,7 +118,6 @@ class ProjectManager {
     }
     
     public static function confirmDelete($id) {
-
         echo '<div class="card">
                 <div class="card-header font-weight-bold ">Delete Project</div>
                 <div class="card-body">
