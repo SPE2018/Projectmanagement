@@ -31,7 +31,7 @@ echo get_jumbotop("Project Overview");
                     <table class="table">
                         <tr><td style="width: 25rem"></td><td style="width: 50rem"><?php echo get_tabs(); ?></td></tr>
 
-                        <tr><td><?php echo get_projectprogress($id, $name, $startdate, $enddate); ?></td><td id="content">
+                        <tr><td id="progressContent"><?php echo get_projectprogress($id, $name, $startdate, $enddate); ?></td><td id="content">
                             </td></tr>
                     </table>
                 </div>
