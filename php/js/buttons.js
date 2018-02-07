@@ -18,6 +18,11 @@ function dynamicButtonsUsers(button, mode) {
             $("#content").load("content_loader.php?pid=" + pid + "&uid=" + uid + "&mode=" + mode + "&" + params);
             return;
         }
+        if (button === "#edittask") {
+            // Close the currently open modals
+            $('.modal').modal('hide');
+            $('.modal-backdrop').remove();
+        }
         if(button === "#add_user")
         {
             uid = ($("#add_user_select").val());
@@ -62,6 +67,8 @@ function createAllDynamicButtons() {
     // Tasks
     dynamicButtonsUsers("#addtask", "taskadd");
     dynamicButtonsUsers("#createnewtask", "taskcreate");
+    dynamicButtonsUsers("#updatetask", "taskupdate");
+    dynamicButtonsUsers("#edittask", "taskedit");
     
     
     // Cancel
